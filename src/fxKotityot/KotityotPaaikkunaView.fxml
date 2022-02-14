@@ -21,7 +21,7 @@
             <Label text="Käyttäjät" BorderPane.alignment="CENTER" />
          </top>
          <center>
-            <ListChooser rivit="Aada&#10;Benjamin&#10;Cecilia&#10;Daniel" BorderPane.alignment="CENTER" />
+            <ListChooser fx:id="lcKayttajat" rivit="Aada&#10;Benjamin&#10;Cecilia&#10;Daniel" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
             <HBox BorderPane.alignment="BOTTOM_LEFT">

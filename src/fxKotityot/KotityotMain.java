@@ -26,7 +26,7 @@ public class KotityotMain extends Application {
             primaryStage.setTitle("Kotityöt");
             primaryStage.show();
             
-            if (!kotityotCtrl.avaa()) Platform.exit(); //metodi, jolla vois saada alkuikkunan alle "varsinaisen ohjelman ikkuna" - luo avaa-metodi
+            if (!kotityotCtrl.avaa()) Platform.exit(); 
         } catch(Exception e) {
             e.printStackTrace();
         }

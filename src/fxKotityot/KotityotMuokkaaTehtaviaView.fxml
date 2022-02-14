@@ -7,20 +7,16 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.jyu.mit.fxgui.ModalController">
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxKotityot.KotityotMuokkaaTehtaviaController">
    <left>
       <BorderPane BorderPane.alignment="CENTER">
          <top>
@@ -39,7 +35,7 @@
          <center>
             <ScrollPane BorderPane.alignment="CENTER">
                <content>
-                  <CheckBoxChooser rivit="Aada&#10;Benjamin&#10;Cecilia&#10;Daniel&#10;">
+                  <CheckBoxChooser fx:id="cbKayttajat" rivit="Aada&#10;Benjamin&#10;Cecilia&#10;Daniel&#10;">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
@@ -65,41 +61,6 @@
          </top>
       </BorderPane>
    </center>
-   <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="Tiedosto">
-            <items>
-                  <Menu mnemonicParsing="false" text="Uusi...">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Käyttäjä" />
-                    <MenuItem mnemonicParsing="false" text="Tehtävä">
-                           <accelerator>
-                              <KeyCodeCombination alt="UP" code="U" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                           </accelerator></MenuItem>
-                    </items>
-                  </Menu>
-                  <MenuItem mnemonicParsing="false" text="Lopeta">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                     </accelerator></MenuItem>
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Muokkaa">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Muokkaa käyttäjiä" />
-                  <MenuItem mnemonicParsing="false" text="Muokkaa tehtäviä" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Apua">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Apua..." />
-                  <MenuItem mnemonicParsing="false" text="Tietoja" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
    <right>
       <VBox prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
          <children>
@@ -108,17 +69,17 @@
                   <Insets bottom="10.0" />
                </padding></Label>
             <Label text="Haku nimestä:" />
-            <TextField />
-            <CheckBox mnemonicParsing="false" text="Vapaat">
+            <TextField fx:id="textHaku" />
+            <CheckBox fx:id="cbVapaat" mnemonicParsing="false" text="Vapaat">
                <padding>
                   <Insets top="8.0" />
                </padding></CheckBox>
-            <CheckBox layoutX="20.0" layoutY="99.0" mnemonicParsing="false" text="Ikä:">
+            <CheckBox fx:id="cbIka" layoutX="20.0" layoutY="99.0" mnemonicParsing="false" text="Ikä:">
                <padding>
                   <Insets top="10.0" />
                </padding>
             </CheckBox>
-            <Slider majorTickUnit="1.0" max="18.0" minHeight="200.0" minorTickCount="0" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+            <Slider fx:id="sliderIka" majorTickUnit="1.0" max="18.0" minHeight="200.0" minorTickCount="0" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -128,7 +89,7 @@
    <bottom>
       <BorderPane BorderPane.alignment="CENTER">
          <left>
-            <Button text="Uusi käyttäjä" BorderPane.alignment="CENTER">
+            <Button onAction="#handleMuokkaaKayttajia" text="Muokkaa käyttäjiä" BorderPane.alignment="CENTER">
                <tooltip>
                   <Tooltip text="Lisää uusi käyttäjä" />
                </tooltip>
@@ -140,12 +101,12 @@
          <center>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <buttons>
-                  <Button mnemonicParsing="false" text="Poista tehtävä">
+                  <Button mnemonicParsing="false" onAction="#handlePoistaTehtava" text="Poista tehtävä">
                      <tooltip>
                         <Tooltip text="Poista valittuna oleva tehtävä" />
                      </tooltip>
                   </Button>
-                  <Button layoutX="159.0" layoutY="10.0" text="_Uusi tehtävä">
+                  <Button layoutX="159.0" layoutY="10.0" onAction="#handleUusiTehtava" text="_Uusi tehtävä">
                      <tooltip>
                         <Tooltip text="Luo uusi tehtävä" />
                      </tooltip>
@@ -157,7 +118,7 @@
             </ButtonBar>
          </center>
          <right>
-            <Button mnemonicParsing="false" text="Tallenna ja poistu" BorderPane.alignment="CENTER">
+            <Button mnemonicParsing="false" onAction="#handleTallennaPoistu" text="Tallenna ja poistu" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </BorderPane.margin>

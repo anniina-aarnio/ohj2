@@ -56,10 +56,9 @@ public class KotityotAlkuikkunaController implements ModalControllerInterface<St
      * @param oletus mitä nimeä näytetään oletuksena
      * @return null jos painetaan Cancel, muuten kirjoitettu nimi
      */
-    public static String kysyNimi(Stage modalityStage, String oletus) {
+    public static String aloita(Stage modalityStage, String oletus) {
         return ModalController.showModal(
                 KotityotAlkuikkunaController.class.getResource("KotityotAlkuikkunaView.fxml"),
-                "Kerho",
-                modalityStage, oletus);
+                "Aloitus", modalityStage, oletus);
     }
 }

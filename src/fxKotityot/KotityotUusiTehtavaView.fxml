@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxKotityot.KotityotGUIController">
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxKotityot.KotityotUusiTehtavaController">
    <center>
       <BorderPane prefHeight="200.0" prefWidth="300.0">
          <top>
@@ -37,9 +37,9 @@
                         <Label text="Nimi" />
                         <Label text="Arvioitu kesto" GridPane.rowIndex="1" />
                         <Label text="Käyttäjän minimi-ikä" GridPane.rowIndex="2" />
-                        <TextField GridPane.columnIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="textNimi" GridPane.columnIndex="1" />
+                        <TextField fx:id="textKesto" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="textIka" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -55,12 +55,12 @@
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
                <children>
-                  <Button cancelButton="true" mnemonicParsing="false" text="Peruuta" GridPane.rowIndex="1">
+                  <Button cancelButton="true" mnemonicParsing="false" onAction="#handleCancel" text="Peruuta" GridPane.rowIndex="1">
                      <tooltip>
                         <Tooltip text="Peru muutokset" />
                      </tooltip>
                   </Button>
-                  <Button defaultButton="true" mnemonicParsing="false" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <tooltip>
                         <Tooltip text="Tallenna tehtävä" />
                      </tooltip>
@@ -72,6 +72,10 @@
                <padding>
                   <Insets top="10.0" />
                </padding>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints />
+               </rowConstraints>
             </GridPane>
          </bottom>
       </BorderPane>

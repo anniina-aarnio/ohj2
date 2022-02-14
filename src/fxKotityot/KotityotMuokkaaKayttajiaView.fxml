@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.jyu.mit.fxgui.ModalController">
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxKotityot.KotityotMuokkaaKayttajiaController">
    <left>
       <BorderPane prefHeight="300.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
@@ -26,7 +26,7 @@
          <bottom>
             <HBox BorderPane.alignment="BOTTOM_LEFT">
                <children>
-                  <Button text="_Uusi käyttäjä">
+                  <Button onAction="#handleUusi" text="_Uusi käyttäjä">
                      <tooltip>
                         <Tooltip text="Lisää uusi käyttäjä" />
                      </tooltip>
@@ -62,8 +62,8 @@
                      <children>
                         <Label text="Nimi" />
                         <Label text="Ikä" GridPane.rowIndex="1" />
-                        <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-                        <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                        <TextField fx:id="textNimi" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                        <TextField fx:id="textIka" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </content>
@@ -78,12 +78,12 @@
          <bottom>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <buttons>
-                  <Button mnemonicParsing="false" text="Poista...">
+                  <Button mnemonicParsing="false" onAction="#handlePoista" text="Poista...">
                      <tooltip>
                         <Tooltip text="Poista valittu käyttäjä pysyvästi" />
                      </tooltip>
                   </Button>
-                  <Button mnemonicParsing="false" text="Tallenna">
+                  <Button mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna">
                      <tooltip>
                         <Tooltip text="Tallenna muutokset" />
                      </tooltip>

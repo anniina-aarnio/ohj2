@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import fi.jyu.mit.fxgui.Dialogs;
+import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
 
 /**
@@ -17,67 +18,111 @@ import fi.jyu.mit.fxgui.ModalController;
  *
  */
 public class KotityotGUIController {
-    // FXML puoli
+    @FXML
+    private ListChooser<String> lcKayttajat;
 
-        @FXML void handleAvaa() {
-            ModalController.showModal(KotityotGUIController.class.getResource("KotityotPaaikkunaView.fxml"), "Kotityöt", null, "");
-            //avaa();
-        }
+    @FXML void handleAvaa() {
+        avaaPaaikkuna();
+        //avaa();
+    }
     
-        @FXML void handleAvaaAlkuikkuna() {
-            ModalController.showModal(KotityotGUIController.class.getResource("KotityotAlkuikkunaView.fxml"), "Aloitus", null, "");
-        }
+        
+    @FXML void handleAvaaAlkuikkuna() {
+        avaaAlkuikkuna();
+    }
 
-        @FXML void handleAvaaApuja() {
-            avustus();
-        }
+        
+    @FXML void handleAvaaApuja() {
+        avustus();
+    }
 
-        @FXML void handleLopeta() {
-            tallenna();
-            Platform.exit();
-        }
+        
+    @FXML void handleLopeta() {
+        tallenna();
+        Platform.exit();
+    }
 
-        @FXML void handleMuokkaaKayttajia() {
-            ModalController.showModal(KotityotGUIController.class.getResource("KotityotMuokkaaKayttajiaView.fxml"), "Käyttäjien muokkaus", null, "");
-        }
+        
+    @FXML void handleMuokkaaKayttajia() {
+        muokkaaKayttajia();
+    }
 
-        @FXML void handleMuokkaaTehtavia() {
-            ModalController.showModal(KotityotGUIController.class.getResource("KotityotMuokkaaTehtaviaView.fxml"), "Käyttäjien muokkaus", null, "");
-        }
+        
+    @FXML void handleMuokkaaTehtavia() {
+        muokkaaTehtavia();
+    }
 
-        @FXML void handleUusiKayttaja() {
-            Dialogs.showMessageDialog("Ei osata vielä tehdä uusia käyttäjiä.");
-        }
+        
+    @FXML void handleUusiKayttaja() {
+        Dialogs.showMessageDialog("Ei osata vielä tehdä uusia käyttäjiä.");
+    }
 
-        @FXML void handleUusiTehtava() {
-            Dialogs.showMessageDialog("Ei osata vielä tehdä uusia tehtäviä.");
-        }
+        
+    @FXML void handleUusiTehtava() {
+        KotityotUusiTehtavaController.aloita(null, "");
+    }
 
     // ====================oma osuus======================================
-    
+
+
+    /*
+     * Avaa alkuikkunan
+     */
+    private void avaaAlkuikkuna() {
+        ModalController.showModal(KotityotGUIController.class.getResource(
+                "KotityotAlkuikkunaView.fxml"), "Aloitus", null, "");
+    }
+
+
+    /*
+     * Avaa pääikkunan
+     */
+    private void avaaPaaikkuna() {
+        ModalController.showModal(KotityotGUIController.class.getResource(
+                "KotityotPaaikkunaView.fxml"), "Kotityöt", null, "");
+    }
+
+
+    /*
+     * Avaa käyttäjienmuokkaus-ikkunan
+     */
+    private void muokkaaKayttajia() {
+        KotityotMuokkaaKayttajiaController.aloita(null, "");
+    }
+
+
+    private void muokkaaTehtavia() {
+        KotityotMuokkaaTehtaviaController.aloita(null, "");
+    }
+
+
     /**
-     * @return palauttaa false, jos painaa "cancel"
+     * @return palauttaa false, jos painaa "cancel" - ei vielä toimi oikein
      * 
      */
     public boolean avaa() {
-        KotityotAlkuikkunaController.kysyNimi(null, "testi");
-//        if (uusinimi != null) return false;
-//        lueTiedosto(uusinimi);
+        ModalController.showModal(KotityotGUIController.class.getResource(
+                "KotityotAlkuikkunaView.fxml"), "Aloitus", null, "");
         return true;
     }
-    
+
+
+    /*
+     * Tallennuksen toiminnallisuus
+     */
     private void tallenna() {
-        // TODO Auto-generated method stub
-        
+        Dialogs.showMessageDialog("Tallennetaan! Mutta ei toimi vielä.");
     }
-    
+
+
     /*
      * Näytetään ohjelman suunnitelma erillisessä selaimessa
      */
     private void avustus() {
         Desktop desktop = Desktop.getDesktop();
         try {
-            URI uri = new URI("https://tim.jyu.fi/view/kurssit/tie/ohj2/2022k/ht/aarnipex");
+            URI uri = new URI(
+                    "https://tim.jyu.fi/view/kurssit/tie/ohj2/2022k/ht/aarnipex");
             desktop.browse(uri);
         } catch (URISyntaxException e) {
             return;
@@ -85,6 +130,5 @@ public class KotityotGUIController {
             return;
         }
 
-        
     }
 }
