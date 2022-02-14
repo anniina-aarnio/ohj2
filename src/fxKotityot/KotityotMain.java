@@ -1,11 +1,11 @@
 package fxKotityot;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.fxml.FXMLLoader;
-
 
 /**
  * @author Anniina
@@ -16,20 +16,24 @@ public class KotityotMain extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            FXMLLoader ldr = new FXMLLoader(getClass().getResource("KotityotharjGUIAlkuikkuna.fxml"));
+            final FXMLLoader ldr = new FXMLLoader(getClass().getResource("KotityotPaaikkunaView.fxml"));
             final Pane root = ldr.load();
-            //final KotityotGUIController kotityotCtrl = (KotityotGUIController) ldr.getController();
+            final KotityotGUIController kotityotCtrl = (KotityotGUIController) ldr.getController();
+            
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("kotityot.css").toExternalForm());
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Kotityot");
+            primaryStage.setTitle("Kotityöt");
             primaryStage.show();
+            
+            if (!kotityotCtrl.avaa()) Platform.exit(); //metodi, jolla vois saada alkuikkunan alle "varsinaisen ohjelman ikkuna" - luo avaa-metodi
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
+     * Käynnistetään käyttöliittymä
      * @param args Ei k�yt�ss�
      */
     public static void main(String[] args) {

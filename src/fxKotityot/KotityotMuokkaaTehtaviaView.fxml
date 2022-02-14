@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import fi.jyu.mit.fxgui.CheckBoxChooser?>
+<?import fi.jyu.mit.fxgui.StringGrid?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fi.jyu.mit.fxgui.ModalController">
+   <left>
+      <BorderPane BorderPane.alignment="CENTER">
+         <top>
+            <Label text="Käyttäjät" BorderPane.alignment="CENTER" />
+         </top>
+         <bottom>
+            <HBox BorderPane.alignment="BOTTOM_LEFT">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+         </bottom>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <center>
+            <ScrollPane BorderPane.alignment="CENTER">
+               <content>
+                  <CheckBoxChooser rivit="Aada&#10;Benjamin&#10;Cecilia&#10;Daniel&#10;">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </CheckBoxChooser>
+               </content>
+            </ScrollPane>
+         </center>
+      </BorderPane>
+   </left>
+   <center>
+      <BorderPane prefHeight="300.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <center>
+            <StringGrid editable="true" minHeight="300.0" rivit="Nimi|Aika|Minimi-ikä&#10;Imurointi|40|7&#10;Likakaivon tyhjennys|30|18&#10;Roskien vienti|2|7" BorderPane.alignment="CENTER">
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy></StringGrid>
+         </center>
+         <top>
+            <Label text="Tehtävät" BorderPane.alignment="CENTER" />
+         </top>
+      </BorderPane>
+   </center>
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Tiedosto">
+            <items>
+                  <Menu mnemonicParsing="false" text="Uusi...">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Käyttäjä" />
+                    <MenuItem mnemonicParsing="false" text="Tehtävä">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="U" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                    </items>
+                  </Menu>
+                  <MenuItem mnemonicParsing="false" text="Lopeta">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator></MenuItem>
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Muokkaa">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Muokkaa käyttäjiä" />
+                  <MenuItem mnemonicParsing="false" text="Muokkaa tehtäviä" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Apua">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Apua..." />
+                  <MenuItem mnemonicParsing="false" text="Tietoja" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <right>
+      <VBox prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Rajaukset tehtäviin">
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding></Label>
+            <Label text="Haku nimestä:" />
+            <TextField />
+            <CheckBox mnemonicParsing="false" text="Vapaat">
+               <padding>
+                  <Insets top="8.0" />
+               </padding></CheckBox>
+            <CheckBox layoutX="20.0" layoutY="99.0" mnemonicParsing="false" text="Ikä:">
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </CheckBox>
+            <Slider majorTickUnit="1.0" max="18.0" minHeight="200.0" minorTickCount="0" orientation="VERTICAL" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </right>
+   <bottom>
+      <BorderPane BorderPane.alignment="CENTER">
+         <left>
+            <Button text="Uusi käyttäjä" BorderPane.alignment="CENTER">
+               <tooltip>
+                  <Tooltip text="Lisää uusi käyttäjä" />
+               </tooltip>
+               <BorderPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </BorderPane.margin>
+            </Button>
+         </left>
+         <center>
+            <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <buttons>
+                  <Button mnemonicParsing="false" text="Poista tehtävä">
+                     <tooltip>
+                        <Tooltip text="Poista valittuna oleva tehtävä" />
+                     </tooltip>
+                  </Button>
+                  <Button layoutX="159.0" layoutY="10.0" text="_Uusi tehtävä">
+                     <tooltip>
+                        <Tooltip text="Luo uusi tehtävä" />
+                     </tooltip>
+                  </Button>
+               </buttons>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="31.0" top="10.0" />
+               </padding>
+            </ButtonBar>
+         </center>
+         <right>
+            <Button mnemonicParsing="false" text="Tallenna ja poistu" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </BorderPane.margin>
+            </Button>
+         </right>
+      </BorderPane>
+   </bottom>
+</BorderPane>
