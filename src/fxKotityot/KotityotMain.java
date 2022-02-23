@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.fxml.FXMLLoader;
+import kotitalous.Kotitalous;
 
 /**
  * @author Anniina
@@ -13,6 +14,7 @@ import javafx.fxml.FXMLLoader;
  *
  */
 public class KotityotMain extends Application {
+    
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -24,6 +26,10 @@ public class KotityotMain extends Application {
             scene.getStylesheets().add(getClass().getResource("kotityot.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.setTitle("Kotityöt");
+            
+            Kotitalous ktalous = new Kotitalous();
+            kotityotCtrl.setKotitalous(ktalous);
+            
             primaryStage.show();
             
             if (!kotityotCtrl.avaa()) Platform.exit(); 
@@ -34,7 +40,7 @@ public class KotityotMain extends Application {
 
     /**
      * Käynnistetään käyttöliittymä
-     * @param args Ei k�yt�ss�
+     * @param args komentorivin parametrit
      */
     public static void main(String[] args) {
         launch(args);
