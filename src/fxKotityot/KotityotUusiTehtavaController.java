@@ -8,7 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 /**
- * Hoitaa uusien tehtävien ikkunan
+ * Hoitaa uusien tehtävien (ja mahd. tehtävien muokkauksen) ikkunan
  * @author Anniina
  * @version 14.2.2022
  *

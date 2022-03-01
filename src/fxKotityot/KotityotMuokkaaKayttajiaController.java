@@ -3,7 +3,9 @@ package fxKotityot;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import kotitalous.Kayttaja;
 import fi.jyu.mit.fxgui.Dialogs;
+import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 
@@ -13,6 +15,8 @@ import fi.jyu.mit.fxgui.ModalControllerInterface;
  *
  */
 public class KotityotMuokkaaKayttajiaController implements ModalControllerInterface<String> {
+    
+    @FXML private ListChooser<Kayttaja> lcKayttajat;
 
     @FXML private TextField textIka;
 
