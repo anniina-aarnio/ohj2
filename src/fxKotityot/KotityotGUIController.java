@@ -83,7 +83,7 @@ public class KotityotGUIController implements Initializable {
      */
     private void alusta() {
         lcKayttajat.clear(); //tyhjentää
-        lcKayttajat.addSelectionListener(e -> naytaJasen()); // tätä ennen voisi olla esillä textArea, johon tulostetaan.. tee kayttajactrl:iin
+        lcKayttajat.addSelectionListener(e -> naytaKayttaja()); // tätä ennen voisi olla esillä textArea, johon tulostetaan.. tee kayttajactrl:iin
     }
     
     /*
@@ -104,19 +104,16 @@ public class KotityotGUIController implements Initializable {
     }
 
     
-    private void naytaJasen() {
+    private void naytaKayttaja() {
         Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
         if (kayttajaKohdalla == null) return;
-        //areaJasen.setText("");
-        //try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaJasen)) { //import printstream
-        //  kayttajaKohdalla.tulosta(os);
-        //}
     }
 
     /*
      * Avaa käyttäjienmuokkaus-ikkunan
      */
     private void muokkaaKayttajia() {
+        KotityotMuokkaaKayttajiaController.setKotitalous(ktalous);
         KotityotMuokkaaKayttajiaController.aloita(null, "");
     }
 
