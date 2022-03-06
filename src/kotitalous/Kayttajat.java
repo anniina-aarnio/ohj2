@@ -57,6 +57,20 @@ public class Kayttajat {
         this.lkm++;
     }
     
+    
+    /**
+     * @param kayttajaId etsitty käyttäjä-id
+     * @return etsitty käyttäjä
+     * @throws SailoException jos ei löydy käyttäjää annetulla id:llä
+     */
+    public Kayttaja etsi(int kayttajaId) throws SailoException {
+        for (Kayttaja k : this.alkiot) {
+            if (k.getKid() == kayttajaId) return k;
+        }
+        throw new SailoException("Ei löydy annetulla käyttäjäindeksillä " + kayttajaId);
+    }
+    
+    
     /**
      * @param i käyttäjän indeksi
      * @return käyttäjä kyseisellä indeksillä
