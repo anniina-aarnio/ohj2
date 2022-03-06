@@ -28,6 +28,16 @@ public class Tehtavat {
      * @param tehtavaId etsittävän tehtävän 
      * @return etsitty tehtävä
      * @throws SailoException virheilmoitus, jos ei löytynyt
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * Tehtavat teet = new Tehtavat();
+     * Tehtava t1 = new Tehtava();
+     * t1.rekisteroi();
+     * teet.lisaa(t1);
+     * teet.anna(t1.getTid()) === t1;
+     * teet.anna(200); #THROWS SailoException
+     * </pre>
      */
     public Tehtava anna(int tehtavaId) throws SailoException {
         for (Tehtava t : this.alkiot) {
@@ -39,6 +49,13 @@ public class Tehtavat {
     /**
      * Palauttaa tehtävien lukumäärän
      * @return tehtävien lukumäärä
+     * @example
+     * <pre name="test">
+     *  Tehtavat teet = new Tehtavat();
+     *  teet.getLkm() === 0;
+     *  teet.lisaa(new Tehtava());
+     *  teet.getLkm() === 1;
+     * </pre>
      */
     public int getLkm() {
         return this.alkiot.size();
