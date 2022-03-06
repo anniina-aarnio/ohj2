@@ -1,7 +1,7 @@
 package kotitalous;
 
 /**
- * Käyttäjät-luokka, vastuaalueet:
+ * Käyttäjät-luokka, vastuualueet:
  * Pitää yllä varsinaista käyttäjärekisteriä, eli osaa lisätä ja poistaa käyttäjän
  * Lukee ja kirjoittaa käyttäjien tiedostoon
  * Osaa etsiä ja lajitella
@@ -27,10 +27,8 @@ public class Kayttajat {
     /**
      * Lisätään käyttäjä käyttäjistöön
      * @param kayttaja lisättävä käyttäjä
-     * @throws SailoException virheilmoitus, jos käyttäjiä on liikaa
      * @example
      * <pre name="test">
-     *  #THROWS SailoException
      *  Kayttajat kayttajat = new Kayttajat();
      *  Kayttaja aada = new Kayttaja(), ben = new Kayttaja();
      *  kayttajat.getLkm() === 0;
@@ -45,11 +43,16 @@ public class Kayttajat {
      *  kayttajat.anna(3) === aada; #THROWS IndexOutOfBoundsException
      *  kayttajat.lisaa(aada); kayttajat.getLkm() === 4;
      *  kayttajat.lisaa(aada); kayttajat.getLkm() === 5;
-     *  kayttajat.lisaa(aada); #THROWS SailoException
      * </pre>
      */
-    public void lisaa(Kayttaja kayttaja) throws SailoException {
-        if (lkm >= this.alkiot.length) throw new SailoException("Liikaa käyttäjiä.");  //alkeellinen versio, toteuta taulukon suurennus
+    public void lisaa(Kayttaja kayttaja)  {
+        if (lkm >= this.alkiot.length) {
+            Kayttaja[] uusi = new Kayttaja[lkm + 10];
+            for (int i = 0; i < lkm; i++) {
+                uusi[i] = this.alkiot[i];
+            }
+            this.alkiot = uusi;
+        }
         this.alkiot[lkm] = kayttaja;
         this.lkm++;
     }
@@ -92,9 +95,11 @@ public class Kayttajat {
         try {
             kayttajat.lisaa(aada);
             kayttajat.lisaa(ben);
+            kayttajat.lisaa(aada);
+            kayttajat.lisaa(ben);
+            kayttajat.lisaa(aada);
+            kayttajat.lisaa(ben);
             kayttajat.anna(34);
-        } catch (SailoException e) { 
-            System.err.println(e.getMessage());
         } catch (IndexOutOfBoundsException e) {
             System.err.println(e.getMessage());
         }
