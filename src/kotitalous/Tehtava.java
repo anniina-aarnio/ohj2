@@ -46,6 +46,12 @@ public class Tehtava {
         this.ika = HetuTarkistus.rand(5, 18);
     }
     
+    /**
+     * @return tehtävä-id
+     */
+    public int getTid() {
+        return this.tid;
+    }
     
     /**
      * Tulostetaan käyttäjän tiedot
