@@ -23,10 +23,7 @@ public class Kayttaja {
     
     private static int  seuraavaNro  = 1;               // luokkamuuttuja, joka on olemassa ilman yhtään olemassaolevaa kayttajaa
     
-
-    // jos luokassa on parametriton JA jokin toinen muodostaja niin parametritonkin on pakko tehdä
-    // pelkkään parametrittomaan riittää tämä alustukseksi
-    
+  
     /**
      * Antaa jäsenelle seuraavan rekisterinumeron.
      * @return käyttäjän uusi id-numero
