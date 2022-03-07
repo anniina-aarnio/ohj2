@@ -12,8 +12,8 @@ package kotitalous;
  */
 public class Kotitalous {
     private final Kayttajat kayttajat = new Kayttajat();
-    // private final Tehtavat tehtavat = new Tehtavat();
-    // private final Sovitut sovitut = new Sovitut();
+    private final Tehtavat tehtavat = new Tehtavat();
+    private final SovitutTehtavat sovitut = new SovitutTehtavat();
 
     /**
      * Palauttaa käyttäjien määrän
@@ -50,7 +50,22 @@ public class Kotitalous {
     public void lisaa(Kayttaja kayttaja) throws SailoException {
         this.kayttajat.lisaa(kayttaja);
     }
+    
+    
+    /**
+     * @param tehtava lisättävä tehtävä
+     */
+    public void lisaa(Tehtava tehtava) {
+        this.tehtavat.lisaa(tehtava);
+    }
+    
 
+    /**
+     * @param sovittutehtava lisättävä sovittu tehtävä
+     */
+    public void lisaa(SovittuTehtava sovittutehtava) {
+        this.sovitut.lisaa(sovittutehtava);
+    }
     
     /**
      * Palauttaa i:nnen jäsenen
@@ -61,7 +76,7 @@ public class Kotitalous {
     public Kayttaja annaKayttaja(int i) throws IndexOutOfBoundsException {
         return this.kayttajat.anna(i);
     }
-
+    
     
     /**
      * @param args ei käytössä
