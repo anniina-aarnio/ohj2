@@ -3,6 +3,7 @@ package kotitalous;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
 import kanta.HetuTarkistus;
 
 /**
@@ -23,6 +24,11 @@ public class Kayttaja {
     
     private static int  seuraavaNro  = 1;               // luokkamuuttuja, joka on olemassa ilman yhtään olemassaolevaa kayttajaa
     
+    
+    private void setKid(int nr) {
+        this.kid = nr;
+        if (this.kid < seuraavaNro) seuraavaNro = this.kid + seuraavaNro;
+    }
   
     /**
      * Antaa jäsenelle seuraavan rekisterinumeron.
@@ -94,6 +100,45 @@ public class Kayttaja {
      */
     public void tulosta(OutputStream os) {
         tulosta(new PrintStream(os));           // printstream saa hoitaa yhteyden outputstreamille
+    }
+    
+    
+    /**
+     * Selvittää jäsenen tiedot | erotellusta merkkijonosta
+     * Pitää huolen, että seuraavaNro on suurempi kuin tuleva tunnusNro
+     * @param rivi josta käyttäjän tiedot otetaan
+     * 
+     * @example
+     * <pre name="test">
+     *  Kayttaja kayttaja = new Kayttaja();
+     *  kayttaja.parse("   3   | Aada     | 35   ");
+     *  kayttaja.getTunnusNro() === 3;
+     *  kayttaja.toString().startsWith("3|Aada|35") === true;
+     *  
+     *  kayttaja.rekisteroi();
+     *  int n = kayttaja.getTunnusNro();
+     *  kayttaja.parse(""+(n+20); // Otetaan merkkijonosta vain tunnusnumero
+     *  kayttaja.rekisteroi(;     // ja tarkistetaan että seuraavalla kertaa tulee yhtä isompi
+     *  kayttaja.getTunnusNro() === n+20+1;
+     * </pre>
+     */
+    public void parse(String rivi) {
+        var sb = new StringBuilder(rivi);
+        setKid(Mjonot.erota(sb, '|', getKid()));
+        this.nimi = Mjonot.erota(sb, '|', this.nimi);
+        this.ika = Mjonot.erota(sb, '|', this.ika);
+    }
+    
+    
+    /**
+     * 
+     */
+    @Override
+    public String toString() {
+        return "" + this.getKid() + "|" +
+                this.nimi + "|" + 
+                this.ika;
+                
     }
     
     

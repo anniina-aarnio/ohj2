@@ -5,7 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
-import kotitalous.SailoException;
+import kotitalous.Tehtava;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -65,7 +65,8 @@ public class KotityotGUIController implements Initializable {
 
         
     @FXML void handleUusiTehtava() {
-        KotityotUusiTehtavaController.aloita(null, "");
+        //KotityotUusiTehtavaController.aloita(null, "");
+        uusiTehtava(); // 5-vaihetta varten tehdään höpöversio
     }
 
     // ====================oma osuus======================================
@@ -107,7 +108,20 @@ public class KotityotGUIController implements Initializable {
     private void naytaKayttaja() {
         Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
         if (kayttajaKohdalla == null) return;
+        
+//        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaKayttaja)) {
+//            tulosta(os, kayttajaKohdalla);
+//        }
+
     }
+    
+//    private void tulosta(PrintStream os, final Kayttaja kayttaja) {
+//      List<SovitutTehtavat> sovitut = ktalous.annaSovitut(kayttajaKohdalla);    // etsii sovitut tehtävät ja tulostaa ne väliaikaiseen textareaan (tehtäväboksin tilalla)
+//      
+//      for (SovittuTehtava st : sovitut) {
+//          st.tulosta(textarea);
+//      }
+//    }
 
     /*
      * Avaa käyttäjienmuokkaus-ikkunan
@@ -163,6 +177,7 @@ public class KotityotGUIController implements Initializable {
         lcKayttajat.setSelectedIndex(index);
     }
     
+    
     /**
      * Lisätään uusi käyttäjä
      */
@@ -170,12 +185,17 @@ public class KotityotGUIController implements Initializable {
         Kayttaja uusi = new Kayttaja();
         uusi.rekisteroi(); // tätä ei kannata oikeasti tähän kohtaan laittaa, vaan vasta tallennuksen kohdalla...
         uusi.taytaAadaTiedoilla();
-        try {
-            ktalous.lisaa(uusi);
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog("Ongelmia uuden luomisessa: " + e.getMessage());
-        }
+        ktalous.lisaa(uusi);
+
         hae(uusi.getKid());
+    }
+    
+    
+    private void uusiTehtava() {
+        Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
+        if (kayttajaKohdalla == null) return;
+        Tehtava teht = new Tehtava();
+        teht.taytaImurointiTiedoilla();
     }
     
 

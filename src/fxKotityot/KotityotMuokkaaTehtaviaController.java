@@ -18,42 +18,33 @@ import javafx.scene.control.Slider;
 public class KotityotMuokkaaTehtaviaController
         implements ModalControllerInterface<String> {
 
-    @FXML
-    private CheckBox cbIka;
+    @FXML private CheckBox cbIka;
 
-    @FXML
-    private CheckBoxChooser<?> cbKayttajat;
+    @FXML private CheckBoxChooser<?> cbKayttajat;
 
-    @FXML
-    private CheckBox cbVapaat;
+    @FXML private CheckBox cbVapaat;
 
-    @FXML
-    private Slider sliderIka;
+    @FXML private Slider sliderIka;
 
-    @FXML
-    private TextField textHaku;
+    @FXML private TextField textHaku;
 
-    @FXML
-    void handleMuokkaaKayttajia() {
+    @FXML void handleMuokkaaKayttajia() {
         muokkaa();
     }
 
 
-    @FXML
-    void handlePoistaTehtava() {
+    @FXML void handlePoistaTehtava() {
         poista();
     }
 
 
-    @FXML
-    void handleTallennaPoistu() {
+    @FXML void handleTallennaPoistu() {
         Dialogs.showMessageDialog("Ei osata vielä tallentaa muutoksia.");
         ModalController.closeStage(textHaku);
     }
 
 
-    @FXML
-    void handleUusiTehtava() {
+    @FXML void handleUusiTehtava() {
         uusi();
     }
 

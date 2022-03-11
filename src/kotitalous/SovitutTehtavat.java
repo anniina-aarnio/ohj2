@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class SovitutTehtavat {
     
-    private final Collection<SovittuTehtava> alkiot = new ArrayList<SovittuTehtava>();
+    private final Collection<SovittuTehtava> alkiot = new ArrayList<SovittuTehtava>();  // pitäisikö olla hashmap??
     
     
     /**
@@ -28,7 +28,7 @@ public class SovitutTehtavat {
     
     /**
      * Etsii käyttäjät tehtävä-id:n perusteella
-     * @param tehtavaId tehtävä-id, jonka perusteella etsitään
+     * @param tehtava tehtävä-id, jonka perusteella etsitään
      * @return kaikki käyttäjät, joilla annettu tehtävä on
      * @example
      * <pre name="test">
@@ -58,51 +58,52 @@ public class SovitutTehtavat {
      *   teet.lisaa(t1);
      *   teet.lisaa(t2);
      *   
-     *   st1.setKayttaja(k1.getKid());
-     *   st2.setKayttaja(k2.getKid());
-     *   st3.setKayttaja(k1.getKid());
-     *   st1.setTehtava(t1.getTid());
-     *   st2.setTehtava(t2.getTid());
-     *   st3.setTehtava(t2.getTid());
+     *   st1.setKayttaja(k1);
+     *   st2.setKayttaja(k2);
+     *   st3.setKayttaja(k1);
+     *   st1.setTehtava(t1);
+     *   st2.setTehtava(t2);
+     *   st3.setTehtava(t2);
      *   
      *   steet.lisaa(st1);
      *   steet.lisaa(st2);
      *   steet.lisaa(st3);
      *   
-     *   List<SovittuTehtava> loytyneet = steet.annaSovitutKayttajat(t1.getTid());
+     *   List<SovittuTehtava> loytyneet = steet.annaSovitutKayttajat(t1);
      *   loytyneet.size() === 1;
      *   loytyneet.get(0) == st1 === true;
      *   
-     *   loytyneet = steet.annaSovitutTehtavat(k2.getKid());
+     *   loytyneet = steet.annaSovitutTehtavat(k2);
      *   loytyneet.size() === 1;
      *   loytyneet.get(0) == st2 === true;
      *   
      * </pre>
      */
-    public List<SovittuTehtava> annaSovitutKayttajat(int tehtavaId) {
+    public List<SovittuTehtava> annaSovitutKayttajat(Tehtava tehtava) {
         List<SovittuTehtava> loydetyt = new ArrayList<SovittuTehtava>();
         for (SovittuTehtava st : this.alkiot) {
-            if (st.getTid() == tehtavaId) loydetyt.add(st);
+            if (st.getTid() == tehtava.getTid()) loydetyt.add(st);
         }
         return loydetyt;
     }
     
     
     /**
-     * Etsii tehtävät käyttäjä-id:n perusteella
-     * @param kayttajaId käyttäjä-id, jonka perusteella etsitään
+     * Etsii tehtävät käyttäjän perusteella
+     * @param kayttaja käyttäjä, jonka perusteella etsitään
      * @return kaikki tehtävät, joilla annettu käyttäjä on
      */
-    public List<SovittuTehtava> annaSovitutTehtavat(int kayttajaId) {
+    public List<SovittuTehtava> annaSovitutTehtavat(Kayttaja kayttaja) {
         List<SovittuTehtava> loydetyt = new ArrayList<SovittuTehtava>();
         for (SovittuTehtava st : this.alkiot) {
-            if (st.getKid() == kayttajaId) loydetyt.add(st);
+            if (st.getKid() == kayttaja.getKid()) loydetyt.add(st);
         }
         return loydetyt;
     }
     
     
     /**
+     * Testataan Sovitut tehtävät -luokkaa
      * @param args ei käytössä
      */
     public static void main(String[] args) {
@@ -131,18 +132,18 @@ public class SovitutTehtavat {
         teet.lisaa(t1);
         teet.lisaa(t2);
         
-        st1.setKayttaja(k1.getKid());
-        st2.setKayttaja(k2.getKid());
-        st3.setKayttaja(k1.getKid());
-        st1.setTehtava(t1.getTid());
-        st2.setTehtava(t2.getTid());
-        st3.setTehtava(t2.getTid());
+        st1.setKayttaja(k1);
+        st2.setKayttaja(k2);
+        st3.setKayttaja(k1);
+        st1.setTehtava(t1);
+        st2.setTehtava(t2);
+        st3.setTehtava(t2);
                 
         steet.lisaa(st1);
         steet.lisaa(st2);
         steet.lisaa(st3);
         
-        List<SovittuTehtava> sovitut = steet.annaSovitutKayttajat(t2.getTid());
+        List<SovittuTehtava> sovitut = steet.annaSovitutKayttajat(t2);
         System.out.println("Tehtävät käyttäjä-id:n perusteella:");
         for (SovittuTehtava st : sovitut) {
             try {
@@ -152,7 +153,7 @@ public class SovitutTehtavat {
             }
         }
         
-        sovitut = steet.annaSovitutTehtavat(k1.getKid());
+        sovitut = steet.annaSovitutTehtavat(k1);
         System.out.println("\nKäyttäjät tehtävä-id:n perusteella:");
         for (SovittuTehtava st : sovitut) {
             try {

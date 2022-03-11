@@ -8,8 +8,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
-import kotitalous.SailoException;
-
 import java.io.PrintStream;
 
 import fi.jyu.mit.fxgui.Dialogs;
@@ -115,11 +113,8 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         Kayttaja uusi = new Kayttaja();
         uusi.rekisteroi(); // tätä ei kannata oikeasti tähän kohtaan laittaa, vaan vasta tallennuksen kohdalla...
         uusi.taytaAadaTiedoilla();
-        try {
-            ktalous.lisaa(uusi);
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog("Ongelmia uuden luomisessa: " + e.getMessage());
-        }
+        ktalous.lisaa(uusi);
+        
         hae(uusi.getKid());
     }
     

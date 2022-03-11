@@ -18,17 +18,17 @@ public class SovittuTehtava {
     private int tid;
     
     /**
-     * @param kayttajaId käyttäjän id
+     * @param kayttaja käyttäjän id
      */
-    public void setKayttaja(int kayttajaId) {
-        this.kid = kayttajaId;
+    public void setKayttaja(Kayttaja kayttaja) {
+        this.kid = kayttaja.getKid();
     }
     
     /**
-     * @param tehtavaId tehtävän id
+     * @param tehtava tehtävän id
      */
-    public void setTehtava(int tehtavaId) {
-        this.tid = tehtavaId;
+    public void setTehtava(Tehtava tehtava) {
+        this.tid = tehtava.getTid();
     }
     
     /**
@@ -87,10 +87,10 @@ public class SovittuTehtava {
         teet.lisaa(t1);
         teet.lisaa(t2);
         
-        st1.setKayttaja(k1.getKid());
-        st2.setKayttaja(k2.getKid());
-        st1.setTehtava(t1.getTid());
-        st2.setTehtava(t2.getTid());
+        st1.setKayttaja(k1);
+        st2.setKayttaja(k2);
+        st1.setTehtava(t1);
+        st2.setTehtava(t2);
         
         st1.tulosta(System.out);
         st2.tulosta(System.out);
