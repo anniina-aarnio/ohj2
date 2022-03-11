@@ -8,7 +8,12 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
+import kotitalous.SailoException;
+import kotitalous.SovittuTehtava;
+import kotitalous.Tehtava;
+
 import java.io.PrintStream;
+import java.util.List;
 
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
@@ -43,6 +48,10 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         //Dialogs.showMessageDialog("Ei osata vielä lisätä uusia käyttäjiä.");
         uusiKayttaja();
     }
+    
+    @FXML void handleUusiTehtava() {
+        uusiTehtava();
+    }
 
     // =========================================
     private static Kotitalous ktalous;
@@ -58,6 +67,7 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         panelKayttaja.setFitToHeight(true);
         
         lcKayttajat.clear(); //tyhjentää
+        tayta();
         lcKayttajat.addSelectionListener(e -> naytaKayttaja());
     }
     
@@ -68,6 +78,15 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         areaKayttaja.setText("");
         try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaKayttaja)) { //import printstream
           kayttajaKohdalla.tulosta(os);
+          os.println("-- Tehtävät --");
+          List<SovittuTehtava> sovitut = ktalous.annaSovitutTehtavat(kayttajaKohdalla);
+          for (SovittuTehtava st : sovitut) {
+              try {
+                ktalous.etsiTehtava(st.getTid()).tulosta(os);
+            } catch (SailoException e) {
+                Dialogs.showMessageDialog(e.getMessage());
+            }
+          }
         }
     }
     
@@ -94,13 +113,22 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     }
     
     
-    private void hae(int kayttajaId) {
+    private void tayta() {
+        for (int i = 0; i < ktalous.getKayttajia(); i++) {
+            Kayttaja kayttaja = ktalous.annaKayttaja(i);
+            lcKayttajat.add("" + kayttaja.getNimi(), kayttaja);
+        }
+    }
+    
+    private void hae(Kayttaja haettavaKayttaja) {
         lcKayttajat.clear();
+        
+        int haettavaId = haettavaKayttaja.getKid();
         
         int index = 0;
         for (int i = 0; i < ktalous.getKayttajia(); i++) {
             Kayttaja kayttaja = ktalous.annaKayttaja(i);
-            if (kayttaja.getKid() == kayttajaId) index = i;
+            if (kayttaja.getKid() == haettavaId) index = i;
             lcKayttajat.add(""+kayttaja.getNimi(), kayttaja);
         }
         lcKayttajat.setSelectedIndex(index);
@@ -115,7 +143,20 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         uusi.taytaAadaTiedoilla();
         ktalous.lisaa(uusi);
         
-        hae(uusi.getKid());
+        hae(uusi);
+    }
+    
+    private void uusiTehtava() {
+        Tehtava uusi = new Tehtava();
+        uusi.rekisteroi();
+        uusi.taytaImurointiTiedoilla();
+        ktalous.lisaa(uusi);
+        
+        SovittuTehtava st = new SovittuTehtava();
+        st.setKayttaja(kayttajaKohdalla);
+        st.setTehtava(uusi);
+        ktalous.lisaa(st);
+        hae(kayttajaKohdalla);
     }
     
     

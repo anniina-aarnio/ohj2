@@ -87,6 +87,7 @@ public class KotityotGUIController implements Initializable {
         lcKayttajat.addSelectionListener(e -> naytaKayttaja()); // tätä ennen voisi olla esillä textArea, johon tulostetaan.. tee kayttajactrl:iin
     }
     
+    
     /*
      * Avaa alkuikkunan
      */

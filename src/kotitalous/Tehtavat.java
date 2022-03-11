@@ -2,6 +2,8 @@ package kotitalous;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Tehtävät-luokka:
@@ -11,7 +13,7 @@ import java.util.Collection;
  * @author Anniina
  * @version 6.3.2022
  */
-public class Tehtavat {
+public class Tehtavat implements Iterable<Tehtava> {
     
     private final Collection<Tehtava> alkiot = new ArrayList<Tehtava>();
     
@@ -61,7 +63,25 @@ public class Tehtavat {
     public int getLkm() {
         return this.alkiot.size();
     }
+
     
+    /**
+     * Luo ja palauttaa listan, jossa on kaikki tämän hetken tehtävät
+     * @return tehtävät listana
+     */
+    public List<Tehtava> annaKaikki() {
+        List<Tehtava> kaikki = new ArrayList<Tehtava>();
+        for (Tehtava t : this.alkiot) {
+            kaikki.add(t);
+        }
+        return kaikki;
+    }
+    
+    
+    @Override
+    public Iterator<Tehtava> iterator() {
+        return this.alkiot.iterator();
+    }
     
     /**
      * Testaa tehtävät-luokkaa
@@ -89,5 +109,7 @@ public class Tehtavat {
             System.out.println(e.getMessage());
         }
     }
+
+
 
 }

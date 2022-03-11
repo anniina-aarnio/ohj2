@@ -52,7 +52,7 @@ public class Kotitalous {
         this.kayttajat.lisaa(kayttaja);
     }
 
-
+    //TODO lisää testit kaikkiin
     /**
      * @param tehtava lisättävä tehtävä
      */
@@ -109,6 +109,15 @@ public class Kotitalous {
         return this.tehtavat.etsi(tehtavaId);
     }
     
+    
+    /**
+     * Pyytää tehtäviä palauttamaan listan,
+     * jossa on kaikki tämän hetken tehtävät
+     * @return kaikki tehtävät listana
+     */
+    public List<Tehtava> annaTehtavat() {
+        return this.tehtavat.annaKaikki();
+    }
     
     /**
      * Palauttaa listan käyttäjistä annetun tehtävän perusteella

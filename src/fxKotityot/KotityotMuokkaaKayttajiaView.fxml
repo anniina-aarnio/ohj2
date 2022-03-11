@@ -31,6 +31,7 @@
                         <Tooltip text="Lisää uusi käyttäjä" />
                      </tooltip>
                   </Button>
+                  <Button mnemonicParsing="false" onAction="#handleUusiTehtava" text="V5 Tehtävä" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

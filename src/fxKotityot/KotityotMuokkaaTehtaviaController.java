@@ -49,8 +49,7 @@ public class KotityotMuokkaaTehtaviaController
     }
 
     // =========================================
-    // TODO pitäisikö tehdä ns. muokkauscontroller, joka jakautuu sekä
-    // käyttäjien että tehtävien muokkauksen mukaan...
+    
     // private int ika = 0;
     // private String nimi = null;
 
