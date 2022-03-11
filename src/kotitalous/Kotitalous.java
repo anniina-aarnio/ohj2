@@ -25,7 +25,8 @@ public class Kotitalous {
     public int getKayttajia() {
         return this.kayttajat.getLkm();
     }
-
+    
+    
 
     /**
      * Lisää kerhoon uuden jäsenen
@@ -66,6 +67,16 @@ public class Kotitalous {
     public void lisaa(SovittuTehtava sovittutehtava) {
         this.sovitut.lisaa(sovittutehtava);
     }
+    
+    
+    /**
+     * Lisää sovittuun tehtävään käyttäjän (id:n).
+     * @param st sovittu tehtävä, jota muokataan
+     * @param kayttaja käyttäjä, jonka id halutaan lisätä
+     */
+    public void setKayttaja(SovittuTehtava st, Kayttaja kayttaja) {
+        this.sovitut.setKayttaja(st, kayttaja);
+    }
 
 
     /**
@@ -80,13 +91,22 @@ public class Kotitalous {
     
     
     /**
-     * Palauttaa i:nnen tehtävän
-     * @param i monesko tehtävä palautetaan
-     * @return viite i:nteen tehtävään
-     * @throws SailoException jos i väärin
+     * @param kayttajaId käyttäjäid, jonka perusteella etsitään
+     * @return käyttäjä, jolla annettu käyttäjä-id
+     * @throws SailoException jos annettua käyttäjä-id:tä ei löydy
      */
-    public Tehtava annaTehtava(int i) throws SailoException {
-        return this.tehtavat.anna(i);
+    public Kayttaja etsiKayttaja(int kayttajaId) throws SailoException {
+        return this.kayttajat.etsi(kayttajaId);
+    }
+    
+    /**
+     * Palauttaa tehtävän tehtavaId:n perusteella
+     * @param tehtavaId id, jonka perusteella tehtävä etsitään
+     * @return viite tehtävään, jolla annettu id
+     * @throws SailoException jos tehtavaId:tä ei löydy
+     */
+    public Tehtava etsiTehtava(int tehtavaId) throws SailoException {
+        return this.tehtavat.etsi(tehtavaId);
     }
     
     
@@ -106,12 +126,12 @@ public class Kotitalous {
      * @return lista tehtävistä, joilla on sovittuna annettu käyttäjä
      */
     public List<SovittuTehtava> annaSovitutTehtavat(Kayttaja k) {
-        return this.annaSovitutTehtavat(k);
+        return this.sovitut.annaSovitutTehtavat(k);
     }
 
     
 //    /**
-//     * Tallettaa kotitalouden tiedot tiedostoon
+//     * Tallettaa kotitalouden tiedot tiedostoon VAIHE 6
 //     * @throws SailoException jos tallettamisessa ongelmia
 //     */
 //    public void tallenna() throws SailoException {
@@ -143,6 +163,28 @@ public class Kotitalous {
         kt.lisaa(aada);
         kt.lisaa(ben);
 
+        Tehtava imu = new Tehtava(), imut = new Tehtava();
+        imu.rekisteroi();
+        imu.taytaImurointiTiedoilla();
+        imut.rekisteroi();
+        imut.taytaImurointiTiedoilla();
+        
+        kt.lisaa(imu);
+        kt.lisaa(imut);
+        
+        SovittuTehtava st1 = new SovittuTehtava(), st2 = new SovittuTehtava(),
+                st3 = new SovittuTehtava();
+        st1.setKayttaja(aada);
+        st1.setTehtava(imu);
+        st2.setKayttaja(ben);
+        st2.setTehtava(imut);
+        st3.setKayttaja(aada);
+        st3.setTehtava(imut);
+        
+        kt.lisaa(st1);
+        kt.lisaa(st2);
+        kt.lisaa(st3);
+        
         System.out.println(
                 " ================ Kotitalouden testi ================ ");
         for (int i = 0; i < kt.getKayttajia(); i++) {
@@ -151,7 +193,28 @@ public class Kotitalous {
             kayttaja.tulosta(System.out);
         }
         
-        // kotitalous.tallenna(); //try catchin sisään...
+        
+        System.out.println("\nTehtävälle " + imu + " on sovittuna käyttäjät: ");
+        List<SovittuTehtava> sovitut = kt.annaSovitutKayttajat(imu);
+        for (SovittuTehtava st : sovitut) {
+            try {
+                System.out.println(kt.etsiKayttaja(st.getKid()));
+            } catch (SailoException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        System.out.println("\nKäyttäjälle " + aada + " on sovittuna tehtävät: ");
+        sovitut = kt.annaSovitutTehtavat(aada);
+        for (SovittuTehtava st : sovitut) {
+            try {
+                System.out.println(kt.etsiTehtava(st.getTid()));
+            } catch (SailoException e) {
+                e.printStackTrace();
+            };
+        }
+        
+        // kotitalous.tallenna(); //try catchin sisään... VAIHE6
 
     }
 

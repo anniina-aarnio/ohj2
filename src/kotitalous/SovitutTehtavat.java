@@ -26,6 +26,28 @@ public class SovitutTehtavat {
     }
     
     
+
+    /**
+     * Lisää sovittuun tehtävään käyttäjän (id:n).
+     * @param st sovittu tehtävä, jota muokataan
+     * @param kayttaja käyttäjä, jonka id halutaan lisätä
+     */
+    public void setKayttaja(SovittuTehtava st, Kayttaja kayttaja) {
+        st.setKayttaja(kayttaja);
+    }
+    
+    
+    
+    /**
+     * Lisää sovittuun tehtävään tehtävän(id:n).
+     * @param st sovittu tehtävä, jota muokataan
+     * @param tehtava tehtävä, jonka id halutaan lisätä
+     */
+    public void setTehtava(SovittuTehtava st, Tehtava tehtava) {
+        st.setTehtava(tehtava);
+    }
+    
+    
     /**
      * Etsii käyttäjät tehtävä-id:n perusteella
      * @param tehtava tehtävä-id, jonka perusteella etsitään
@@ -58,16 +80,16 @@ public class SovitutTehtavat {
      *   teet.lisaa(t1);
      *   teet.lisaa(t2);
      *   
-     *   st1.setKayttaja(k1);
-     *   st2.setKayttaja(k2);
-     *   st3.setKayttaja(k1);
-     *   st1.setTehtava(t1);
-     *   st2.setTehtava(t2);
-     *   st3.setTehtava(t2);
-     *   
      *   steet.lisaa(st1);
      *   steet.lisaa(st2);
      *   steet.lisaa(st3);
+     *   
+     *   steet.setKayttaja(st1, k1);
+     *   steet.setKayttaja(st2, k2);
+     *   steet.setKayttaja(st3, k1);
+     *   steet.setTehtava(st1, t1);
+     *   steet.setTehtava(st2, t2);
+     *   steet.setTehtava(st3, t2);
      *   
      *   List<SovittuTehtava> loytyneet = steet.annaSovitutKayttajat(t1);
      *   loytyneet.size() === 1;
@@ -144,24 +166,30 @@ public class SovitutTehtavat {
         steet.lisaa(st3);
         
         List<SovittuTehtava> sovitut = steet.annaSovitutKayttajat(t2);
-        System.out.println("Tehtävät käyttäjä-id:n perusteella:");
+        System.out.println("Käyttäjät tehtävä-id:n perusteella:");
         for (SovittuTehtava st : sovitut) {
             try {
-                System.out.println(koot.etsi(st.getKid()).getNimi() + " " + teet.anna(st.getTid()));
+                System.out.println(koot.etsi(st.getKid()).getNimi() + " " + teet.etsi(st.getTid()));
             } catch (SailoException e) {
                 System.out.println(e.getMessage());
             }
         }
         
         sovitut = steet.annaSovitutTehtavat(k1);
-        System.out.println("\nKäyttäjät tehtävä-id:n perusteella:");
+        System.out.println("\nTehtävät käyttäjä-id:n perusteella:");
         for (SovittuTehtava st : sovitut) {
             try {
-                System.out.println(koot.etsi(st.getKid()).getNimi() + " " + teet.anna(st.getTid()));
+                System.out.println(koot.etsi(st.getKid()).getNimi() + " " + teet.etsi(st.getTid()));
             } catch (SailoException e) {
                 System.out.println(e.getMessage());
             }
         }
         
+        for (SovittuTehtava st : sovitut) {
+            System.out.println(st);
+        }
+        
     }
+
+
 }

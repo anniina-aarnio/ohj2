@@ -23,7 +23,7 @@ public class Tehtavat {
         this.alkiot.add(tehtava);
     }
     
-    
+       
     /**
      * Etsii ja palauttaa tehtävä-id:n perusteella tehtävän
      * @param tehtavaId etsittävän tehtävän 
@@ -36,11 +36,11 @@ public class Tehtavat {
      * Tehtava t1 = new Tehtava();
      * t1.rekisteroi();
      * teet.lisaa(t1);
-     * teet.anna(t1.getTid()) === t1;
-     * teet.anna(200); #THROWS SailoException
+     * teet.etsi(t1.getTid()) === t1;
+     * teet.etsi(200); #THROWS SailoException
      * </pre>
      */
-    public Tehtava anna(int tehtavaId) throws SailoException {
+    public Tehtava etsi(int tehtavaId) throws SailoException {
         for (Tehtava t : this.alkiot) {
                 if (t.getTid() == tehtavaId) return t;
         }
@@ -62,6 +62,7 @@ public class Tehtavat {
         return this.alkiot.size();
     }
     
+    
     /**
      * Testaa tehtävät-luokkaa
      * @param args ei käytössä
@@ -80,14 +81,13 @@ public class Tehtavat {
         
         System.out.println("=================Tehtävä-testi===============");
         try {
-            teet.anna(1).tulosta(System.out);
-            teet.anna(2).tulosta(System.out);
-            teet.anna(3).tulosta(System.out);
+            teet.etsi(1).tulosta(System.out);
+            teet.etsi(2).tulosta(System.out);
+            teet.etsi(3).tulosta(System.out);
 
         } catch (SailoException e) {
             System.out.println(e.getMessage());
         }
-
     }
 
 }

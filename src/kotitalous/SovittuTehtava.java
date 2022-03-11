@@ -96,8 +96,8 @@ public class SovittuTehtava {
         st2.tulosta(System.out);
         
         try {
-            System.out.println(koot.etsi(st1.getKid()).getNimi() + " " + teet.anna(st1.getTid()));
-            System.out.println(koot.etsi(st2.getKid()).getNimi() + " " + teet.anna(st2.getTid()));
+            System.out.println(koot.etsi(st1.getKid()).getNimi() + " " + teet.etsi(st1.getTid()));
+            System.out.println(koot.etsi(st2.getKid()).getNimi() + " " + teet.etsi(st2.getTid()));
         } catch (IndexOutOfBoundsException | SailoException e) {
             e.printStackTrace();
         }
