@@ -36,10 +36,10 @@ public class Kayttaja {
      * @example
      * <pre name="test">
      *  Kayttaja aku1 = new Kayttaja();
-     *  aku1.getKid();
+     *  aku1.getKid() === 0;
      *  aku1.rekisteroi();
      *  Kayttaja aku2 = new Kayttaja();
-     *  aku2. rekisteroi();
+     *  aku2.rekisteroi();
      *  int n1 = aku1.getKid();
      *  int n2 = aku2.getKid();
      *  n1 === n2-1;
@@ -112,14 +112,14 @@ public class Kayttaja {
      * <pre name="test">
      *  Kayttaja kayttaja = new Kayttaja();
      *  kayttaja.parse("   3   | Aada     | 35   ");
-     *  kayttaja.getTunnusNro() === 3;
+     *  kayttaja.getKid() === 3;
      *  kayttaja.toString().startsWith("3|Aada|35") === true;
      *  
      *  kayttaja.rekisteroi();
-     *  int n = kayttaja.getTunnusNro();
-     *  kayttaja.parse(""+(n+20); // Otetaan merkkijonosta vain tunnusnumero
-     *  kayttaja.rekisteroi(;     // ja tarkistetaan että seuraavalla kertaa tulee yhtä isompi
-     *  kayttaja.getTunnusNro() === n+20+1;
+     *  int n = kayttaja.getKid();
+     *  kayttaja.parse(""+(n+20)); // Otetaan merkkijonosta vain tunnusnumero
+     *  kayttaja.rekisteroi();     // ja tarkistetaan että seuraavalla kertaa tulee yhtä isompi
+     *  kayttaja.getKid() === n+20+1;
      * </pre>
      */
     public void parse(String rivi) {
@@ -155,7 +155,7 @@ public class Kayttaja {
         aada.tulosta(System.out);               // parametrina tietovirta, jotta voi tulostaa muuallekin kuin näyttöön
         ben.tulosta(System.out);
         
-        aada.taytaAadaTiedoilla();            // täyttää itse itsensä esimerkki-Aadan tiedoilla
+        aada.taytaAadaTiedoilla();              // täyttää itse itsensä esimerkki-Aadan tiedoilla
         ben.taytaAadaTiedoilla();
         
         aada.tulosta(System.out);               // malliksi tulostus

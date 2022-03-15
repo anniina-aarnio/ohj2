@@ -30,6 +30,13 @@ public class Tehtava {
      * @example
      * <pre name="test">
      *  Tehtava t1 = new Tehtava();
+     *  t1.getTid() === 0;
+     *  t1.rekisteroi();
+     *  Tehtava t2 = new Tehtava();
+     *  t2.rekisteroi();
+     *  int n1 = t1.getTid();
+     *  int n2 = t2.getTid();
+     *  n1 === n2-1;
      */
     public int rekisteroi() {
         this.tid = seuraavaNro;

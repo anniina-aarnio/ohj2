@@ -99,7 +99,7 @@ public class Kayttajat {
     
     
     /**
-     * Lukee jäsenistön tiedostosta, kesken.
+     * Lukee jäsenistön tiedostosta, kesken. // TODO
      * @param hakemisto tiedoston hakemisto
      * @throws SailoException jos lukeminen epäonnistuu
      */
