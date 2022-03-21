@@ -18,28 +18,70 @@ public class SovittuTehtava {
     private int tid;
     
     /**
+     * Asettaa käyttäjän sovittuun tehtävään
      * @param kayttaja käyttäjän id
+     * @example
+     * <pre name="test">
+     * Kayttaja aada = new Kayttaja();
+     * aada.rekisteroi();
+     * aada.taytaAadaTiedoilla();
+     * SovittuTehtava st = new SovittuTehtava();
+     * st.setKayttaja(aada);
+     * st.getKid() === aada.getKid();
+     * </pre>
+     * 
      */
     public void setKayttaja(Kayttaja kayttaja) {
         this.kid = kayttaja.getKid();
     }
     
     /**
-     * @param tehtava tehtävän id
+     * Asettaa tehtävän sovittuun tehtävään
+     * @param tehtava asetettava tehtävä
+     * @example
+     * <pre name="test">
+     * Tehtava t1 = new Tehtava();
+     * t1.rekisteroi();
+     * t1.taytaImurointiTiedoilla();
+     * SovittuTehtava st = new SovittuTehtava();
+     * st.setTehtava(t1);
+     * st.getTid() === t1.getTid();
+     * </pre>
      */
     public void setTehtava(Tehtava tehtava) {
         this.tid = tehtava.getTid();
     }
     
     /**
+     * Palauttaa sovittuun tehtävään tallennetun käyttäjä-id:n
      * @return käyttäjän id
+     * @example
+     * <pre name="test">
+     * SovittuTehtava st = new SovittuTehtava();
+     * st.getKid() === 0;
+     * Kayttaja aada = new Kayttaja();
+     * aada.rekisteroi();
+     * st.setKayttaja(aada);
+     * st.getKid() === aada.getKid();
+     * </pre>
      */
     public int getKid() {
         return this.kid;
     }
     
     /**
+     * Palauttaa sovittuun tehtävään tallennetun tehtävä-id:n
      * @return tehtävän id
+     * @example
+     * <pre name="test">
+     * SovittuTehtava st = new SovittuTehtava();
+     * st.getTid() === 0;
+     * Tehtava t1 = new Tehtava();
+     * t1.rekisteroi();
+     * st.setTehtava(t1);
+     * st.getTid() === t1.getTid();
+     * </pre>
+     * 
      */
     public int getTid() {
         return this.tid;
@@ -54,9 +96,17 @@ public class SovittuTehtava {
     }
     
     
+    /**
+     * @return palauttaa tiedon muodossa: "KäyttäjäID|TehtäväID" esim. "1|3"
+     * @example
+     * <pre name="test">
+     * SovittuTehtava st = new SovittuTehtava();
+     * st.toString() === "0|0";
+     * </pre>
+     */
     @Override
     public String toString() {
-        return "käyttäjä-id: " + this.kid + " ja tehtävä-id: " + this.tid;
+        return String.format("%d|%d", this.kid, this.tid);
     }
     
     

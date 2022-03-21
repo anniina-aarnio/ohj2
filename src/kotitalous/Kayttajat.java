@@ -2,6 +2,7 @@ package kotitalous;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 //import java.io.FileOutputStream;
@@ -54,11 +55,7 @@ public class Kayttajat {
      */
     public void lisaa(Kayttaja kayttaja)  {
         if (lkm >= this.alkiot.length) {
-            Kayttaja[] uusi = new Kayttaja[lkm + 10];
-            for (int i = 0; i < lkm; i++) {
-                uusi[i] = this.alkiot[i];
-            }
-            this.alkiot = uusi;
+            this.alkiot = Arrays.copyOf(this.alkiot, lkm+10);
         }
         this.alkiot[lkm] = kayttaja;
         this.lkm++;
@@ -74,7 +71,7 @@ public class Kayttajat {
         for (Kayttaja k : this.alkiot) {
             if (k.getKid() == kayttajaId) return k;
         }
-        throw new SailoException("Ei löydy annetulla käyttäjäindeksillä " + kayttajaId);
+        throw new SailoException("Ei löydy annetulla käyttäjäindeksillä " + kayttajaId + ".");
     }
     
     

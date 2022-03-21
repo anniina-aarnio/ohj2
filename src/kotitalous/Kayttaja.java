@@ -27,7 +27,7 @@ public class Kayttaja {
     
     private void setKid(int nr) {
         this.kid = nr;
-        if (this.kid < seuraavaNro) seuraavaNro = this.kid + seuraavaNro;
+        if (this.kid >= seuraavaNro) seuraavaNro = this.kid + 1;
     }
   
     /**
@@ -76,7 +76,9 @@ public class Kayttaja {
     
     
     /**
-     * Apumetodi, jolla saadaan täytettyä testiarvot jäsenelle
+     * Apumetodi, jolla saadaan täytettyä testiarvot jäsenelle.
+     * Nimestä tulee "Aada " ja leikkihenkilötunnus.
+     * Ikä arvotaan välillä 1-99.
      */
     public void taytaAadaTiedoilla() {
         this.nimi = "Aada " + HetuTarkistus.arvoHetu();
@@ -90,7 +92,7 @@ public class Kayttaja {
      * @param out tietovirta, johon tulostetaan
      */
     public void tulosta(PrintStream out) {
-        out.println(String.format("%03d", this.kid) + ": " + this.nimi + " " + this.ika);        // %03 kolmen numeron ja loppu täytetään nollilla, esim 001, 002 ... 
+        out.println(String.format("%03d: %s %d", this.kid, this.nimi, this.ika));  
     }
     
     
@@ -119,7 +121,7 @@ public class Kayttaja {
      *  int n = kayttaja.getKid();
      *  kayttaja.parse(""+(n+20)); // Otetaan merkkijonosta vain tunnusnumero
      *  kayttaja.rekisteroi();     // ja tarkistetaan että seuraavalla kertaa tulee yhtä isompi
-     *  kayttaja.getKid() === n+20+1;
+     *  kayttaja.getKid() === n+20+1;       // ei toimi vielä oikein
      * </pre>
      */
     public void parse(String rivi) {
@@ -131,7 +133,13 @@ public class Kayttaja {
     
     
     /**
-     * 
+     * Tulostaa käyttäjän tiedot muodossa:
+     * KäyttäjäID|Nimi|Ikä
+     * @example
+     * <pre name="test">
+     * Kayttaja aada = new Kayttaja();
+     * aada.toString() === "0||0";
+     * </pre>
      */
     @Override
     public String toString() {

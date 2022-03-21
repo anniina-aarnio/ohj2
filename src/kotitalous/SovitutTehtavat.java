@@ -19,7 +19,34 @@ public class SovitutTehtavat {
     
     
     /**
+     * Lisää sovitun tehtävän listaan
      * @param sovittutehtava annettu tehtävä
+     * @example
+     * <pre name="test">
+     * SovitutTehtavat sovitut = new SovitutTehtavat();
+     * SovittuTehtava st = new SovittuTehtava();
+     * SovittuTehtava st2 = new SovittuTehtava();
+     * Kayttaja aada = new Kayttaja();
+     * Tehtava imu = new Tehtava();
+     * Tehtava imu2 = new Tehtava();
+     * aada.taytaAadaTiedoilla();
+     * imu.taytaImurointiTiedoilla();
+     * imu2.taytaImurointiTiedoilla();
+     * aada.rekisteroi();
+     * imu.rekisteroi();
+     * imu2.rekisteroi();
+     * 
+     * st.setKayttaja(aada);
+     * st.setTehtava(imu);
+     * st2.setKayttaja(aada);
+     * st2.setTehtava(imu2);
+     * sovitut.lisaa(st);
+     * sovitut.lisaa(st2);
+     * List<SovittuTehtava> aadan = sovitut.annaSovitutTehtavat(aada);
+     * aadan.size() === 2;
+     * List<SovittuTehtava> imuroinnit = sovitut.annaSovitutKayttajat(imu);
+     * imuroinnit.size() === 1;
+     * </pre>
      */
     public void lisaa(SovittuTehtava sovittutehtava) {
         this.alkiot.add(sovittutehtava);
@@ -114,6 +141,7 @@ public class SovitutTehtavat {
      * Etsii tehtävät käyttäjän perusteella
      * @param kayttaja käyttäjä, jonka perusteella etsitään
      * @return kaikki tehtävät, joilla annettu käyttäjä on
+     * (testattu "annaSovitutKayttajat"-metodin testeissä)
      */
     public List<SovittuTehtava> annaSovitutTehtavat(Kayttaja kayttaja) {
         List<SovittuTehtava> loydetyt = new ArrayList<SovittuTehtava>();
@@ -166,7 +194,7 @@ public class SovitutTehtavat {
         steet.lisaa(st3);
         
         List<SovittuTehtava> sovitut = steet.annaSovitutKayttajat(t2);
-        System.out.println("Käyttäjät tehtävä-id:n perusteella:");
+        System.out.println("Käyttäjät tehtävän perusteella:");
         for (SovittuTehtava st : sovitut) {
             try {
                 System.out.println(koot.etsi(st.getKid()).getNimi() + " " + teet.etsi(st.getTid()));
@@ -176,7 +204,7 @@ public class SovitutTehtavat {
         }
         
         sovitut = steet.annaSovitutTehtavat(k1);
-        System.out.println("\nTehtävät käyttäjä-id:n perusteella:");
+        System.out.println("\nTehtävät käyttäjän perusteella:");
         for (SovittuTehtava st : sovitut) {
             try {
                 System.out.println(koot.etsi(st.getKid()).getNimi() + " " + teet.etsi(st.getTid()));

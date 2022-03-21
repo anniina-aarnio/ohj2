@@ -52,7 +52,7 @@ public class Kotitalous {
         this.kayttajat.lisaa(kayttaja);
     }
 
-    //TODO lisää testit kaikkiin
+
     /**
      * @param tehtava lisättävä tehtävä
      */
@@ -123,6 +123,42 @@ public class Kotitalous {
      * Palauttaa listan käyttäjistä annetun tehtävän perusteella
      * @param t tehtävä
      * @return lista käyttäjistä, joilla on sovittuna annettu tehtävä
+     * @example
+     * <pre name="test">
+     * #import java.util.*;
+     * Kotitalous kt = new Kotitalous();
+     * Kayttaja aada = new Kayttaja(), ben = new Kayttaja();
+     * aada.rekisteroi(); ben.rekisteroi();
+     * Tehtava imu1 = new Tehtava(), imu2 = new Tehtava(), imu3 = new Tehtava();
+     * imu1.rekisteroi(); imu2.rekisteroi(); imu3.rekisteroi();
+     * SovittuTehtava st1 = new SovittuTehtava(), st2 = new SovittuTehtava();
+     * SovittuTehtava st3 = new SovittuTehtava(), st4 = new SovittuTehtava();
+     * st1.setKayttaja(aada); st1.setTehtava(imu1);
+     * st2.setKayttaja(aada); st2.setTehtava(imu2);
+     * st3.setKayttaja(aada); st3.setTehtava(imu3);
+     * st4.setKayttaja(ben); st4.setTehtava(imu3);
+     * 
+     * kt.lisaa(aada); kt.lisaa(ben);
+     * kt.lisaa(imu1); kt.lisaa(imu2); kt.lisaa(imu3);
+     * kt.lisaa(st1); kt.lisaa(st2); kt.lisaa(st3); kt.lisaa(st4);
+     * 
+     * List<SovittuTehtava> loydetyt = kt.annaSovitutKayttajat(imu1);
+     * loydetyt.size() === 1;
+     * loydetyt.get(0) === st1;
+     * loydetyt = kt.annaSovitutKayttajat(imu2);
+     * loydetyt.size() === 1;
+     * loydetyt.get(0) === st2;
+     * loydetyt = kt.annaSovitutKayttajat(imu3);
+     * loydetyt.size() === 2;
+     * loydetyt.get(0) === st3;
+     * loydetyt.get(1) === st4;
+     * loydetyt = kt.annaSovitutTehtavat(aada);
+     * loydetyt.size() === 3;
+     * loydetyt = kt.annaSovitutTehtavat(ben);
+     * loydetyt.size() === 1;
+     * loydetyt.get(0) === st4;
+     * 
+     * </pre>
      */
     public List<SovittuTehtava> annaSovitutKayttajat(Tehtava t) {
         return this.sovitut.annaSovitutKayttajat(t);
@@ -133,6 +169,7 @@ public class Kotitalous {
      * Palauttaa listan tehtävistä annetun käyttäjän perusteella
      * @param k käyttäjä
      * @return lista tehtävistä, joilla on sovittuna annettu käyttäjä
+     * (Testit tästä "annaSovitutKayttajat" alla)
      */
     public List<SovittuTehtava> annaSovitutTehtavat(Kayttaja k) {
         return this.sovitut.annaSovitutTehtavat(k);
