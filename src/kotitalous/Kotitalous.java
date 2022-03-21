@@ -1,5 +1,6 @@
 package kotitalous;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -13,10 +14,10 @@ import java.util.List;
  *
  */
 public class Kotitalous {
-    private final Kayttajat kayttajat = new Kayttajat();
-    private final Tehtavat tehtavat = new Tehtavat();
-    private final SovitutTehtavat sovitut = new SovitutTehtavat();
-//    private String hakemisto = "kotitalous";
+    private Kayttajat kayttajat = new Kayttajat();
+    private Tehtavat tehtavat = new Tehtavat();
+    private SovitutTehtavat sovitut = new SovitutTehtavat();
+    private String hakemisto = "kotitalous";
 
     /**
      * Palauttaa käyttäjien määrän
@@ -176,22 +177,50 @@ public class Kotitalous {
     }
 
     
-//    /**
-//     * Tallettaa kotitalouden tiedot tiedostoon VAIHE 6
-//     * @throws SailoException jos tallettamisessa ongelmia
-//     */
-//    public void tallenna() throws SailoException {
-//        String virhe = "";
+    /**
+     * @param nimi hakemiston nimi
+     * @throws SailoException jos lukemisessa ongelmia
+     */
+    public void lueTiedostosta(String nimi) throws SailoException {
+        File dir = new File(nimi);
+        dir.mkdir();
+        this.kayttajat = new Kayttajat();
+        // this.tehtavat = new Tehtavat();
+        // this.sovitut = new SovitutTehtavat();
+        
+        this.hakemisto = nimi;
+        this.kayttajat.lueTiedostosta(nimi);
+        //this.tehtavat.lueTiedostosta(nimi);
+        //this.sovitut.lueTiedostosta(nimi)
+    }
+    
+    
+    /**
+     * Tallettaa kotitalouden tiedot tiedostoon VAIHE 6
+     * @throws SailoException jos tallettamisessa ongelmia
+     */
+    public void tallenna() throws SailoException {
+        String virhe = "";
+        try {
+            kayttajat.tallenna(hakemisto);
+        } catch ( SailoException ex) {
+            virhe = ex.getMessage();
+        }
+        
 //        try {
-//            kayttajat.tallenna(hakemisto);
-//        } catch ( SailoException ex) {
-//            virhe = ex.getMessage();
+//            tehtavat.tallenna(hakemisto);
+//        } catch (SailoException ex) {
+//            virhe += ex.getMessage();
 //        }
 //        
 //        try {
-//            tehtavat.tallenna(hakemisto);
-//        } catch ()
-//    }
+//            sovitut.tallenna(hakemisto);
+//        } catch (SailoException ex) {
+//            virhe += ex.getMessage();
+//        }
+        
+        if (!"".equals(virhe)) throw new SailoException(virhe);
+    }
 
     /**
      * @param args ei käytössä
@@ -199,7 +228,12 @@ public class Kotitalous {
     public static void main(String[] args) {
         Kotitalous kt = new Kotitalous();
 
-        // kotitalous.lueTiedostosta("kotitalous");
+        try {
+            kt.lueTiedostosta("kotitalous");
+        } catch (SailoException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
         Kayttaja aada = new Kayttaja(), ben = new Kayttaja();
         aada.rekisteroi();
         aada.taytaAadaTiedoilla();

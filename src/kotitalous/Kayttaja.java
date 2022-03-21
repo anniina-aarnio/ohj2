@@ -24,7 +24,11 @@ public class Kayttaja {
     
     private static int  seuraavaNro  = 1;               // luokkamuuttuja, joka on olemassa ilman yhtään olemassaolevaa kayttajaa
     
-    
+    /**
+     * Asettaa käyttäjä-id:n ja samalla varmistaa,
+     * että seuraava numero on aina suurempi kuin tähän mennessä suurin.
+     * @param nr asetettava käyttäjä-id
+     */
     private void setKid(int nr) {
         this.kid = nr;
         if (this.kid >= seuraavaNro) seuraavaNro = this.kid + 1;
@@ -121,7 +125,7 @@ public class Kayttaja {
      *  int n = kayttaja.getKid();
      *  kayttaja.parse(""+(n+20)); // Otetaan merkkijonosta vain tunnusnumero
      *  kayttaja.rekisteroi();     // ja tarkistetaan että seuraavalla kertaa tulee yhtä isompi
-     *  kayttaja.getKid() === n+20+1;       // ei toimi vielä oikein
+     *  kayttaja.getKid() === n+20+1;
      * </pre>
      */
     public void parse(String rivi) {
@@ -143,7 +147,8 @@ public class Kayttaja {
      */
     @Override
     public String toString() {
-        return "" + this.getKid() + "|" +
+        return "" + 
+                this.getKid() + "|" +
                 this.nimi + "|" + 
                 this.ika;
                 

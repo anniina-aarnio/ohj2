@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 //import java.io.FileOutputStream;
 //import java.io.PrintStream;
+import java.io.PrintStream;
 
 /**
  * Käyttäjät-luokka, vastuualueet:
@@ -96,7 +98,7 @@ public class Kayttajat {
     
     
     /**
-     * Lukee jäsenistön tiedostosta, kesken. // TODO
+     * Lukee jäsenistön tiedostosta, kesken.
      * @param hakemisto tiedoston hakemisto
      * @throws SailoException jos lukeminen epäonnistuu
      */
@@ -118,27 +120,28 @@ public class Kayttajat {
     }
     
     
-//    /**
-//     * Tallentaa käyttäjistön tiedostoon
-//     * Tiedoston muoto:
-//     * <pre>
-//     * 2|Aada|35
-//     * 3|Ben|34
-//     * </pre>
-//     * @param hakemisto tallennettavan tiedoston hakemisto
-//     * @throws SailoException jos talletus epäonnistuu
-//     */
-//    public void tallenna(String hakemisto) throws SailoException {
-//        File ftied = new File(hakemisto + "/nimet.dat"); // TODO tee tiedosto, jos sitä ei ole
-//        try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, true))) { //tarkista tuleeko false vai true
-//            for (int i = 0; i < this.getLkm(); i++) {
-//                Kayttaja kayttaja = this.anna(i);
-//                fo.println(kayttaja.toString());
-//            }
-//        } catch (FileNotFoundException ex) {
-//            throw new SailoException("Tiedosto " + ftied.getAbsolutePath());
-//        }
-//    }
+    /**
+     * Tallentaa käyttäjistön tiedostoon
+     * Tiedoston muoto:
+     * <pre>
+     * 2|Aada|35
+     * 3|Ben|34
+     * </pre>
+     * @param hakemisto tallennettavan tiedoston hakemisto
+     * @throws SailoException jos talletus epäonnistuu
+     */
+    public void tallenna(String hakemisto) throws SailoException {
+        File ftied = new File(hakemisto + "/nimet.dat"); // TODO tee tiedosto, jos sitä ei ole
+        
+        try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) { //tarkista tuleeko false vai true
+            for (int i = 0; i < this.getLkm(); i++) {
+                Kayttaja kayttaja = this.anna(i);
+                fo.println(kayttaja.toString());
+            }
+        } catch (FileNotFoundException ex) {
+            throw new SailoException("Tiedosto " + ftied.getAbsolutePath() + " ei aukea");
+        }
+    }
     
     /**
      * @param args ei käytössä
@@ -146,7 +149,11 @@ public class Kayttajat {
     public static void main(String[] args) {
         Kayttajat kayttajat = new Kayttajat();
         
-        // tähän lukeminen parse:n kanssa...
+        try {
+            kayttajat.lueTiedostosta("kotitalous");
+        } catch (SailoException ex) {
+            System.err.println(ex.getMessage());
+        }
         
         Kayttaja aada = new Kayttaja();         // saa syntyä millaisena haluaa graafisessa ympäristössä
         Kayttaja ben = new Kayttaja();
@@ -156,15 +163,11 @@ public class Kayttajat {
         
         aada.taytaAadaTiedoilla();            // täyttää itse itsensä esimerkki-Aadan tiedoilla
         ben.taytaAadaTiedoilla();
+
         
         try {
             kayttajat.lisaa(aada);
             kayttajat.lisaa(ben);
-            kayttajat.lisaa(aada);
-            kayttajat.lisaa(ben);
-            kayttajat.lisaa(aada);
-            kayttajat.lisaa(ben);
-            kayttajat.anna(34);
         } catch (IndexOutOfBoundsException e) {
             System.err.println(e.getMessage());
         }
@@ -176,11 +179,11 @@ public class Kayttajat {
             kayttaja.tulosta(System.out);
         }
         
-//        try {
-//            kayttajat.tallenna("kotitalous");             // pitäisi toimia jo, ei testattu
-//        } catch (SailoException e) {
-//            System.out.println(e.getMessage());
-//        }
+        try {
+            kayttajat.tallenna("kotitalous"); 
+        } catch (SailoException e) {
+            e.printStackTrace();
+        }
         
         
     }
