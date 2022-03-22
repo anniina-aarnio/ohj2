@@ -178,6 +178,7 @@ public class Kotitalous {
 
     
     /**
+     * Lukee kerhon tiedot tiedostosta
      * @param nimi hakemiston nimi
      * @throws SailoException jos lukemisessa ongelmia
      */
@@ -185,18 +186,18 @@ public class Kotitalous {
         File dir = new File(nimi);
         dir.mkdir();
         this.kayttajat = new Kayttajat();
-        // this.tehtavat = new Tehtavat();
-        // this.sovitut = new SovitutTehtavat();
+        this.tehtavat = new Tehtavat();
+        this.sovitut = new SovitutTehtavat();
         
         this.hakemisto = nimi;
         this.kayttajat.lueTiedostosta(nimi);
-        //this.tehtavat.lueTiedostosta(nimi);
-        //this.sovitut.lueTiedostosta(nimi)
+        this.tehtavat.lueTiedostosta(nimi);
+        this.sovitut.lueTiedostosta(nimi);
     }
     
     
     /**
-     * Tallettaa kotitalouden tiedot tiedostoon VAIHE 6
+     * Tallettaa kotitalouden tiedot tiedostoon
      * @throws SailoException jos tallettamisessa ongelmia
      */
     public void tallenna() throws SailoException {
@@ -207,17 +208,17 @@ public class Kotitalous {
             virhe = ex.getMessage();
         }
         
-//        try {
-//            tehtavat.tallenna(hakemisto);
-//        } catch (SailoException ex) {
-//            virhe += ex.getMessage();
-//        }
-//        
-//        try {
-//            sovitut.tallenna(hakemisto);
-//        } catch (SailoException ex) {
-//            virhe += ex.getMessage();
-//        }
+        try {
+            tehtavat.tallenna(hakemisto);
+        } catch (SailoException ex) {
+            virhe += ex.getMessage();
+        }
+        
+        try {
+            sovitut.tallenna(hakemisto);
+        } catch (SailoException ex) {
+            virhe += ex.getMessage();
+        }
         
         if (!"".equals(virhe)) throw new SailoException(virhe);
     }
@@ -231,8 +232,7 @@ public class Kotitalous {
         try {
             kt.lueTiedostosta("kotitalous");
         } catch (SailoException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            System.err.println(e1.getMessage());
         }
         Kayttaja aada = new Kayttaja(), ben = new Kayttaja();
         aada.rekisteroi();
@@ -294,7 +294,11 @@ public class Kotitalous {
             };
         }
         
-        // kotitalous.tallenna(); //try catchin sisään... VAIHE6
+        try {
+            kt.tallenna();
+        } catch (SailoException e) {
+            System.err.println(e.getMessage());
+        }
 
     }
 

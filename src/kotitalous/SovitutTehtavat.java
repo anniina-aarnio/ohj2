@@ -267,6 +267,13 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
      */
     public static void main(String[] args) {
         SovitutTehtavat steet = new SovitutTehtavat();
+        
+        try {
+            steet.lueTiedostosta("kotitalous");
+        } catch (SailoException ex) {
+            System.err.println(ex.getMessage());
+        }
+        
         SovittuTehtava st1 = new SovittuTehtava();
         SovittuTehtava st2 = new SovittuTehtava();
         SovittuTehtava st3 = new SovittuTehtava();
@@ -326,5 +333,10 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
             System.out.println(st);
         }
         
+        try {
+            steet.tallenna("kotitalous");
+        } catch (SailoException e) {
+            e.printStackTrace();
+        }
     }
 }

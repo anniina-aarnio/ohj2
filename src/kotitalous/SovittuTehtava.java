@@ -165,12 +165,17 @@ public class SovittuTehtava {
         st1.tulosta(System.out);
         st2.tulosta(System.out);
         
+        SovittuTehtava st4 = new SovittuTehtava();
+        st4.parse("3|6");
+        
         try {
             System.out.println(koot.etsi(st1.getKid()).getNimi() + " " + teet.etsi(st1.getTid()));
             System.out.println(koot.etsi(st2.getKid()).getNimi() + " " + teet.etsi(st2.getTid()));
         } catch (IndexOutOfBoundsException | SailoException e) {
             e.printStackTrace();
         }
+        
+        System.out.println(st4);
         
     }
 }
