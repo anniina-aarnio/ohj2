@@ -29,7 +29,6 @@ public class KotityotGUIController implements Initializable {
 
     @FXML void handleAvaa() {
         avaaPaaikkuna();
-        //avaa();
     }
     
         
@@ -85,7 +84,16 @@ public class KotityotGUIController implements Initializable {
      */
     private void alusta() {
         lcKayttajat.clear(); //tyhjentää
-        lcKayttajat.addSelectionListener(e -> naytaKayttaja()); // tätä ennen voisi olla esillä textArea, johon tulostetaan.. tee kayttajactrl:iin
+        lcKayttajat.addSelectionListener(e -> naytaKayttaja());
+    }
+    
+    private void lueTiedosto(String nimi) {
+        try {
+            ktalous.lueTiedostosta(nimi);
+            hae(0);
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
     }
     
     
@@ -134,6 +142,7 @@ public class KotityotGUIController implements Initializable {
     public boolean avaa() {
         ModalController.showModal(KotityotGUIController.class.getResource(
                 "KotityotAlkuikkunaView.fxml"), "Aloitus", null, "");
+        lueTiedosto("kotitalous");
         return true;
     }
 
@@ -176,12 +185,7 @@ public class KotityotGUIController implements Initializable {
      * Lisätään uusi käyttäjä
      */
     private void uusiKayttaja() {
-        Kayttaja uusi = new Kayttaja();
-        uusi.rekisteroi(); // tätä ei kannata oikeasti tähän kohtaan laittaa, vaan vasta tallennuksen kohdalla...
-        uusi.taytaAadaTiedoilla();
-        ktalous.lisaa(uusi);
-
-        hae(uusi.getKid());
+        Dialogs.showMessageDialog("Kokeile \"Muokkaa käyttäjiä\".");
     }
     
     
