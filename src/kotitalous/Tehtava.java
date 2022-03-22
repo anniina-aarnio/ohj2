@@ -2,6 +2,7 @@ package kotitalous;
 
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
 import kanta.HetuTarkistus;
 
 /**
@@ -17,12 +18,22 @@ import kanta.HetuTarkistus;
 public class Tehtava {
     
     private String      nimi    = "";
-    private int         kesto;
-    private int         ika;
+    private int         kesto;              // minuuteissa
+    private int         ika;                // tehtävän tekijän ikä vähintään
     private int         tid;                // tehtävä id
     
     private static int seuraavaNro = 1;     // luokkamuuttuja, joka on olemassa ilman yhtään olemassaolevaa tehtävää
 
+    /**
+     * Asettaa tehtävän id-numeron ja samalla varmistaa,
+     * että seuraava numero on aina suurempi kuin tähän mennessä suurin.
+     * @param nr asetettava tunnusnumero
+     */
+    private void setTid(int nr) {
+        this.tid = nr;
+        if (this.tid >= seuraavaNro) seuraavaNro = this.tid + 1;
+    }
+    
     
     /**
      * Antaa tehtävälle seuraavan rekisterinumeron
@@ -71,9 +82,36 @@ public class Tehtava {
     
     @Override
     public String toString() {
-        return String.format("%03d", this.tid) + " " + this.nimi + ": kesto: " + this.kesto + " min, minimi-ikä: " + this.ika;
+        return this.tid + "|" + this.nimi + "|" + this.ika + "|" + this.kesto;
     }
     
+    
+    /**
+     * Selvittää tehtävän tiedot | erotellusta merkkijonosta.
+     * Pitää huolen, että seuraavaNro on suurempi kuin tuleva tunnusnro.
+     * @param rivi josta tehtävän tiedot otetaan
+     * @example
+     * <pre name="test">
+     *  Tehtava tehtava = new Tehtava();
+     *  tehtava.parse("   2   |  Imurointi     | 10 |  30    ");
+     *  tehtava.getTid() === 2;
+     *  tehtava.toString() === "2|Imurointi|10|30";
+     *  
+     *  tehtava.rekisteroi();
+     *  int n = tehtava.getTid();
+     *  tehtava.parse(""+(n+20));
+     *  tehtava.rekisteroi();
+     *  tehtava.getTid() === n+20+1;
+     *  tehtava.toString() === "" + (n+20+1) + "|Imurointi|10|30";
+     * </pre>
+     */
+    public void parse(String rivi) {
+        StringBuffer sb = new StringBuffer(rivi);
+        setTid(Mjonot.erota(sb,  '|', getTid()));
+        this.nimi = Mjonot.erota(sb, '|', this.nimi);
+        this.ika = Mjonot.erota(sb, '|', this.ika);
+        this.kesto = Mjonot.erota(sb, '|', this.kesto);
+    }
     
     /**
      * Testaa Tehtävä-luokkaa
