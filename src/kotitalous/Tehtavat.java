@@ -153,7 +153,7 @@ public class Tehtavat implements Iterable<Tehtava> {
                 fo.println(teht.toString());
             }
         } catch (FileNotFoundException ex) {
-            throw new SailoException("Tiedosto " + ftied.getAbsolutePath() + " ei aukea");
+            throw new SailoException("Tiedosto " + ftied.getAbsolutePath() + " ei aukea.");
         }
     }
     

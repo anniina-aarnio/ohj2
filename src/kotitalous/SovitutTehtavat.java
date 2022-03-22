@@ -1,8 +1,15 @@
 package kotitalous;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Sovitut tehtävät -luokka:
@@ -13,7 +20,7 @@ import java.util.List;
  * @author Anniina
  * @version 6.3.2022
  */
-public class SovitutTehtavat {
+public class SovitutTehtavat implements Iterable<SovittuTehtava> {
     
     private final Collection<SovittuTehtava> alkiot = new ArrayList<SovittuTehtava>();  // pitäisikö olla hashmap??
     
@@ -153,6 +160,108 @@ public class SovitutTehtavat {
     
     
     /**
+     * Lukee sovitut tehtävät tiedostosta
+     * @param hakemisto tiedoston nimen alkuosa
+     * @throws SailoException jos lukeminen epäonnistuu
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * #import java.io.File;
+     * #import java.util.Iterator;
+     *  SovitutTehtavat steet = new SovitutTehtavat();
+     *  SovittuTehtava st1 = new SovittuTehtava();
+     *  SovittuTehtava st2 = new SovittuTehtava();
+     *  SovittuTehtava st3 = new SovittuTehtava();
+     *  
+     *  String tiedNimi = "testiKotitalous";
+     *  File ftied = new File(tiedNimi + "/sovitut.dat");
+     *  ftied.delete();
+     *  steet.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *   
+     *  Kayttaja k1 = new Kayttaja();
+     *  Kayttaja k2 = new Kayttaja();
+     *  k1.rekisteroi();
+     *  k2.rekisteroi();
+     *  k1.taytaAadaTiedoilla();
+     *  k2.taytaAadaTiedoilla();
+     *  
+     *  Tehtava t1 = new Tehtava();
+     *  Tehtava t2 = new Tehtava();
+     *  t1.rekisteroi();
+     *  t2.rekisteroi();
+     *  t1.taytaImurointiTiedoilla();
+     *  t2.taytaImurointiTiedoilla();
+     *  
+     *  st1.setKayttaja(k1); st1.setTehtava(t1);
+     *  st2.setKayttaja(k2); st2.setTehtava(t2);
+     *  st3.setKayttaja(k1); st3.setTehtava(t2);
+     *          
+     *  steet.lisaa(st1);
+     *  steet.lisaa(st2);
+     *  steet.lisaa(st3);
+     *  steet.tallenna(tiedNimi);
+     *  
+     *  steet = new SovitutTehtavat();
+     *  steet.lueTiedostosta(tiedNimi);
+     *  Iterator<SovittuTehtava> i = steet.iterator();
+     *  i.next().toString() === st1.toString();
+     *  i.next().toString() === st2.toString();
+     *  i.next().toString() === st3.toString();
+     *  i.hasNext() === false;
+     *  steet.lisaa(st1);
+     *  steet.tallenna(tiedNimi);
+     *  ftied.delete() === true;
+     * </pre>
+     */
+    public void lueTiedostosta(String hakemisto) throws SailoException {
+        String nimi = hakemisto + "/sovitut.dat";
+        File ftied = new File(nimi);
+        
+        try (Scanner fi = new Scanner(new FileInputStream(ftied))) {
+            while (fi.hasNext()) {
+                String s = fi.nextLine().trim();
+                if ("".equals(s) || s.charAt(0) == ';') continue;
+                SovittuTehtava st = new SovittuTehtava();
+                st.parse(s);
+                lisaa(st);
+            }
+        } catch (FileNotFoundException e) {
+            throw new SailoException("Ei saa luettua tiedostoa " + nimi);
+        }
+    }
+    
+    
+    /**
+     * Tallentaa sovitut tehtävät tiedostoon
+     * Tiedoston muoto
+     * <pre>
+     * 1|1
+     * 3|1
+     * </pre>
+     * @param hakemisto tallennettavan tiedoston hakemisto
+     * @throws SailoException jos talletus epäonnistuu
+     */
+    public void tallenna(String hakemisto) throws SailoException {
+        File ftied = new File(hakemisto + "/sovitut.dat");
+        try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) {
+            for (var st : this.alkiot) {
+                fo.println(st.toString());
+            }
+        } catch (FileNotFoundException ex) {
+            throw new SailoException("Tiedosto " + ftied.getAbsolutePath() + " ei aukea.");
+        }
+    }
+    
+
+
+    @Override
+    public Iterator<SovittuTehtava> iterator() {
+        return this.alkiot.iterator();
+    }
+
+
+    
+    /**
      * Testataan Sovitut tehtävät -luokkaa
      * @param args ei käytössä
      */
@@ -218,6 +327,4 @@ public class SovitutTehtavat {
         }
         
     }
-
-
 }

@@ -2,6 +2,8 @@ package kotitalous;
 
 import java.io.PrintStream;
 
+import fi.jyu.mit.ohj2.Mjonot;
+
 /**
  * Sovittu tehtävä -luokka
  * - tietää sovitun tehtävän kentät (kayttaja_id, tehtava_id)
@@ -109,6 +111,24 @@ public class SovittuTehtava {
         return String.format("%d|%d", this.kid, this.tid);
     }
     
+    
+    /**
+     * Selvittää sovitun tehtävän tiedot | erotellusta merkkijonosta.
+     * @param rivi josta sovitun tehtävän tiedot otetaan
+     * @example
+     * <pre name="test">
+     *  SovittuTehtava st = new SovittuTehtava();
+     *  st.parse("  1   |   2");
+     *  st.getKid() === 1;
+     *  st.getTid() === 2;
+     *  st.toString() === "1|2";
+     * </pre>
+     */
+    public void parse(String rivi) {
+        StringBuffer sb = new StringBuffer(rivi);
+        this.kid = Mjonot.erota(sb,  '|', this.kid);
+        this.tid = Mjonot.erota(sb, '|', this.tid);
+    }
     
     /**
      * @param args ei käytössä
