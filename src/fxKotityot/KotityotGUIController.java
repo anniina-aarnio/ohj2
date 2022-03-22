@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
+import kotitalous.SailoException;
 import kotitalous.Tehtava;
 
 import java.awt.Desktop;
@@ -109,20 +110,8 @@ public class KotityotGUIController implements Initializable {
     private void naytaKayttaja() {
         Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
         if (kayttajaKohdalla == null) return;
-        
-//        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaKayttaja)) {
-//            tulosta(os, kayttajaKohdalla);
-//        }
-
     }
     
-//    private void tulosta(PrintStream os, final Kayttaja kayttaja) {
-//      List<SovitutTehtavat> sovitut = ktalous.annaSovitut(kayttajaKohdalla);    // etsii sovitut tehtävät ja tulostaa ne väliaikaiseen textareaan (tehtäväboksin tilalla)
-//      
-//      for (SovittuTehtava st : sovitut) {
-//          st.tulosta(textarea);
-//      }
-//    }
 
     /*
      * Avaa käyttäjienmuokkaus-ikkunan
@@ -153,7 +142,11 @@ public class KotityotGUIController implements Initializable {
      * Tallennuksen toiminnallisuus
      */
     private void tallenna() {
-        Dialogs.showMessageDialog("Tallennetaan! Mutta ei toimi vielä.");
+        try {
+            ktalous.tallenna();
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
     }
 
     

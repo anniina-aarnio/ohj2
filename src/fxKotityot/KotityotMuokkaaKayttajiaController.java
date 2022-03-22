@@ -40,8 +40,7 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     }
 
     @FXML void handleTallenna() {
-        Dialogs.showMessageDialog("Ei osata vielä tallentaa muutoksia.");
-        ModalController.closeStage(lcKayttajat);
+        tallenna();
     }
 
     @FXML void handleUusi() {
@@ -62,6 +61,7 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
      * Alustaa kokonaisuuden....
      */
     private void alusta() {
+        avaa();
         panelKayttaja.setContent(areaKayttaja);
         areaKayttaja.setFont(new Font("Courier New", 12));
         panelKayttaja.setFitToHeight(true);
@@ -113,6 +113,16 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     }
     
     
+    private void tallenna() {
+        try {
+            ktalous.tallenna();
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
+        ModalController.closeStage(lcKayttajat);
+    }
+    
+    
     private void tayta() {
         for (int i = 0; i < ktalous.getKayttajia(); i++) {
             Kayttaja kayttaja = ktalous.annaKayttaja(i);
@@ -159,6 +169,25 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         hae(kayttajaKohdalla);
     }
     
+    
+    private void lueTiedosto(String nimi) {
+        try {
+            ktalous.lueTiedostosta(nimi);
+            hae(new Kayttaja());
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
+    }
+    
+    
+    /**
+     * Lukee tiedoston "kotitalous"
+     * @return true, jos onnistui, false jos ei
+     */
+    public boolean avaa() {
+        lueTiedosto("kotitalous");
+        return true;
+    }
     
     
     /**
