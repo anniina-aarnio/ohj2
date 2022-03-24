@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
 import kotitalous.SailoException;
+import kotitalous.SovittuTehtava;
 import kotitalous.Tehtava;
 
 import java.awt.Desktop;
@@ -13,11 +14,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
+import fi.jyu.mit.fxgui.StringGrid;
 
 /**
  * @author Anniina
@@ -26,6 +29,7 @@ import fi.jyu.mit.fxgui.ModalController;
  */
 public class KotityotGUIController implements Initializable {
     @FXML private ListChooser<Kayttaja> lcKayttajat;
+    @FXML private StringGrid<Tehtava> tableTehtavat;
 
     @FXML void handleAvaa() {
         avaaPaaikkuna();
@@ -118,6 +122,28 @@ public class KotityotGUIController implements Initializable {
     private void naytaKayttaja() {
         Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
         if (kayttajaKohdalla == null) return;
+        naytaTehtavat(kayttajaKohdalla);
+    }
+    
+    
+    private void naytaTehtavat(Kayttaja kayttaja) {
+        tableTehtavat.clear();
+        if (kayttaja == null) return;
+        List<SovittuTehtava> sovitut = ktalous.annaSovitutTehtavat(kayttaja);
+        if (sovitut.size() == 0) return;
+        for (SovittuTehtava st : sovitut) {
+            naytaTehtava(st);
+        }
+    }
+    
+    private void naytaTehtava(SovittuTehtava st) {
+        try {
+            Tehtava t = ktalous.etsiTehtava(st.getTid());
+            String[] rivi = t.toString().split("\\|");
+            tableTehtavat.add(t, rivi[1], rivi[2]);    //TODO korjaa joskus
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Jotain meni pieleen: " + e.getMessage());
+        }
     }
     
 

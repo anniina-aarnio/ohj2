@@ -60,32 +60,7 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    // =========================================
-    private static Kotitalous ktalous;
-    private Kayttaja kayttajaKohdalla;
-//    private TextArea areaKayttaja = new TextArea(); VANHA JOSSA TEXTAREA
-    
-    /**
-     * Alustaa kokonaisuuden....
-     */
-    private void alusta() {
-        avaa();
-
-        lcKayttajat.clear(); //tyhjentää
-        tayta();
-        lcKayttajat.addSelectionListener(e -> naytaKayttaja());
-    }
-    
-    private void naytaKayttaja() {
-        kayttajaKohdalla = lcKayttajat.getSelectedObject();
-        if (kayttajaKohdalla == null) return;
-        editNimi.setText(kayttajaKohdalla.getNimi());
-        editIka.setText("" +kayttajaKohdalla.getIka());
-
+        alusta();
     }
     
     @Override
@@ -107,11 +82,36 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     @Override
     public void setDefault(Kayttaja oletus) {
         this.kayttajaKohdalla = oletus;
-        editNimi.setText(oletus.getNimi());
-        editIka.setText("" +oletus.getIka());
+        naytaKayttaja();
     }
     
     
+    // =========================================
+    private static Kotitalous ktalous;
+    private Kayttaja kayttajaKohdalla;
+    private TextField[] edits;
+    
+//    private TextArea areaKayttaja = new TextArea(); VANHA JOSSA TEXTAREA
+    
+    /**
+     * Alustaa kokonaisuuden....
+     */
+    private void alusta() {
+//        avaa();
+        edits = new TextField[]{editNimi, editIka};
+
+        lcKayttajat.clear(); //tyhjentää
+        tayta();
+        lcKayttajat.addSelectionListener(e -> naytaKayttaja());
+    }
+    
+    private void naytaKayttaja() {
+        kayttajaKohdalla = lcKayttajat.getSelectedObject();
+        if (kayttajaKohdalla == null) return;
+        edits[0].setText(kayttajaKohdalla.getNimi());
+        edits[1].setText("" +kayttajaKohdalla.getIka());
+    }
+
     private void tallennaKayttaja() {
         try {
             ktalous.tallenna();
