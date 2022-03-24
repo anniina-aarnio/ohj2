@@ -1,11 +1,11 @@
 package fxKotityot;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
 import kotitalous.SailoException;
@@ -13,7 +13,9 @@ import kotitalous.SovittuTehtava;
 import kotitalous.Tehtava;
 
 import java.io.PrintStream;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
@@ -26,7 +28,7 @@ import fi.jyu.mit.fxgui.TextAreaOutputStream;
  * @version 14.2.2022
  *
  */
-public class KotityotMuokkaaKayttajiaController implements ModalControllerInterface<String> {
+public class KotityotMuokkaaKayttajiaController implements ModalControllerInterface<Kayttaja>, Initializable {
     
     @FXML private ListChooser<Kayttaja> lcKayttajat;
     @FXML private ScrollPane panelKayttaja;
@@ -50,6 +52,12 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     
     @FXML void handleUusiTehtava() {
         uusiTehtava();
+    }
+    
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+        // TODO Auto-generated method stub
+        
     }
 
     // =========================================
@@ -91,7 +99,7 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     }
     
     @Override
-    public String getResult() {
+    public Kayttaja getResult() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -107,8 +115,8 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
 
     
     @Override
-    public void setDefault(String oletus) {
-        textNimi.setText(oletus);
+    public void setDefault(Kayttaja oletus) {
+        textNimi.setText(oletus.getNimi());
         
     }
     
@@ -190,15 +198,15 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     }
     
     
-    /**
-     * @param modalityStage mille ollaan modaalisia, null = sovellukselle
-     * @param oletus mitä nimeä näytetään oletuksena
-     * @return null, jos painetaan Cancel, muuten kirjoitettu nimi
-     */
-    public static String aloita(Stage modalityStage, String oletus) {
-        return ModalController.showModal(KotityotMuokkaaKayttajiaController.class.getResource("KotityotMuokkaaKayttajiaView.fxml"),
-                "Käyttäjien muokkaus", modalityStage, oletus);
-    }
+//    /** Muutettu 24.3.
+//     * @param modalityStage mille ollaan modaalisia, null = sovellukselle
+//     * @param oletus mitä nimeä näytetään oletuksena
+//     * @return null, jos painetaan Cancel, muuten kirjoitettu nimi
+//     */
+//    public static String aloita(Stage modalityStage, String oletus) {
+//        return ModalController.showModal(KotityotMuokkaaKayttajiaController.class.getResource("KotityotMuokkaaKayttajiaView.fxml"),
+//                "Käyttäjien muokkaus", modalityStage, oletus);
+//    }
 
     /**
      * Asettaa kotitalouden
@@ -207,5 +215,4 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     public static void setKotitalous(Kotitalous kotitalous) {
         ktalous = kotitalous;
     }
-
 }
