@@ -80,11 +80,31 @@ public class Kayttaja {
     
     
     /**
+     * Asettaa käyttäjän nimen
+     * @param nimi muutettava nimi
+     * @return null jos kaikki meni hyvin, muuten virheteksti
+     */
+    public String setNimi(String nimi) {
+        this.nimi = nimi;
+        return null;
+    }
+    
+    
+    /**
      * Palauttaa käyttäjän iän
      * @return käyttäjän ikä: vuodet kokonaislukuna
      */
     public int getIka() {
         return this.ika;
+    }
+    
+    
+    /**
+     * Asettaa käyttäjän iän
+     * @param nro uusi ikä
+     */
+    public void setIka(int nro) {
+        this.ika = nro;
     }
     
     

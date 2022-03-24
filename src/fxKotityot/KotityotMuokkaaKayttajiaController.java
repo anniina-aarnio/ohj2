@@ -2,6 +2,7 @@ package fxKotityot;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -31,6 +32,7 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
 
     @FXML private TextField editIka;
     @FXML private TextField editNimi;
+    @FXML private Label labelVirhe;
 
     @FXML void handlePoista() {
         Dialogs.showMessageDialog("Ei osata vielä poistaa käyttäjiä.");
@@ -47,6 +49,7 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     
     @FXML
     void handlePeruuta() {
+        kayttajaKohdalla = null;
         ModalController.closeStage(editNimi);
     }
 
@@ -60,13 +63,12 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        alusta();
+        alusta();           // TODO: jos pääikkunassa on valittuna käyttäjä niin ei näytä tässä sitä
     }
     
     @Override
     public Kayttaja getResult() {
-        // TODO Auto-generated method stub
-        return null;
+        return kayttajaKohdalla;
     }
 
     /**
@@ -97,12 +99,36 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
      * Alustaa kokonaisuuden....
      */
     private void alusta() {
-//        avaa();
         edits = new TextField[]{editNimi, editIka};
 
         lcKayttajat.clear(); //tyhjentää
         tayta();
         lcKayttajat.addSelectionListener(e -> naytaKayttaja());
+        editNimi.setOnKeyReleased(e -> kasitteleMuutosJaseneen(1, editNimi));
+    }
+    
+    
+    private void kasitteleMuutosJaseneen(@SuppressWarnings("unused") int k, TextField edit) {
+        if (kayttajaKohdalla == null) return;
+        String s = edit.getText();
+        String virhe = null;
+        virhe = kayttajaKohdalla.setNimi(s);
+        if (virhe == null) {
+            naytaVirhe(virhe);
+        } else {
+            naytaVirhe(virhe);
+        }
+    }
+    
+    
+    private void naytaVirhe(String virhe) {
+        if (virhe == null || virhe.isEmpty()) {
+            labelVirhe.setText("");
+            labelVirhe.getStyleClass().removeAll("virhe");
+            return;
+        }
+        labelVirhe.setText(virhe);
+        labelVirhe.getStyleClass().add("virhe");
     }
     
     private void naytaKayttaja() {
@@ -113,6 +139,10 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     }
 
     private void tallennaKayttaja() {
+        if (kayttajaKohdalla != null && kayttajaKohdalla.getNimi().trim().equals("")) {
+            naytaVirhe("Nimi ei saa olla tyhjä");
+            return;
+        }
         try {
             ktalous.tallenna();
         } catch (SailoException e) {
@@ -173,31 +203,11 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     }
     
     
-    private void lueTiedosto(String nimi) {
-        try {
-            ktalous.lueTiedostosta(nimi);
-            hae(new Kayttaja());
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog(e.getMessage());
-        }
-    }
-    
-    
-    /**
-     * Lukee tiedoston "kotitalous"
-     * @return true, jos onnistui, false jos ei
-     */
-    public boolean avaa() {
-        lueTiedosto("kotitalous");
-        return true;
-    }
-    
-    
     /** 
      * Luodaan käyttäjän muokkaus-dialogi ja palautetaan sama tietue muutettuna tai null
      * @param modalityStage mille ollaan modaalisia, null = sovellukselle
      * @param oletus mitä käyttäjää käytetään oletuksena
-     * @return null, jos painetaan Cancel, muuten täytetty käyttäjä
+     * @return null, jos painetaan Cancel, muuten viimeiseksi täytetty käyttäjä
      */
     public static Kayttaja kysyKayttaja(Stage modalityStage, Kayttaja oletus) {
         return ModalController.showModal(KotityotMuokkaaKayttajiaController.class.getResource("KotityotMuokkaaKayttajiaView.fxml"),
