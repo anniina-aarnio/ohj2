@@ -127,9 +127,7 @@ public class KotityotGUIController implements Initializable {
     private void muokkaaKayttajia() {
         Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
         KotityotMuokkaaKayttajiaController.setKotitalous(ktalous);
-        ModalController.showModal(KotityotGUIController.class.getResource("KotityotMuokkaaKayttajiaView.fxml"),
-                "Käyttäjä", null, kayttajaKohdalla);
-//      muutettu 24.3.  KotityotMuokkaaKayttajiaController.aloita(null, ""); // tähän käyttäjäkohdalla ?
+        KotityotMuokkaaKayttajiaController.kysyKayttaja(null, kayttajaKohdalla);
     }
 
 

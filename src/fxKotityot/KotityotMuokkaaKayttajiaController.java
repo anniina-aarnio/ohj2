@@ -6,6 +6,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
 import kotitalous.SailoException;
@@ -198,15 +199,16 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     }
     
     
-//    /** Muutettu 24.3.
-//     * @param modalityStage mille ollaan modaalisia, null = sovellukselle
-//     * @param oletus mitä nimeä näytetään oletuksena
-//     * @return null, jos painetaan Cancel, muuten kirjoitettu nimi
-//     */
-//    public static String aloita(Stage modalityStage, String oletus) {
-//        return ModalController.showModal(KotityotMuokkaaKayttajiaController.class.getResource("KotityotMuokkaaKayttajiaView.fxml"),
-//                "Käyttäjien muokkaus", modalityStage, oletus);
-//    }
+    /** 
+     * Luodaan käyttäjän muokkaus-dialogi ja palautetaan sama tietue muutettuna tai null
+     * @param modalityStage mille ollaan modaalisia, null = sovellukselle
+     * @param oletus mitä käyttäjää käytetään oletuksena
+     * @return null, jos painetaan Cancel, muuten täytetty käyttäjä
+     */
+    public static Kayttaja kysyKayttaja(Stage modalityStage, Kayttaja oletus) {
+        return ModalController.showModal(KotityotMuokkaaKayttajiaController.class.getResource("KotityotMuokkaaKayttajiaView.fxml"),
+                "Käyttäjien muokkaus", modalityStage, oletus);
+    }
 
     /**
      * Asettaa kotitalouden

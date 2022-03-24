@@ -60,7 +60,7 @@ public class KotityotMuokkaaTehtaviaController
 
 
     private void muokkaa() {
-        KotityotMuokkaaKayttajiaController.aloita(null, "");
+        KotityotMuokkaaKayttajiaController.kysyKayttaja(null, null);
     }
 
 
