@@ -3,9 +3,7 @@ package fxKotityot;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
@@ -13,16 +11,13 @@ import kotitalous.SailoException;
 import kotitalous.SovittuTehtava;
 import kotitalous.Tehtava;
 
-import java.io.PrintStream;
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ListChooser;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
-import fi.jyu.mit.fxgui.TextAreaOutputStream;
 
 /**
  * @author Anniina
@@ -34,20 +29,28 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     @FXML private ListChooser<Kayttaja> lcKayttajat;
     @FXML private ScrollPane panelKayttaja;
 
-    @FXML private TextField textIka;
-
-    @FXML private TextField textNimi;
+    @FXML private TextField editIka;
+    @FXML private TextField editNimi;
 
     @FXML void handlePoista() {
         Dialogs.showMessageDialog("Ei osata vielä poistaa käyttäjiä.");
     }
 
-    @FXML void handleTallenna() {
+    @FXML void handleTallennaKayttaja() {
+        tallennaKayttaja();
+    }
+    
+    @FXML
+    void handleTallennaJaPoistu() {
         tallenna();
+    }
+    
+    @FXML
+    void handlePeruuta() {
+        ModalController.closeStage(editNimi);
     }
 
     @FXML void handleUusi() {
-        //Dialogs.showMessageDialog("Ei osata vielä lisätä uusia käyttäjiä.");
         uusiKayttaja();
     }
     
@@ -64,17 +67,14 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     // =========================================
     private static Kotitalous ktalous;
     private Kayttaja kayttajaKohdalla;
-    private TextArea areaKayttaja = new TextArea();
+//    private TextArea areaKayttaja = new TextArea(); VANHA JOSSA TEXTAREA
     
     /**
      * Alustaa kokonaisuuden....
      */
     private void alusta() {
         avaa();
-        panelKayttaja.setContent(areaKayttaja);
-        areaKayttaja.setFont(new Font("Courier New", 12));
-        panelKayttaja.setFitToHeight(true);
-        
+
         lcKayttajat.clear(); //tyhjentää
         tayta();
         lcKayttajat.addSelectionListener(e -> naytaKayttaja());
@@ -83,20 +83,9 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     private void naytaKayttaja() {
         kayttajaKohdalla = lcKayttajat.getSelectedObject();
         if (kayttajaKohdalla == null) return;
-        
-        areaKayttaja.setText("");
-        try (PrintStream os = TextAreaOutputStream.getTextPrintStream(areaKayttaja)) { //import printstream
-          kayttajaKohdalla.tulosta(os);
-          os.println("-- Tehtävät --");
-          List<SovittuTehtava> sovitut = ktalous.annaSovitutTehtavat(kayttajaKohdalla);
-          for (SovittuTehtava st : sovitut) {
-              try {
-                ktalous.etsiTehtava(st.getTid()).tulosta(os);
-            } catch (SailoException e) {
-                Dialogs.showMessageDialog(e.getMessage());
-            }
-          }
-        }
+        editNimi.setText(kayttajaKohdalla.getNimi());
+        editIka.setText("" +kayttajaKohdalla.getIka());
+
     }
     
     @Override
@@ -111,27 +100,32 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     @Override
     public void handleShown() {
         alusta();
-        textNimi.requestFocus();
+        editNimi.requestFocus();
     }
 
     
     @Override
     public void setDefault(Kayttaja oletus) {
-        textNimi.setText(oletus.getNimi());
-        
+        this.kayttajaKohdalla = oletus;
+        editNimi.setText(oletus.getNimi());
+        editIka.setText("" +oletus.getIka());
     }
     
     
-    private void tallenna() {
+    private void tallennaKayttaja() {
         try {
             ktalous.tallenna();
         } catch (SailoException e) {
             Dialogs.showMessageDialog(e.getMessage());
         }
+    }
+    
+    private void tallenna() {
+        tallennaKayttaja();
         ModalController.closeStage(lcKayttajat);
     }
     
-    
+ 
     private void tayta() {
         for (int i = 0; i < ktalous.getKayttajia(); i++) {
             Kayttaja kayttaja = ktalous.annaKayttaja(i);

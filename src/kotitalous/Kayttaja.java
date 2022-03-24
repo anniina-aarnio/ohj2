@@ -80,6 +80,15 @@ public class Kayttaja {
     
     
     /**
+     * Palauttaa käyttäjän iän
+     * @return käyttäjän ikä: vuodet kokonaislukuna
+     */
+    public int getIka() {
+        return this.ika;
+    }
+    
+    
+    /**
      * Apumetodi, jolla saadaan täytettyä testiarvot jäsenelle.
      * Nimestä tulee "Aada " ja leikkihenkilötunnus.
      * Ikä arvotaan välillä 1-99.
