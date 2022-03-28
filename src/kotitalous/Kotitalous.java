@@ -10,15 +10,16 @@ import java.util.List;
  * 
  * Pääosin kaikki metodit ovat vain "välittäjämetodeja" käyttäjistöön.
  * @author Anniina
- * @version 22.2.2022
+ * @version 22.2.2022 //TODO päivittele joskus kaikkiin
  *
  */
 public class Kotitalous {
     private Kayttajat kayttajat = new Kayttajat();
     private Tehtavat tehtavat = new Tehtavat();
     private SovitutTehtavat sovitut = new SovitutTehtavat();
-    private String hakemisto = "kotitalous";
+    private String hakemisto = "kotitalous";    // TODO: haluanko final? testit vaikeutuu jos ei...
 
+    
     /**
      * Palauttaa käyttäjien määrän
      * @return käyttäjien määrä
@@ -26,7 +27,6 @@ public class Kotitalous {
     public int getKayttajia() {
         return this.kayttajat.getLkm();
     }
-    
     
 
     /**
@@ -178,7 +178,7 @@ public class Kotitalous {
 
     
     /**
-     * Lukee kerhon tiedot tiedostosta
+     * Lukee kerhon tiedot tiedostosta //TODO tee testit
      * @param nimi hakemiston nimi
      * @throws SailoException jos lukemisessa ongelmia
      */

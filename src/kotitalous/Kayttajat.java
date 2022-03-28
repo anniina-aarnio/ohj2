@@ -3,12 +3,13 @@ package kotitalous;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-//import java.io.FileOutputStream;
-//import java.io.PrintStream;
 import java.io.PrintStream;
+
 
 /**
  * Käyttäjät-luokka, vastuualueet:
@@ -19,7 +20,7 @@ import java.io.PrintStream;
  * @version 21.2.2022
  *
  */
-public class Kayttajat {
+public class Kayttajat implements Iterable<Kayttaja> {
     
     private static final int MAX_JASENIA = 5;
     
@@ -101,9 +102,37 @@ public class Kayttajat {
      * Lukee jäsenistön tiedostosta, kesken.
      * @param hakemisto tiedoston hakemisto
      * @throws SailoException jos lukeminen epäonnistuu
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * #import java.io.File;
+     * #import java.util.Iterator;
+     *  Kayttajat kayttajat = new Kayttajat();
+     *  Kayttaja aada1 = new Kayttaja(); aada1.rekisteroi(); aada1.taytaAadaTiedoilla();
+     *  Kayttaja aada2 = new Kayttaja(); aada2.rekisteroi(); aada2.taytaAadaTiedoilla();
+     *  Kayttaja aada3 = new Kayttaja(); aada3.rekisteroi(); aada3.taytaAadaTiedoilla();
+     *  String tiedNimi = "testiKotitalous";
+     *  File ftied = new File(tiedNimi + "/kayttajat.dat");
+     *  ftied.delete();
+     *  kayttajat.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *  kayttajat.lisaa(aada1);
+     *  kayttajat.lisaa(aada2);
+     *  kayttajat.lisaa(aada3);
+     *  kayttajat.tallenna(tiedNimi);
+     *  kayttajat = new Kayttajat();
+     *  kayttajat.lueTiedostosta(tiedNimi);
+     *  Iterator<Kayttaja> i = kayttajat.iterator();
+     *  i.next().toString() === aada1.toString();
+     *  i.next().toString() === aada2.toString();
+     *  i.next().toString() === aada3.toString();
+     *  i.hasNext() === false;
+     *  kayttajat.lisaa(aada1);
+     *  kayttajat.tallenna(tiedNimi);
+     *  ftied.delete() === true;
+     * </pre>
      */
     public void lueTiedostosta(String hakemisto) throws SailoException {
-        String nimi = hakemisto + "/nimet.dat";
+        String nimi = hakemisto + "/kayttajat.dat";
         File ftied = new File(nimi);
         
         try (Scanner fi = new Scanner(new FileInputStream(ftied))) {
@@ -131,9 +160,9 @@ public class Kayttajat {
      * @throws SailoException jos talletus epäonnistuu
      */
     public void tallenna(String hakemisto) throws SailoException {
-        File ftied = new File(hakemisto + "/nimet.dat"); // TODO tee tiedosto, jos sitä ei ole
+        File ftied = new File(hakemisto + "/kayttajat.dat"); // TODO tee tiedosto, jos sitä ei ole
         
-        try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) { //tarkista tuleeko false vai true
+        try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) {
             for (int i = 0; i < this.getLkm(); i++) {
                 Kayttaja kayttaja = this.anna(i);
                 fo.println(kayttaja.toString());
@@ -143,6 +172,78 @@ public class Kayttajat {
         }
     }
     
+    
+    /**
+     * Luokka käyttäjien iteroimiseksi.
+     * @excample
+     * <pre name="test">
+     * #THROWS SailoException
+     * #import java.util.*;
+     * 
+     *  Kayttajat kayttajat = new Kayttajat();
+     *  Kayttaja aada1 = new Kayttaja(), aada2 = new Kayttaja();
+     *  aada1.rekisteroi(); aada2.rekisteroi();
+     *  
+     *  kayttajat.lisaa(aada1);
+     *  kayttajat.lisaa(aada2);
+     *  kayttajat.lisaa(aada1);
+     *  
+     *  StringBuffer ids = new StringBuffer(30);
+     *  for (Kayttaja kayttaja : kayttajat)
+     *      ids.append(" " + kayttaja.getKid());
+     *  String tulos = " " + aada1.getKid() + " " + aada2.getKid() + " " + aada1.getKid();
+     *  
+     *  ids.toString() === tulos;
+     *  
+     *  ids = new StringBuffer(30);
+     *  for (Iterator<Kayttaja> i = kayttajat.iterator(); i.hasNext();) {
+     *      Kayttaja k = i.next();
+     *      ids.append(" " + k.getKid());
+     *  }
+     *  
+     *  ids.toString() === tulos;
+     *  
+     *  Iterator<Kayttaja> i = kayttajat.iterator();
+     *  i.next() == aada1 === true;
+     *  i.next() == aada2 === true;
+     *  i.next() == aada1 === true;
+     *  
+     *  i.next(); #THROWS NoSuchElementException
+     */
+    @Override
+    public Iterator<Kayttaja> iterator() {
+        return new KayttajatIterator();
+    }
+    
+    /**
+     * @author Anniina
+     * @version 28.3.2022
+     */
+    public class KayttajatIterator implements Iterator<Kayttaja> {
+        private int kohdalla = 0;
+
+        /**
+         * Onko olemassa vielä seuraava käyttäjä
+         * @return true, jos on vielä käyttäjiä
+         */
+        @Override
+        public boolean hasNext() {
+            return kohdalla < getLkm();
+        }
+
+        /**
+         * Annetaan seuraava käyttäjä
+         * @return seuraava käyttäjä
+         * @throws NoSuchElementException jos seuraavaa alkiota ei enää ole
+         */
+        @Override
+        public Kayttaja next() throws NoSuchElementException {
+            if (!hasNext()) throw new NoSuchElementException("Ei oo");
+            return anna(kohdalla++);
+        }
+    }
+    
+    
     /**
      * @param args ei käytössä
      */
@@ -150,7 +251,7 @@ public class Kayttajat {
         Kayttajat kayttajat = new Kayttajat();
         
         try {
-            kayttajat.lueTiedostosta("kotitalous");
+            kayttajat.lueTiedostosta("testiKotitalous");
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
         }
@@ -180,11 +281,19 @@ public class Kayttajat {
         }
         
         try {
-            kayttajat.tallenna("kotitalous"); 
+            kayttajat.tallenna("testiKotitalous"); 
         } catch (SailoException e) {
             e.printStackTrace();
         }
         
+        try {
+            kayttajat.lueTiedostosta("testiKotitalous");
+        } catch (SailoException ex) {
+            System.err.println(ex.getMessage());
+        }
+        
         
     }
+
+
 }

@@ -171,7 +171,7 @@ public class Tehtavat implements Iterable<Tehtava> {
         Tehtavat teet = new Tehtavat();
         
         try {
-            teet.lueTiedostosta("kotitalous");
+            teet.lueTiedostosta("testiKotitalous");
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
         }
@@ -193,7 +193,7 @@ public class Tehtavat implements Iterable<Tehtava> {
         }
         
         try {
-            teet.tallenna("kotitalous");
+            teet.tallenna("testiKotitalous");
         } catch (SailoException e) {
             e.printStackTrace();
         }

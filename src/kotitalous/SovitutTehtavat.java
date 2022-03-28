@@ -269,7 +269,7 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
         SovitutTehtavat steet = new SovitutTehtavat();
         
         try {
-            steet.lueTiedostosta("kotitalous");
+            steet.lueTiedostosta("testiKotitalous");
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
         }
@@ -334,7 +334,7 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
         }
         
         try {
-            steet.tallenna("kotitalous");
+            steet.tallenna("testiKotitalous");
         } catch (SailoException e) {
             e.printStackTrace();
         }
