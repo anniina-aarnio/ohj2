@@ -18,12 +18,12 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
 
 
         @FXML private Label labelOtsikko;
-
         @FXML private TextField textIka;
-
         @FXML private TextField textNimi;
+        @FXML private Label labelVirhe;
 
         @FXML void handleCancel() {
+            kayttajaKohdalla = null;
             ModalController.closeStage(textNimi);
         }
 
@@ -33,8 +33,7 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
         
         @Override
         public Kayttaja getResult() {
-            // TODO Auto-generated method stub
-            return null;
+            return kayttajaKohdalla;
         }
 
         @Override
@@ -46,19 +45,67 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
         @Override
         public void setDefault(Kayttaja kayttaja) {
             if (kayttaja != null) labelOtsikko.setText("Muokkaa käyttäjää");
-            this.kayttajaKohdalla = kayttaja;
+            if (kayttaja == null) this.kayttajaKohdalla = new Kayttaja();
+            else this.kayttajaKohdalla = kayttaja;
             naytaKayttaja(kayttajaKohdalla);
+            alusta();
         }
 
         //=======================================================================
         
         private Kayttaja kayttajaKohdalla;
         
-        
-        private void tallenna() {
-            //
+        private void alusta() {
+            textNimi.setOnKeyReleased(e -> kasitteleNimi());
+            textIka.setOnKeyReleased(e -> kasitteleIka());
         }
         
+        
+        private void kasitteleNimi() {
+            if (kayttajaKohdalla == null) return;
+            String s = textNimi.getText();
+            String virhe = null;
+            virhe = kayttajaKohdalla.setNimi(s);
+            if (virhe == null) {
+                naytaVirhe(virhe);
+            } else {
+                naytaVirhe(virhe);
+            }
+        }
+        
+        
+        private void kasitteleIka() {
+            if (kayttajaKohdalla == null) return;
+            String s = textIka.getText();
+            String virhe = null;
+            virhe = kayttajaKohdalla.setIka(s);
+            if (virhe == null) {
+                naytaVirhe(virhe);
+            } else {
+                naytaVirhe(virhe);
+            }
+        }
+        
+        
+        private void tallenna() {
+            if (kayttajaKohdalla != null && kayttajaKohdalla.getNimi().trim().equals("")) {
+                naytaVirhe("Nimi ei saa olla tyhjä");
+                return;
+            }
+            // TODO ei vielä tallenna tietoja oikeasti
+            ModalController.closeStage(labelVirhe);
+        }
+        
+
+        private void naytaVirhe(String virhe) {
+            if (virhe == null || virhe.isBlank()) {
+                labelVirhe.setText("");
+                labelVirhe.getStyleClass().removeAll("virhe");
+                return;
+            }
+            labelVirhe.setText(virhe);
+            labelVirhe.getStyleClass().add("virhe");
+        }
         
         private void naytaKayttaja(Kayttaja kayttaja) {
             if (kayttaja == null) return;

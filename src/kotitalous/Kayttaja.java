@@ -83,8 +83,19 @@ public class Kayttaja {
      * Asettaa käyttäjän nimen
      * @param nimi muutettava nimi
      * @return null jos kaikki meni hyvin, muuten virheteksti
+     * @example
+     * <pre name="test">
+     * Kayttaja k = new Kayttaja();
+     * k.setNimi("Minna") === null;
+     * k.setNimi("") === "Nimi ei saa olla tyhjä";
+     * k.getNimi() === "Minna";
+     * k.setNimi(null) === "Nimi ei saa olla tyhjä";
+     * k.setNimi("Minna | Mikkonen") === "Merkki | ei ole sallittu";
+     * </pre>
      */
     public String setNimi(String nimi) {
+        if (nimi == null || nimi.isEmpty()) return "Nimi ei saa olla tyhjä";
+        if (nimi.contains("|")) return "Merkki | ei ole sallittu";
         this.nimi = nimi;
         return null;
     }
@@ -105,6 +116,30 @@ public class Kayttaja {
      */
     public void setIka(int nro) {
         this.ika = nro;
+    }
+    
+    
+    /**
+     * Asettaa käyttäjän iän merkkijonosta
+     * @param s merkkijono, josta ikä otetaan
+     * @return null, jos kaikki ok, muuten virheteksti
+     * @example
+     * <pre name="test">
+     * Kayttaja k = new Kayttaja();
+     * k.setIka("14") === null;
+     * k.setIka("") === "Iän tulee olla vähintään 0";
+     * k.getIka() === 14;
+     * k.setIka("a") === "Vääriä merkkejä, käytä vain kokonaislukuja";
+     * k.setIka("01") === "Vääriä merkkejä, käytä vain kokonaislukuja";
+     * k.setIka("100") === "Yli 100-vuotiaan ei tarvitse tehdä kotitöitä";
+     * </pre>
+     */
+    public String setIka(String s) {
+        if (s == null || s.isEmpty()) return "Iän tulee olla vähintään 0";
+        if (s.matches("[1-9][0-9][0-9]+")) return "Yli 100-vuotias saa levätä";
+        if (!s.matches("[0]|[1-9][0-9]?")) return "Käytä kokonaislukuja";
+        this.ika = Integer.parseInt(s);
+        return null;
     }
     
     

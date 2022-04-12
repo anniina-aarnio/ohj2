@@ -63,25 +63,24 @@ public class KotityotGUIController implements Initializable {
 
         
     @FXML void handleUusiKayttaja() {
-        //Dialogs.showMessageDialog("Ei osata vielä tehdä uusia käyttäjiä.");
         uusiKayttaja();
     }
 
         
     @FXML void handleUusiTehtava() {
-        //KotityotUusiTehtavaController.aloita(null, "");
         uusiTehtava(); // 5-vaihetta varten tehdään höpöversio
     }
-
-    // ====================oma osuus======================================
-    
-    private Kotitalous ktalous;
     
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
         alusta();
     }
+
+    // ====================oma osuus======================================
+    
+    private Kotitalous ktalous;
+    
     
     /**
      * Alustaa kokonaisuuden....
@@ -152,6 +151,7 @@ public class KotityotGUIController implements Initializable {
      */
     private void muokkaaKayttajaa() {
         Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
+        if (kayttajaKohdalla == null) return;
 //        KotityotMuokkaaKayttajiaController.setKotitalous(ktalous);
         KotityotMuokkaaKayttajaaController.kysyKayttaja(null, kayttajaKohdalla);
     }
