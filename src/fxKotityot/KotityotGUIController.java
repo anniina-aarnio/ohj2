@@ -52,8 +52,8 @@ public class KotityotGUIController implements Initializable {
     }
 
         
-    @FXML void handleMuokkaaKayttajia() {
-        muokkaaKayttajia();
+    @FXML void handleMuokkaaKayttajaa() {
+        muokkaaKayttajaa();
     }
 
         
@@ -150,10 +150,10 @@ public class KotityotGUIController implements Initializable {
     /*
      * Avaa käyttäjienmuokkaus-ikkunan
      */
-    private void muokkaaKayttajia() {
+    private void muokkaaKayttajaa() {
         Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
-        KotityotMuokkaaKayttajiaController.setKotitalous(ktalous);
-        KotityotMuokkaaKayttajiaController.kysyKayttaja(null, kayttajaKohdalla);
+//        KotityotMuokkaaKayttajiaController.setKotitalous(ktalous);
+        KotityotMuokkaaKayttajaaController.kysyKayttaja(null, kayttajaKohdalla);
     }
 
 
@@ -212,7 +212,7 @@ public class KotityotGUIController implements Initializable {
      * Lisätään uusi käyttäjä
      */
     private void uusiKayttaja() {
-        Dialogs.showMessageDialog("Kokeile \"Muokkaa käyttäjiä\".");
+        KotityotMuokkaaKayttajaaController.uusiKayttaja(null);
     }
     
     

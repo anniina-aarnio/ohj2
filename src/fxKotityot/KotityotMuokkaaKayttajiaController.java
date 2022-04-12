@@ -205,7 +205,7 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
      * Lisätään uusi käyttäjä
      */
     private void uusiKayttaja() {
-        KotityotMuokkaaKayttajaaController.uusiKayttaja(null, kayttajaKohdalla);
+        KotityotMuokkaaKayttajaaController.uusiKayttaja(null);
 //        Kayttaja uusi = new Kayttaja();
 //        uusi.rekisteroi(); // tätä ei kannata oikeasti tähän kohtaan laittaa, vaan vasta tallennuksen kohdalla...
 //        uusi.taytaAadaTiedoilla();

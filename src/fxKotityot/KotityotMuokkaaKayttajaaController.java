@@ -45,6 +45,7 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
 
         @Override
         public void setDefault(Kayttaja kayttaja) {
+            if (kayttaja != null) labelOtsikko.setText("Muokkaa käyttäjää");
             this.kayttajaKohdalla = kayttaja;
             naytaKayttaja(kayttajaKohdalla);
         }
@@ -81,12 +82,11 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
         /**
          * Luodaan uuden käyttäjän tietojen kysymysdialogi ja palautetaan sama tietue muutettuna tai null
          * @param modalityStage mille ollaan modaalisia, null = sovellukselle
-         * @param oletus mitä dataa näytetään oletuksena
          * @return null, jos painetaan Cancel, muuten täytetty tietue
          */
-        public static Kayttaja uusiKayttaja(Stage modalityStage, Kayttaja oletus) {
+        public static Kayttaja uusiKayttaja(Stage modalityStage) {
             return ModalController.showModal(KotityotMuokkaaKayttajaaController.class.getResource(
-                    "KotityotMuokkaaKayttajaaView.fxml"), "Uusi käyttäjä", modalityStage, oletus);
+                    "KotityotMuokkaaKayttajaaView.fxml"), "Uusi käyttäjä", modalityStage, null);
         }
 
 

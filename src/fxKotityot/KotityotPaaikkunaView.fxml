@@ -26,9 +26,17 @@
          <bottom>
             <HBox BorderPane.alignment="BOTTOM_LEFT">
                <children>
-                  <Button mnemonicParsing="false" onAction="#handleMuokkaaKayttajia" text="Muokkaa käyttäjiä">
+                  <Button mnemonicParsing="false" onAction="#handleUusiKayttaja" text="Uusi käyttäjä">
                      <tooltip>
-                        <Tooltip text="Muokkaa käyttäjää tai lisää uusi käyttäjä" />
+                        <Tooltip text="Lisää uusi käyttäjä" />
+                     </tooltip>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleMuokkaaKayttajaa" text="Muokkaa">
+                     <tooltip>
+                        <Tooltip text="Muokkaa valittua käyttäjää" />
                      </tooltip>
                   </Button>
                </children>
@@ -88,7 +96,7 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Muokkaa">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaKayttajia" text="Muokkaa käyttäjiä" />
+              <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaKayttajaa" text="Muokkaa käyttäjää" />
                   <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaTehtavia" text="Muokkaa tehtäviä" />
             </items>
           </Menu>
