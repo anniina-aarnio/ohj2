@@ -55,6 +55,17 @@ public class Kotitalous {
 
 
     /**
+     * Korvaa käyttäjän tietorakenteessa.
+     * Ottaa käyttäjän omistukseensa.
+     * Etsitään samalla tunnusnumerolla oleva käyttäjä. Jos ei löydy,
+     * niin lisätään uutena käyttäjänä.
+     * @param kayttaja lisätään käyttäjän viite. Huom. tietorakenne muuttuu omistajaksi!
+     */
+    public void korvaaTaiLisaa(Kayttaja kayttaja) {
+        kayttajat.korvaaTaiLisaa(kayttaja);
+    }
+
+    /**
      * @param tehtava lisättävä tehtävä
      */
     public void lisaa(Tehtava tehtava) {
@@ -176,6 +187,8 @@ public class Kotitalous {
         return this.sovitut.annaSovitutTehtavat(k);
     }
 
+    
+    
     
     /**
      * Lukee kerhon tiedot tiedostosta //TODO tee testit
@@ -301,5 +314,4 @@ public class Kotitalous {
         }
 
     }
-
 }

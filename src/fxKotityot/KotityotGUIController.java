@@ -154,7 +154,16 @@ public class KotityotGUIController implements Initializable {
         Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
         if (kayttajaKohdalla == null) return;
 //        KotityotMuokkaaKayttajiaController.setKotitalous(ktalous);
-        KotityotMuokkaaKayttajaaController.kysyKayttaja(null, kayttajaKohdalla);
+        try {
+            Kayttaja kayttaja = KotityotMuokkaaKayttajaaController.kysyKayttaja(null, kayttajaKohdalla.clone());
+            if (kayttaja == null) return;
+            hae(kayttaja.getKid());
+            ktalous.korvaaTaiLisaa(kayttaja);
+        } catch (CloneNotSupportedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
 

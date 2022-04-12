@@ -16,7 +16,7 @@ import kanta.HetuTarkistus;
  * @author Anniina
  * @version 21.2.2022
  */
-public class Kayttaja {
+public class Kayttaja implements Cloneable {
     
     private int         kid;                            // käyttäjä id
     private String      nimi         = "";              // etunimi riittää
@@ -217,6 +217,15 @@ public class Kayttaja {
                 this.ika;
     }
      
+    /**
+     * Tekee käyttäjästä kloonin
+     */
+    @Override
+    public Kayttaja clone() throws CloneNotSupportedException {
+        Kayttaja uusi;
+        uusi = (Kayttaja) super.clone();    // toimii koska vain int- ja String-attribuutteja
+        return uusi;
+    }
     
     /**
      * @param args ei käytössä

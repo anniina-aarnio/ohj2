@@ -26,7 +26,8 @@ public class Kayttajat implements Iterable<Kayttaja> {
     
     private int             lkm;
     private Kayttaja[]      alkiot;
-
+    private boolean         muutettu = false;
+    
     /**
      * Luodaan alustava taulukko
      */
@@ -62,6 +63,22 @@ public class Kayttajat implements Iterable<Kayttaja> {
         }
         this.alkiot[lkm] = kayttaja;
         this.lkm++;
+    }
+    
+    /**
+     * Korvaa //TODO tee testit ja tekstit 
+     * @param kayttaja korvattava tai lisättävä käyttäjä
+     */
+    public void korvaaTaiLisaa(Kayttaja kayttaja) {
+        int id = kayttaja.getKid();
+        for (int i = 0; i < lkm; i++) {
+            if (alkiot[i].getKid() == id) {
+                alkiot[i] = kayttaja;
+                muutettu = true;
+                return;
+            }
+        }
+        lisaa(kayttaja);
     }
     
     
@@ -146,6 +163,7 @@ public class Kayttajat implements Iterable<Kayttaja> {
         } catch (FileNotFoundException e) {
             throw new SailoException("Ei saa luettua tiedostoa " + nimi);
         }
+        this.muutettu = false;
     }
     
     
@@ -160,6 +178,7 @@ public class Kayttajat implements Iterable<Kayttaja> {
      * @throws SailoException jos talletus epäonnistuu
      */
     public void tallenna(String hakemisto) throws SailoException {
+        if (!muutettu) return;
         File ftied = new File(hakemisto + "/kayttajat.dat"); // TODO tee tiedosto, jos sitä ei ole
         
         try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) {

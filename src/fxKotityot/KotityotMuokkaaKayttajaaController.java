@@ -1,5 +1,6 @@
 package fxKotityot;
 
+import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import javafx.fxml.FXML;
@@ -80,14 +81,20 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
             String virhe = null;
             virhe = kayttajaKohdalla.setIka(s);
             if (virhe == null) {
+                Dialogs.setToolTipText(textIka, "");
+                textIka.getStyleClass().add("normaali");
                 naytaVirhe(virhe);
             } else {
+                Dialogs.setToolTipText(textIka, virhe);
+                textIka.getStyleClass().add("virhe");
                 naytaVirhe(virhe);
             }
         }
         
         
         private void tallenna() {
+            // TODO nyt "tallentaa" sen perusteella mitä käyttäjässä on
+            // kun pitäisi katsoa, miltä ruudussa näyttää, että mitä pitäisi tallentaa
             if (kayttajaKohdalla != null && kayttajaKohdalla.getNimi().trim().equals("")) {
                 naytaVirhe("Nimi ei saa olla tyhjä");
                 return;
