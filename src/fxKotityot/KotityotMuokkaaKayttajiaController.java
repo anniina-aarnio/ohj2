@@ -62,11 +62,6 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     }
     
     @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        alusta();           // TODO: jos pääikkunassa on valittuna käyttäjä niin ei näytä tässä sitä
-    }
-    
-    @Override
     public Kayttaja getResult() {
         return kayttajaKohdalla;
     }
@@ -83,17 +78,20 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     
     @Override
     public void setDefault(Kayttaja oletus) {
-        this.kayttajaKohdalla = oletus;
-        naytaKayttaja();
+        this.kayttajaKohdalla = oletus;         // TODO ei näytä edellisestä ikkunasta valittua käyttäjää ensimmäisenä
+        naytaKayttaja();                        // johtunee tästä, kun tämä metodi yrittää näyttää klikatun..
     }
     
+
+    @Override
+    public void initialize(URL arg0, ResourceBundle arg1) {
+//        alusta();   
+    }
     
     // =========================================
     private static Kotitalous ktalous;
     private Kayttaja kayttajaKohdalla;
     private TextField[] edits;
-    
-//    private TextArea areaKayttaja = new TextArea(); VANHA JOSSA TEXTAREA
     
     /**
      * Alustaa kokonaisuuden....
@@ -104,11 +102,14 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         lcKayttajat.clear(); //tyhjentää
         tayta();
         lcKayttajat.addSelectionListener(e -> naytaKayttaja());
-        editNimi.setOnKeyReleased(e -> kasitteleMuutosJaseneen(1, editNimi));
+        editNimi.setOnKeyReleased(e -> kasitteleMuutosKayttajaan(1, editNimi));
+        editIka.setOnKeyReleased(e -> kasitteleMuutosKayttajaan(2, editIka));
     }
     
-    
-    private void kasitteleMuutosJaseneen(@SuppressWarnings("unused") int k, TextField edit) {
+    /**
+     * Käsitellään käyttäjään tullut muutos
+     */
+    private void kasitteleMuutosKayttajaan(@SuppressWarnings("unused") int k, TextField edit) {
         if (kayttajaKohdalla == null) return;
         String s = edit.getText();
         String virhe = null;
@@ -120,7 +121,10 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         }
     }
     
-    
+    /**
+     * Tekee virhelabelin virhemuotoon, jos virhe tapahtunut
+     * @param virhe virheteksti
+     */
     private void naytaVirhe(String virhe) {
         if (virhe == null || virhe.isEmpty()) {
             labelVirhe.setText("");
@@ -131,6 +135,7 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         labelVirhe.getStyleClass().add("virhe");
     }
     
+    
     private void naytaKayttaja() {
         kayttajaKohdalla = lcKayttajat.getSelectedObject();
         if (kayttajaKohdalla == null) return;
@@ -138,6 +143,7 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         edits[1].setText("" +kayttajaKohdalla.getIka());
     }
 
+    
     private void tallennaKayttaja() {
         if (kayttajaKohdalla != null && kayttajaKohdalla.getNimi().trim().equals("")) {
             naytaVirhe("Nimi ei saa olla tyhjä");
@@ -146,9 +152,10 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         try {
             ktalous.tallenna();
         } catch (SailoException e) {
-            Dialogs.showMessageDialog(e.getMessage());
+            Dialogs.showMessageDialog("Tallennuksessa ongelmia! " + e.getMessage());
         }
     }
+    
     
     private void tallenna() {
         tallennaKayttaja();
@@ -163,6 +170,22 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         }
     }
     
+    
+    /**
+     * Tyhjennetään tekstikentät
+     * @param edits taulukko, jossa tyhjennettäviä tekstikenttiä
+     */
+    public static void tyhjenna(TextField[] edits) {
+        for (TextField edit : edits) {
+            edit.setText("");
+        }
+    }
+    
+    
+    /**
+     * Hakee käyttäjien tiedot listaan
+     * @param haettavaKayttaja etsittävä käyttäjä, joka aktivoidaan haun jälkeen
+     */
     private void hae(Kayttaja haettavaKayttaja) {
         lcKayttajat.clear();
         
@@ -177,19 +200,22 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
         lcKayttajat.setSelectedIndex(index);
     }
     
+    
     /**
      * Lisätään uusi käyttäjä
      */
     private void uusiKayttaja() {
-        Kayttaja uusi = new Kayttaja();
-        uusi.rekisteroi(); // tätä ei kannata oikeasti tähän kohtaan laittaa, vaan vasta tallennuksen kohdalla...
-        uusi.taytaAadaTiedoilla();
-        ktalous.lisaa(uusi);
-        
-        hae(uusi);
+        KotityotMuokkaaKayttajaaController.uusiKayttaja(null, kayttajaKohdalla);
+//        Kayttaja uusi = new Kayttaja();
+//        uusi.rekisteroi(); // tätä ei kannata oikeasti tähän kohtaan laittaa, vaan vasta tallennuksen kohdalla...
+//        uusi.taytaAadaTiedoilla();
+//        ktalous.lisaa(uusi);
+//        
+//        hae(uusi);
     }
     
-    private void uusiTehtava() {
+    
+    private void uusiTehtava() {        // tämä pois tästä kunhan muu toimii
         Tehtava uusi = new Tehtava();
         uusi.rekisteroi();
         uusi.taytaImurointiTiedoilla();
@@ -210,7 +236,8 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
      * @return null, jos painetaan Cancel, muuten viimeiseksi täytetty käyttäjä
      */
     public static Kayttaja kysyKayttaja(Stage modalityStage, Kayttaja oletus) {
-        return ModalController.showModal(KotityotMuokkaaKayttajiaController.class.getResource("KotityotMuokkaaKayttajiaView.fxml"),
+        return ModalController.showModal(
+                KotityotMuokkaaKayttajiaController.class.getResource("KotityotMuokkaaKayttajiaView.fxml"),
                 "Käyttäjien muokkaus", modalityStage, oletus);
     }
 
@@ -221,4 +248,5 @@ public class KotityotMuokkaaKayttajiaController implements ModalControllerInterf
     public static void setKotitalous(Kotitalous kotitalous) {
         ktalous = kotitalous;
     }
+
 }

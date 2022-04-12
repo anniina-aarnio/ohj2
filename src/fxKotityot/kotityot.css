@@ -1,1 +1,7 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+.virhe {
+	-fx-background-color: red;
+}
+
+.normaali {
+	-fx-background-color: white;
+}

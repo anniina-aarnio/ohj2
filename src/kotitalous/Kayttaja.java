@@ -139,7 +139,7 @@ public class Kayttaja {
     
     
     /**
-     * Selvittää jäsenen tiedot | erotellusta merkkijonosta
+     * Selvittää käyttäjän tiedot | erotellusta merkkijonosta
      * Pitää huolen, että seuraavaNro on suurempi kuin tuleva tunnusNro
      * @param rivi josta käyttäjän tiedot otetaan
      * 
@@ -180,9 +180,8 @@ public class Kayttaja {
                 this.getKid() + "|" +
                 this.nimi + "|" + 
                 this.ika;
-                
     }
-    
+     
     
     /**
      * @param args ei käytössä
