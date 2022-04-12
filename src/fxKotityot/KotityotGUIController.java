@@ -88,6 +88,7 @@ public class KotityotGUIController implements Initializable {
     private void alusta() {
         lcKayttajat.clear(); //tyhjentää
         lcKayttajat.addSelectionListener(e -> naytaKayttaja());
+        lcKayttajat.setOnMouseClicked( e -> {if ( e.getClickCount() > 1) muokkaaKayttajaa();});
     }
     
     private void lueTiedosto(String nimi) {
