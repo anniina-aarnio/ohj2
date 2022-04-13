@@ -5,6 +5,7 @@ import java.io.PrintStream;
 
 import fi.jyu.mit.ohj2.Mjonot;
 import kanta.HetuTarkistus;
+import kanta.Tietue;
 
 /**
  * Käyttäjä-luokka, vastuualueet:
@@ -16,7 +17,7 @@ import kanta.HetuTarkistus;
  * @author Anniina
  * @version 21.2.2022
  */
-public class Kayttaja implements Cloneable {
+public class Kayttaja implements Cloneable, Tietue {
     
     private int         kid;                            // käyttäjä id
     private String      nimi         = "";              // etunimi riittää
@@ -80,28 +81,6 @@ public class Kayttaja implements Cloneable {
     
     
     /**
-     * Asettaa käyttäjän nimen
-     * @param nimi muutettava nimi
-     * @return null jos kaikki meni hyvin, muuten virheteksti
-     * @example
-     * <pre name="test">
-     * Kayttaja k = new Kayttaja();
-     * k.setNimi("Minna") === null;
-     * k.setNimi("") === "Nimi ei saa olla tyhjä";
-     * k.getNimi() === "Minna";
-     * k.setNimi(null) === "Nimi ei saa olla tyhjä";
-     * k.setNimi("Minna | Mikkonen") === "Merkki | ei ole sallittu";
-     * </pre>
-     */
-    public String setNimi(String nimi) {
-        if (nimi == null || nimi.isEmpty()) return "Nimi ei saa olla tyhjä";
-        if (nimi.contains("|")) return "Merkki | ei ole sallittu";
-        this.nimi = nimi;
-        return null;
-    }
-    
-    
-    /**
      * Palauttaa käyttäjän iän
      * @return käyttäjän ikä: vuodet kokonaislukuna
      */
@@ -109,38 +88,94 @@ public class Kayttaja implements Cloneable {
         return this.ika;
     }
     
+
+    /**
+     * Palauttaa käyttäjän kenttien lukumäärän
+     * @return kenttien lukumäärä
+     */
+    @Override
+    public int getKenttia() {
+        return 3;
+    }
     
     /**
-     * Asettaa käyttäjän iän
-     * @param nro uusi ikä
+     * Ensimmäinen kenttä, joka on mielekäs kysyttäväksi
+     * @return ensimmäisen kentän indeksi
      */
-    public void setIka(int nro) {
-        this.ika = nro;
+    @Override
+    public int ekaKentta() {
+        return 1;
+    }
+    
+    
+    @Override
+    public String anna(int k) {
+        switch (k) {
+        case 0: return "" + this.kid;
+        case 1: return "" + this.nimi;
+        case 2: return "" + this.ika;
+        default: return "???";
+        }
     }
     
     
     /**
-     * Asettaa käyttäjän iän merkkijonosta
-     * @param s merkkijono, josta ikä otetaan
-     * @return null, jos kaikki ok, muuten virheteksti
+     * Asettaa k:n kentän arvoksi parametrina tuodun merkkijonon arvon
+     * @param k kuinka monennen kentän arvo asetetaan
+     * @param merkkijono jono, joka asetetaan kentän arvoksi
+     * @return null, jos asettaminen onnistuu, muuten vastaava virheilmoitus
      * @example
      * <pre name="test">
-     * Kayttaja k = new Kayttaja();
-     * k.setIka("14") === null;
-     * k.setIka("") === "Iän tulee olla vähintään 0";
-     * k.getIka() === 14;
-     * k.setIka("a") === "Vääriä merkkejä, käytä vain kokonaislukuja";
-     * k.setIka("01") === "Vääriä merkkejä, käytä vain kokonaislukuja";
-     * k.setIka("100") === "Yli 100-vuotiaan ei tarvitse tehdä kotitöitä";
+     *  Kayttaja kayttaja = new Kayttaja();
+     *  kayttaja.aseta(1, "") === "Nimi ei saa olla tyhjä";
+     *  kayttaja.aseta(2, "Aada |") === "Merkki | ei ole sallittu";
+     *  kayttaja.aseta(1, "Aada") === null;
+     *  kayttaja.aseta(2, "kissa") === "Anna kokonaisluku";
+     *  kayttaja.aseta(2, "100") === "100 vuotta täyttäneet saavat levätä";
+     *  kayttaja.aseta(2, "02") === "Anna kokonaisluku";
+     *  kayttaja.aseta(2, "-1") === "Anna kokonaisluku";
+     *  kayttaja.aseta(2, 0) === null;
      * </pre>
      */
-    public String setIka(String s) {
-        if (s == null || s.isEmpty()) return "Iän tulee olla vähintään 0";
-        if (s.matches("[1-9][0-9][0-9]+")) return "Yli 100-vuotias saa levätä";
-        if (!s.matches("[0]|[1-9][0-9]?")) return "Käytä kokonaislukuja";
-        this.ika = Integer.parseInt(s);
-        return null;
+    @Override
+    public String aseta(int k, String merkkijono) {
+        String tjono = merkkijono.trim();
+        StringBuilder sb = new StringBuilder(tjono);
+        switch (k) {
+        case 0:
+            setKid(Mjonot.erota(sb, '§', getKid()));    // selvitä miksi näin
+            return null;
+        case 1:
+            if (tjono == null || tjono.isEmpty()) return "Nimi ei saa olla tyhjä";
+            if (tjono.contains("|")) return "Merkki | ei ole sallittu";
+            this.nimi = tjono;
+            return null;
+        case 2:
+            if (tjono == null || tjono.isEmpty()) return "Iän tulee olla vähintään 0";
+            if (tjono.matches("[1-9][0-9][0-9]+")) return "Yli 100-vuotias saa levätä";
+            if (!tjono.matches("[0]|[1-9][0-9]?")) return "Käytä kokonaislukuja";
+            this.ika = Integer.parseInt(tjono);
+            return null;
+        default:
+            return "???"; 
+        }
     }
+    
+    /**
+     * Palauttaa k:tta jäsenen kenttää vastaavan kysymyksen
+     * @param k kuinka monennen kentän kysymys palautetaan (0-alkuinen)
+     * @return k:nnetta kenttää vastaava kysymys
+     */
+    @Override
+    public String getKysymys(int k) {
+        switch (k) {
+        case 0: return "Käyttäjän ID";
+        case 1: return "Nimi";
+        case 2: return "Ikä";
+        default: return "???";
+        }
+    }
+    
     
     
     /**
