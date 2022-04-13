@@ -45,9 +45,12 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
 
         @Override
         public void setDefault(Kayttaja kayttaja) {
-            if (kayttaja != null) labelOtsikko.setText("Muokkaa käyttäjää");
-            if (kayttaja == null) this.kayttajaKohdalla = new Kayttaja();
-            else this.kayttajaKohdalla = kayttaja;
+            if (kayttaja.getNimi().isBlank()) {
+                labelOtsikko.setText("Uusi käyttäjä");
+                labelVirhe.setText("Täytä tiedot");
+            }
+            else labelOtsikko.setText("Muokkaa käyttäjää");
+            this.kayttajaKohdalla = kayttaja;
             naytaKayttaja(kayttajaKohdalla);
             alusta();
         }
@@ -68,8 +71,12 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
             String virhe = null;
             virhe = kayttajaKohdalla.setNimi(s);
             if (virhe == null) {
+                Dialogs.setToolTipText(textNimi, "");
+                textNimi.getStyleClass().removeAll("virhe");
                 naytaVirhe(virhe);
             } else {
+                Dialogs.setToolTipText(textNimi, virhe);
+                textNimi.getStyleClass().add("virhe");
                 naytaVirhe(virhe);
             }
         }
@@ -82,7 +89,7 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
             virhe = kayttajaKohdalla.setIka(s);
             if (virhe == null) {
                 Dialogs.setToolTipText(textIka, "");
-                textIka.getStyleClass().add("normaali");
+                textIka.getStyleClass().removeAll("virhe");
                 naytaVirhe(virhe);
             } else {
                 Dialogs.setToolTipText(textIka, virhe);
@@ -93,14 +100,17 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
         
         
         private void tallenna() {
-            // TODO nyt "tallentaa" sen perusteella mitä käyttäjässä on
-            // kun pitäisi katsoa, miltä ruudussa näyttää, että mitä pitäisi tallentaa
-            if (kayttajaKohdalla != null && kayttajaKohdalla.getNimi().trim().equals("")) {
-                naytaVirhe("Nimi ei saa olla tyhjä");
-                return;
+            if (labelVirhe == null || labelVirhe.getText().isEmpty()) {
+                ModalController.closeStage(textNimi);
+            } else {
+                naytaVirhe(labelVirhe.getText());
             }
-            // TODO ei vielä tallenna tietoja oikeasti
-            ModalController.closeStage(labelVirhe);
+            
+//            if (kayttajaKohdalla != null && kayttajaKohdalla.getNimi().trim().equals("")) {
+//                naytaVirhe("Nimi ei saa olla tyhjä");
+//                return;
+//            }
+//            ModalController.closeStage(labelVirhe);
         }
         
 
@@ -132,16 +142,4 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
                     "KotityotMuokkaaKayttajaaView.fxml"), "Käyttäjän muokkaus", modalityStage, oletus);
         }
         
-        
-        /**
-         * Luodaan uuden käyttäjän tietojen kysymysdialogi ja palautetaan sama tietue muutettuna tai null
-         * @param modalityStage mille ollaan modaalisia, null = sovellukselle
-         * @return null, jos painetaan Cancel, muuten täytetty tietue
-         */
-        public static Kayttaja uusiKayttaja(Stage modalityStage) {
-            return ModalController.showModal(KotityotMuokkaaKayttajaaController.class.getResource(
-                    "KotityotMuokkaaKayttajaaView.fxml"), "Uusi käyttäjä", modalityStage, null);
-        }
-
-
 }

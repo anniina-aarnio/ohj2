@@ -55,6 +55,10 @@ public class KotityotGUIController implements Initializable {
     @FXML void handleMuokkaaKayttajaa() {
         muokkaaKayttajaa();
     }
+    
+    @FXML void handlePoistaKayttaja() {
+        // TODO
+    }
 
         
     @FXML void handleMuokkaaTehtavia() {
@@ -157,8 +161,9 @@ public class KotityotGUIController implements Initializable {
         try {
             Kayttaja kayttaja = KotityotMuokkaaKayttajaaController.kysyKayttaja(null, kayttajaKohdalla.clone());
             if (kayttaja == null) return;
-            hae(kayttaja.getKid());
             ktalous.korvaaTaiLisaa(kayttaja);
+            tallenna();
+            hae(kayttaja.getKid());
         } catch (CloneNotSupportedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -174,7 +179,6 @@ public class KotityotGUIController implements Initializable {
 
     /**
      * @return palauttaa false, jos painaa "cancel" - ei vielä toimi oikein
-     * 
      */
     public boolean avaa() {
         ModalController.showModal(KotityotGUIController.class.getResource(
@@ -222,7 +226,14 @@ public class KotityotGUIController implements Initializable {
      * Lisätään uusi käyttäjä
      */
     private void uusiKayttaja() {
-        KotityotMuokkaaKayttajaaController.uusiKayttaja(null);
+        Kayttaja uusi = new Kayttaja();
+        uusi = KotityotMuokkaaKayttajaaController.kysyKayttaja(null, uusi);
+        
+        if (uusi == null) return;
+        uusi.rekisteroi();
+        ktalous.lisaa(uusi);
+        tallenna();
+        hae(uusi.getKid());
     }
     
     

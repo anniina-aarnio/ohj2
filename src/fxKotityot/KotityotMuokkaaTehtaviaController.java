@@ -59,8 +59,8 @@ public class KotityotMuokkaaTehtaviaController
     }
 
 
-    private void muokkaa() {
-        KotityotMuokkaaKayttajiaController.kysyKayttaja(null, null);
+    private void muokkaa() {    // TODO ei tule toimimaan oikein
+        KotityotMuokkaaKayttajaaController.kysyKayttaja(null, null);
     }
 
 
