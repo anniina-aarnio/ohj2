@@ -15,7 +15,7 @@ import kanta.Tietue;
  * Osaa antaa merkkijonona i:nnen kentän tiedot
  * Osaa laittaa merkkijonon i:nneksi kentäksi
  * @author Anniina
- * @version 21.2.2022
+ * @version 13.4.2022
  */
 public class Kayttaja implements Cloneable, Tietue {
     
@@ -128,13 +128,13 @@ public class Kayttaja implements Cloneable, Tietue {
      * <pre name="test">
      *  Kayttaja kayttaja = new Kayttaja();
      *  kayttaja.aseta(1, "") === "Nimi ei saa olla tyhjä";
-     *  kayttaja.aseta(2, "Aada |") === "Merkki | ei ole sallittu";
+     *  kayttaja.aseta(1, "Aada |") === "Merkki | ei ole sallittu";
      *  kayttaja.aseta(1, "Aada") === null;
      *  kayttaja.aseta(2, "kissa") === "Anna kokonaisluku";
-     *  kayttaja.aseta(2, "100") === "100 vuotta täyttäneet saavat levätä";
+     *  kayttaja.aseta(2, "100") === "Yli 100-vuotias saa levätä";
      *  kayttaja.aseta(2, "02") === "Anna kokonaisluku";
      *  kayttaja.aseta(2, "-1") === "Anna kokonaisluku";
-     *  kayttaja.aseta(2, 0) === null;
+     *  kayttaja.aseta(2, "0") === null;
      * </pre>
      */
     @Override
@@ -153,7 +153,7 @@ public class Kayttaja implements Cloneable, Tietue {
         case 2:
             if (tjono == null || tjono.isEmpty()) return "Iän tulee olla vähintään 0";
             if (tjono.matches("[1-9][0-9][0-9]+")) return "Yli 100-vuotias saa levätä";
-            if (!tjono.matches("[0]|[1-9][0-9]?")) return "Käytä kokonaislukuja";
+            if (!tjono.matches("[0]|[1-9][0-9]?")) return "Anna kokonaisluku";
             this.ika = Integer.parseInt(tjono);
             return null;
         default:

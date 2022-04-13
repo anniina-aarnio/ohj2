@@ -15,7 +15,7 @@ public interface Tietue {
      * <pre name="test">
      *  #import kotitalous.Kayttaja;
      *  Kayttaja k = new Kayttaja();
-     *  k.getKenttia() === 2;
+     *  k.getKenttia() === 3;
      * </pre>
      */
     public abstract int getKenttia();
@@ -69,7 +69,7 @@ public interface Tietue {
      * @example
      * <pre name="test">
      * Kayttaja k = new Kayttaja();
-     * k.aseta(2, "kissa") === "Ikä: Ei kokonaisluku (kissa)";
+     * k.aseta(2, "kissa") === "Anna kokonaisluku";
      * k.aseta(2, "13") === null;
      * </pre>
      */
@@ -85,15 +85,16 @@ public interface Tietue {
      * #THROWS CloneNotSupportedException
      * Kayttaja k = new Kayttaja();
      * k.parse("  3 |   Aada    | 35   ");
-     * Object kopio = har.clone();
+     * Object kopio = k.clone();
      * kopio.toString() === k.toString();
      * k.parse("   1 |  Ben   |  35  ");
-     * kopio.toString.equals(k.toString()) === false;
+     * kopio.toString().equals(k.toString()) === false;
      * kopio instanceof Kayttaja === true;
      * </pre>
      */
     public abstract Tietue clone() throws CloneNotSupportedException;
 
+    
     /**
      * Palauttaa tietueen merkkijonona jonka voi tallentaa tiedostoon
      * @return tietue tolppaeroteltuna merkkijonona

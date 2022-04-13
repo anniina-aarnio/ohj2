@@ -4,23 +4,24 @@ import java.io.PrintStream;
 
 import fi.jyu.mit.ohj2.Mjonot;
 import kanta.HetuTarkistus;
+import kanta.Tietue;
 
 /**
  * Tehtävä-luokka:
  * - tietää tehtävän kentät (nimi, kesto, ikä) 
  * - osaa tarkistaa tietyn kentän oikeellisuuden
- * - osaa muuttaa 1|Imurointi|10|30 -merkkijonon tehtävän tiedoiksi
+ * - osaa muuttaa 1|Imurointi|30|10 -merkkijonon tehtävän tiedoiksi
  * - osaa antaa merkkijonona i:n kentän tiedot
  * - osaa laittaa merkkijonon i:nneksi kentäksi
  * @author Anniina
- * @version 6.3.2022
+ * @version 13.4.2022
  */
-public class Tehtava {
+public class Tehtava implements Cloneable, Tietue {
     
+    private int         tid;                // tehtävä id
     private String      nimi    = "";
     private int         kesto;              // minuuteissa
     private int         ika;                // tehtävän tekijän ikä vähintään
-    private int         tid;                // tehtävä id
     
     private static int seuraavaNro = 1;     // luokkamuuttuja, joka on olemassa ilman yhtään olemassaolevaa tehtävää
 
@@ -64,12 +65,141 @@ public class Tehtava {
         this.ika = HetuTarkistus.rand(5, 18);
     }
     
+    
     /**
      * @return tehtävä-id
      */
     public int getTid() {
         return this.tid;
     }
+    
+    
+    /**
+     * @return tehtävän kenttien lukumäärä
+     */
+    @Override
+    public int getKenttia() {
+        return 4;
+    }
+    
+    
+    /**
+     * @return ensimmäinen syötettävän kentän indeksi
+     */
+    @Override
+    public int ekaKentta() {
+        return 1;
+    }
+    
+    
+    /**
+     * @param k minkä kentän kysymys halutaan
+     * @return valitun kentän kysymysteksti
+     */
+    @Override
+    public String getKysymys(int k) {
+        switch(k) {
+        case 0: return "Id";
+        case 1: return "Nimi";
+        case 3: return "Kesto";
+        case 2: return "Ikä";
+        default: return "???";
+        }
+    }
+    
+    
+    /**
+     * @param k minkä kentän sisältö halutaan
+     * @return valitun kentän sisältö
+     * @example
+     * <pre name="test">
+     *  Tehtava t = new Tehtava();
+     *  t.parse("3 |   Imurointi   |  40   |   10   ");
+     *  t.anna(0) === "3";
+     *  t.anna(1) === "Imurointi";
+     *  t.anna(2) === "40";
+     *  t.anna(3) === "10";
+     * </pre>
+     */
+    @Override
+    public String anna(int k) {
+        switch (k) {
+        case 0: return "" + this.tid;
+        case 1: return "" + this.nimi;
+        case 2: return "" + this.kesto;
+        case 3: return "" + this.ika;
+        default: return "???";
+        }
+    }
+    
+    
+    /**
+     * Asetetaan valitun kentän sisältö.
+     * Mikäli asettaminen onnistuu, palautetaan null,
+     * muutoin virheteksti.
+     * @param k minkä kentän sisältö asetetaan
+     * @param s asetettava sisältö merkkijonona
+     * @return null jos ok, muuten virheteksti
+     * @example
+     * <pre name="test">
+     *  Tehtava t = new Tehtava();
+     *  t.aseta(1, "") === "Nimi ei saa olla tyhjä";
+     *  t.aseta(1, "Imurointi |") === "Merkki | ei ole sallittu";
+     *  t.aseta(2, "kissa") === "Anna kokonaisluku, minuutteja";
+     *  t.aseta(2, "30") === null;
+     *  t.aseta(3, "100") === "Suurin sallittu luku 18";
+     *  t.aseta(3, "-1") === "Anna kokonaisluku";
+     *  t.aseta(3, "3") === null;
+     * </pre>
+     */
+    @Override
+    public String aseta(int k, String s) {
+        String st = s.trim();
+        StringBuilder sb = new StringBuilder(st);
+        switch (k) {
+        case 0:
+            setTid(Mjonot.erota(sb, '§', getTid()));
+            return null;
+        case 1:
+            if (st == null || st.isEmpty()) return "Nimi ei saa olla tyhjä";
+            if (st.contains("|")) return "Merkki | ei ole sallittu";
+            this.nimi = st;
+            return null;
+        case 2:
+            if (st == null || st.isEmpty()) return "Keston tulee olla vähintään 0 minuuttia";
+            if (!st.matches("[0]|[1-9][0-9]*")) return "Anna kokonaisluku, minuutteja";
+            this.kesto = Integer.parseInt(st);
+            return null;
+        case 3:
+            if (st == null || st.isEmpty()) return "Iän tulee olla vähintään 0";
+            if (st.matches("[1-9][0-9][0-9]+")) return "Suurin sallittu luku 18";
+            if (!st.matches("[0]|[1-9][0-9]?")) return "Anna kokonaisluku";
+            this.ika = Integer.parseInt(st);
+            return null;
+        default: return "Väärä kentän indeksi";         
+        }
+    }
+    
+    
+    /**
+     * Tehdään identtinen klooni tehtävästä
+     * @return Object kloonattu tehtävä
+     * @example
+     * <pre name="test">
+     * #THROWS CloneNotSupportedException
+     *  Tehtava t = new Tehtava();
+     *  t.parse("3 |   Imurointi   |  40   |   10   ");
+     *  Tehtava kopio = t.clone();
+     *  kopio.toString() === t.toString();
+     *  t.parse("  4 |  Moppaus |  20 | 10   ");
+     *  kopio.toString().equals(t.toString()) === false;
+     */
+    @Override
+    public Tehtava clone() throws CloneNotSupportedException {
+        Tehtava t = (Tehtava) super.clone();
+        return t;
+    }
+    
     
     /**
      * Tulostetaan käyttäjän tiedot
@@ -82,7 +212,7 @@ public class Tehtava {
     
     @Override
     public String toString() {
-        return this.tid + "|" + this.nimi + "|" + this.ika + "|" + this.kesto;
+        return this.tid + "|" + this.nimi + "|" + this.kesto + "|" + this.ika;
     }
     
     
@@ -93,24 +223,24 @@ public class Tehtava {
      * @example
      * <pre name="test">
      *  Tehtava tehtava = new Tehtava();
-     *  tehtava.parse("   2   |  Imurointi     | 10 |  30    ");
+     *  tehtava.parse("   2   |  Imurointi     | 30 |  10    ");
      *  tehtava.getTid() === 2;
-     *  tehtava.toString() === "2|Imurointi|10|30";
+     *  tehtava.toString() === "2|Imurointi|30|10";
      *  
      *  tehtava.rekisteroi();
      *  int n = tehtava.getTid();
      *  tehtava.parse(""+(n+20));
      *  tehtava.rekisteroi();
      *  tehtava.getTid() === n+20+1;
-     *  tehtava.toString() === "" + (n+20+1) + "|Imurointi|10|30";
+     *  tehtava.toString() === "" + (n+20+1) + "|Imurointi|30|10";
      * </pre>
      */
     public void parse(String rivi) {
         StringBuffer sb = new StringBuffer(rivi);
         setTid(Mjonot.erota(sb,  '|', getTid()));
         this.nimi = Mjonot.erota(sb, '|', this.nimi);
-        this.ika = Mjonot.erota(sb, '|', this.ika);
         this.kesto = Mjonot.erota(sb, '|', this.kesto);
+        this.ika = Mjonot.erota(sb, '|', this.ika);
     }
     
     /**
