@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane stylesheets="@kotityot.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxKotityot.KotityotMuokkaaKayttajaaController">
+<BorderPane stylesheets="@kotityot.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fxKotityot.KotityotTietueController">
    <center>
       <BorderPane prefHeight="200.0" prefWidth="300.0">
          <top>
@@ -22,9 +22,9 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <center>
-            <ScrollPane minHeight="100.0" minWidth="300.0" BorderPane.alignment="CENTER">
+            <ScrollPane fx:id="panelTietue" minHeight="100.0" minWidth="300.0" BorderPane.alignment="CENTER">
                <content>
-                  <GridPane hgap="10.0">
+                  <GridPane fx:id="gridTietue" hgap="10.0">
                     <columnConstraints>
                       <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="148.0" minWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="148.0" />

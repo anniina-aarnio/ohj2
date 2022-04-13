@@ -70,7 +70,7 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
             if (kayttajaKohdalla == null) return;
             String s = textNimi.getText();
             String virhe = null;
-            virhe = kayttajaKohdalla.setNimi(s);
+            virhe = kayttajaKohdalla.aseta(1, s);
             if (virhe == null) {
                 Dialogs.setToolTipText(textNimi, "");
                 textNimi.getStyleClass().removeAll("virhe");
@@ -87,7 +87,7 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
             if (kayttajaKohdalla == null) return;
             String s = textIka.getText();
             String virhe = null;
-            virhe = kayttajaKohdalla.setIka(s);
+            virhe = kayttajaKohdalla.aseta(2, s);
             if (virhe == null) {
                 Dialogs.setToolTipText(textIka, "");
                 textIka.getStyleClass().removeAll("virhe");
