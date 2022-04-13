@@ -228,7 +228,6 @@ public class KotityotGUIController implements Initializable {
     private void uusiKayttaja() {
         Kayttaja uusi = new Kayttaja();
         uusi = KotityotMuokkaaKayttajaaController.kysyKayttaja(null, uusi);
-        
         if (uusi == null) return;
         uusi.rekisteroi();
         ktalous.lisaa(uusi);

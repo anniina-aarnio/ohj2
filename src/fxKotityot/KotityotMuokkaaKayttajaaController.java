@@ -27,6 +27,7 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
             kayttajaKohdalla = null;
             ModalController.closeStage(textNimi);
         }
+        
 
         @FXML void handleTallenna() {
             tallenna();
@@ -40,9 +41,9 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
         @Override
         public void handleShown() {
             // TODO Auto-generated method stub
-            
         }
 
+        
         @Override
         public void setDefault(Kayttaja kayttaja) {
             if (kayttaja.getNimi().isBlank()) {
@@ -100,7 +101,7 @@ public class KotityotMuokkaaKayttajaaController implements ModalControllerInterf
         
         
         private void tallenna() {
-            if (labelVirhe == null || labelVirhe.getText().isEmpty()) {
+            if (labelVirhe.getText().isEmpty() && !kayttajaKohdalla.getNimi().isEmpty()) {
                 ModalController.closeStage(textNimi);
             } else {
                 naytaVirhe(labelVirhe.getText());
