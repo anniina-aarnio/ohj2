@@ -101,8 +101,8 @@ public class Tehtava implements Cloneable, Tietue {
         switch(k) {
         case 0: return "Id";
         case 1: return "Nimi";
-        case 3: return "Kesto";
-        case 2: return "Ikä";
+        case 2: return "Kesto";
+        case 3: return "Ikä";
         default: return "???";
         }
     }
