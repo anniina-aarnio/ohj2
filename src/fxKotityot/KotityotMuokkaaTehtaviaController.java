@@ -3,12 +3,14 @@ package fxKotityot;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
 import kotitalous.SailoException;
 import kotitalous.Tehtava;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
+import fi.jyu.mit.fxgui.StringGrid;
 import fi.jyu.mit.fxgui.CheckBoxChooser;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
@@ -22,10 +24,11 @@ public class KotityotMuokkaaTehtaviaController
         implements ModalControllerInterface<Kotitalous> {
 
     @FXML private CheckBox cbIka;
-    @FXML private CheckBoxChooser<?> cbKayttajat;
+    @FXML private CheckBoxChooser<Kayttaja> cbKayttajat;
     @FXML private CheckBox cbVapaat;
     @FXML private Slider sliderIka;
     @FXML private TextField textHaku;
+    @FXML private StringGrid<Tehtava> tableTehtavat;
 
     @FXML void handleMuokkaaKayttajia() {
         muokkaa();
@@ -77,7 +80,18 @@ public class KotityotMuokkaaTehtaviaController
     private Kotitalous ktalous;
 
     private void alusta() {
+        alustaKayttajat();
         // TODO hae ihmiset ja tehtävät
+    }
+    
+    private void alustaKayttajat() {
+        cbKayttajat.clear();
+        
+        for (int i = 0; i < ktalous.getKayttajia(); i++) {
+            Kayttaja kayttaja = ktalous.annaKayttaja(i);
+            String nimi = kayttaja.getNimi();
+            cbKayttajat.add(nimi, kayttaja);
+        }
     }
 
     private void poista() {
@@ -114,6 +128,7 @@ public class KotityotMuokkaaTehtaviaController
             Dialogs.showMessageDialog("Tallennuksessa jokin virhe: " + e.getMessage());
         }
     }
+    
     
     // TODO pitäisikö tehdä tänne stringGrid staattisena, jolloin voisi käyttää samaa GUIcontrollerin puolella?
     

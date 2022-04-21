@@ -266,15 +266,7 @@ public class KotityotGUIController implements Initializable {
         hae(uusi.getKid());
     }
     
-//    TODO: poista tämä ja tee oikea tilalle
-//    private void uusiTehtava() {
-//        Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
-//        if (kayttajaKohdalla == null) return;
-//        Tehtava teht = new Tehtava();
-//        teht.taytaImurointiTiedoilla();
-//    }
-    
-
+ 
     /*
      * Näytetään ohjelman suunnitelma erillisessä selaimessa
      */

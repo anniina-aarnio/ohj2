@@ -51,7 +51,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <center>
-            <StringGrid fx:id="sgTehtavat" editable="true" minHeight="300.0" rivit="Nimi|Aika|Minimi-ikä&#10;Imurointi|40|7&#10;Likakaivon tyhjennys|30|18&#10;Roskien vienti|2|7" BorderPane.alignment="CENTER">
+            <StringGrid fx:id="tableTehtavat" editable="true" minHeight="300.0" rivit="Nimi|Aika|Minimi-ikä&#10;Imurointi|40|7&#10;Likakaivon tyhjennys|30|18&#10;Roskien vienti|2|7" BorderPane.alignment="CENTER">
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy></StringGrid>
