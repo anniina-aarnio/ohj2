@@ -36,7 +36,7 @@ public class KotityotMuokkaaTehtaviaController
     @FXML private StringGrid<Tehtava> tableTehtavat;
 
     @FXML void handleMuokkaaKayttajia() {
-        muokkaa();
+        uusiKayttaja();
         //TODO vaihda tämän tilalle "muokkaa tehtävää" ja sen mukaisesti ikkunat yms
         // Samalla edit-poisto string gridiin ehkä?
     }
@@ -131,17 +131,21 @@ public class KotityotMuokkaaTehtaviaController
         Tehtava teht = tableTehtavat.getObject();
         if (teht == null) return;
         
-        //int k = tableTehtavat.getColumnNr()+teht.ekaKentta();
+//        int k = tableTehtavat.getColumnNr()+teht.ekaKentta();
         
         try {
             teht = KotityotTietueController.kysyTietue(null, teht.clone());
             if (teht == null) return;
             ktalous.korvaaTaiLisaa(teht);
+            naytaTehtavat();
+            // tallenna() ???
             tableTehtavat.selectRow(r);
-            naytaTehtava(teht);
         } catch (CloneNotSupportedException e) {
             Dialogs.showMessageDialog("Ongelmia muuttamisessa: " + e.getMessage());
         }
+        
+        // TODO palatessa ei valittuna sama kenttä
+        // TODO palatessa muokkauksesta tulee uusi kenttä, mutta kuitenkin tiedostoon korvaa vanhan
     }
       
     
@@ -201,6 +205,20 @@ public class KotityotMuokkaaTehtaviaController
         tableTehtavat.setColumnWidth(3, 60);
     }
     
+    
+    /**
+     * Lisätään uusi käyttäjä
+     */
+    private void uusiKayttaja() {
+        Kayttaja uusi = new Kayttaja();
+        uusi = KotityotTietueController.kysyTietue(null, uusi);
+        if (uusi == null) return;
+        
+        uusi.rekisteroi();
+        ktalous.lisaa(uusi);
+        tallenna();
+        alustaKayttajat();
+    }
     
     // TODO pitäisikö tehdä tänne stringGrid staattisena, jolloin voisi käyttää samaa GUIcontrollerin puolella?
     
