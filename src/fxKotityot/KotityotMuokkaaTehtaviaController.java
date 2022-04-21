@@ -1,27 +1,28 @@
 package fxKotityot;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
 import kotitalous.SailoException;
+import kotitalous.SovittuTehtava;
 import kotitalous.Tehtava;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import fi.jyu.mit.fxgui.StringGrid;
-
 import java.util.List;
-
 import fi.jyu.mit.fxgui.CheckBoxChooser;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableView;
 
 /**
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.4.2022
  *
  */
@@ -95,7 +96,10 @@ public class KotityotMuokkaaTehtaviaController
         alustaTehtavat();
         naytaTehtavat();
 //        tableTehtavat.addSelectionListener(e -> naytaKayttaja()); TODO etsi vastaava, jotta voi vaihtaa sovittuja käyttäjiä
-        tableTehtavat.setOnMouseClicked(e -> {if (e.getClickCount() > 1) muokkaa(); });
+        tableTehtavat.setOnMouseClicked(e -> {
+            if (e.getClickCount() > 1) muokkaa();
+            else naytaKayttajat();
+        });
     }
     
     private void alustaKayttajat() {
@@ -122,10 +126,13 @@ public class KotityotMuokkaaTehtaviaController
         uusi.rekisteroi();
         ktalous.lisaa(uusi);
         tallenna();
-//        hae(uusi.getTid());
+        naytaTehtava(uusi);
     }
     
     
+    /**
+     * Muokkaa StringGridissä valittuna olevaa tehtävää
+     */
     private void muokkaa() {
         int r = tableTehtavat.getRowNr();
         if ( r < 0) return;     // esim otsikkorivi
@@ -140,7 +147,7 @@ public class KotityotMuokkaaTehtaviaController
             if (teht == null) return;
             ktalous.korvaaTaiLisaa(teht);
             naytaTehtavat();
-            // tallenna() ???
+            // tallenna() ???   //TODO mieti milloin tallennetaan
             tableTehtavat.selectRow(r);
         } catch (CloneNotSupportedException e) {
             Dialogs.showMessageDialog("Ongelmia muuttamisessa: " + e.getMessage());
@@ -215,6 +222,40 @@ public class KotityotMuokkaaTehtaviaController
         alustaKayttajat();
     }
 
+    
+    private void naytaKayttajat() {     //TODO ei ehkä näytä kaikkia!
+        Tehtava t = tableTehtavat.getObject();
+        List<SovittuTehtava> sovitut = ktalous.annaSovitutKayttajat(t);
+        if (sovitut.size() == 0) return;
+        
+        for (SovittuTehtava st : sovitut) {
+            naytaKayttaja(st);
+        }
+    }
+    
+    /**
+     * Näyttää yksittäisen sovitun käyttäjän
+     */
+    private void naytaKayttaja(SovittuTehtava st) {
+        try {
+            Kayttaja k = ktalous.etsiKayttaja(st.getKid());
+            int kID = k.getKid();
+            cbKayttajat.clear();
+            
+            int index = 0;
+            for (int i = 0; i < ktalous.getKayttajia(); i++) {
+                Kayttaja kayttaja = ktalous.annaKayttaja(i);
+                if (kID == kayttaja.getKid()) index = i;
+                cbKayttajat.add(kayttaja.getNimi(), kayttaja);
+            }
+            cbKayttajat.setSelectedIndex(index);
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Jotain meni pieleen: " + e.getMessage());
+        }
+        
+    }
+    
+    
     
     /**
      * @param modalityStage mille ollaan modaalisia, null = sovellukselle

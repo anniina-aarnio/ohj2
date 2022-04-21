@@ -85,20 +85,20 @@
         <menus>
           <Menu mnemonicParsing="false" text="Tiedosto">
             <items>
-                  <Menu mnemonicParsing="false" text="Uusi...">
-                    <items>
-                      <MenuItem mnemonicParsing="false" onAction="#handleUusiKayttaja" text="Käyttäjä" />
-                    <MenuItem mnemonicParsing="false" onAction="#handleUusiTehtava" text="Tehtävä" />
-                    </items>
-                  </Menu>
+                  <MenuItem mnemonicParsing="false" onAction="#handleTulosta" text="Tarvitaanko tulostus ei toimi" />
                   <MenuItem mnemonicParsing="false" onAction="#handleLopeta" text="Lopeta" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Muokkaa">
+          <Menu mnemonicParsing="false" text="Tehtävien hallinta">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaKayttajaa" text="Muokkaa käyttäjää" />
-                  <MenuItem fx:id="handlePoistaKayttaja" mnemonicParsing="false" onAction="#handleMuokkaaKayttajaa" text="Poista käyttäjä..." />
                   <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaTehtavia" text="Muokkaa tehtäviä" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Käyttäjien hallinta">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleUusiKayttaja" text="Uusi" />
+            <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaKayttajaa" text="Muokkaa valittua" />
+                <MenuItem mnemonicParsing="false" onAction="#handlePoistaKayttaja" text="Poista valittu..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Apua">

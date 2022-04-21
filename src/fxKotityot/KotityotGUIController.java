@@ -54,6 +54,10 @@ public class KotityotGUIController implements Initializable {
         tallenna();
         Platform.exit();
     }
+    
+    @FXML void handleTulosta() {
+        Dialogs.showMessageDialog("Ei onnistu tulostus, ei ehkä koskaan...");
+    }
 
         
     @FXML void handleMuokkaaKayttajaa() {
@@ -73,12 +77,7 @@ public class KotityotGUIController implements Initializable {
     @FXML void handleUusiKayttaja() {
         uusiKayttaja();
     }
-
-        
-    @FXML void handleUusiTehtava() {
-        //uusiTehtava(); // 5-vaihetta varten tehdään höpöversio
-    }
-    
+  
     
     @Override
     public void initialize(URL url, ResourceBundle bundle) {
