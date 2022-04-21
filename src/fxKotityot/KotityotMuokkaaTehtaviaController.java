@@ -3,8 +3,8 @@ package fxKotityot;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
+import kotitalous.SailoException;
 import kotitalous.Tehtava;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
@@ -15,7 +15,7 @@ import javafx.scene.control.Slider;
 
 /**
  * @author Anniina
- * @version 14.2.2022
+ * @version 21.4.2022
  *
  */
 public class KotityotMuokkaaTehtaviaController
@@ -38,7 +38,7 @@ public class KotityotMuokkaaTehtaviaController
 
 
     @FXML void handleTallennaPoistu() {
-        Dialogs.showMessageDialog("Ei osata vielä tallentaa muutoksia.");
+        tallenna();
         ModalController.closeStage(textHaku);
     }
 
@@ -48,6 +48,13 @@ public class KotityotMuokkaaTehtaviaController
     }
     
 
+    @Override
+    public void handleShown() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    
     @Override
     public Kotitalous getResult() {
         // TODO Auto-generated method stub
@@ -79,23 +86,20 @@ public class KotityotMuokkaaTehtaviaController
 
 
     private void muokkaa() {    // TODO ei tule toimimaan oikein
-        KotityotMuokkaaKayttajaaController.kysyKayttaja(null, null);    //TODO keksi ratkaisu
+        Dialogs.showMessageDialog("Käyttäjien muokkaaminen ei vielä onnistu tästä ikkunasta");
+        //TODO keksi ratkaisu, poistetaanko käyttäjien muokkaaminen vai miten...
     }
 
 
     private void uusi() {
-        Tehtava tehtavaKohdalla = null;
-        
-        try {
-            Tehtava tehtava = KotityotTietueController.kysyTietue(null, tehtavaKohdalla.clone());
-            if (tehtava == null) return;
-            
-            this.ktalous.korvaaTaiLisaa(tehtava);
-            tallenna();
-            hae(tehtava.getTid());
-        } catch (CloneNotSupportedException e) {
-            Dialogs.showMessageDialog(e.getMessage());
-        }
+        Tehtava uusi = new Tehtava();
+        uusi = KotityotTietueController.kysyTietue(null, uusi);
+        if (uusi == null) return;
+
+        uusi.rekisteroi();
+        ktalous.lisaa(uusi);
+        tallenna();
+        hae(uusi.getTid());
     }
     
     
@@ -104,7 +108,11 @@ public class KotityotMuokkaaTehtaviaController
     }
     
     private void tallenna() {
-        // TODO
+        try {
+            ktalous.tallenna();
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog("Tallennuksessa jokin virhe: " + e.getMessage());
+        }
     }
     
     // TODO pitäisikö tehdä tänne stringGrid staattisena, jolloin voisi käyttää samaa GUIcontrollerin puolella?
@@ -114,12 +122,10 @@ public class KotityotMuokkaaTehtaviaController
      * @param oletus mitä nimeä näytetään oletuksena
      * @return null, jos painetaan Cancel, muuten kirjoitettu nimi
      */
-    public static String aloita(Stage modalityStage, Kotitalous oletus) {
+    public static Kotitalous aloita(Stage modalityStage, Kotitalous oletus) {
         return ModalController.showModal(
                 KotityotMuokkaaTehtaviaController.class
                         .getResource("KotityotMuokkaaTehtaviaView.fxml"),
                 "Tehtävien muokkaus", modalityStage, oletus);
     }
-
-
 }

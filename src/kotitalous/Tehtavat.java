@@ -16,7 +16,7 @@ import java.util.Scanner;
  * - lukee ja kirjoittaa tehtävät tiedostoon
  * - osaa etsiä ja lajitella
  * @author Anniina
- * @version 6.3.2022
+ * @version 21.4.2022
  */
 public class Tehtavat implements Iterable<Tehtava> {
     

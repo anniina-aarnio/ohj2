@@ -14,7 +14,7 @@ import kanta.Tietue;
  * - osaa antaa merkkijonona i:n kentän tiedot
  * - osaa laittaa merkkijonon i:nneksi kentäksi
  * @author Anniina
- * @version 13.4.2022
+ * @version 21.4.2022
  */
 public class Tehtava implements Cloneable, Tietue {
     

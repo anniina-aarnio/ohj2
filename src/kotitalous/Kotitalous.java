@@ -10,7 +10,7 @@ import java.util.List;
  * 
  * Pääosin kaikki metodit ovat vain "välittäjämetodeja" käyttäjistöön.
  * @author Anniina
- * @version 22.2.2022 //TODO päivittele joskus kaikkiin
+ * @version 21.4.2022
  *
  */
 public class Kotitalous {

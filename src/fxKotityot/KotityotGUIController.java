@@ -25,7 +25,7 @@ import fi.jyu.mit.fxgui.StringGrid;
 /**
  * Luokka käyttöliittymän tapahtumien hoitamiseksi
  * @author Anniina
- * @version 13.4.2022
+ * @version 21.4.2022
  *
  */
 public class KotityotGUIController implements Initializable {
@@ -215,8 +215,7 @@ public class KotityotGUIController implements Initializable {
 
 
     private void muokkaaTehtavia() {
-        KotityotMuokkaaTehtaviaController.setKotitalous(ktalous);
-        KotityotMuokkaaTehtaviaController.aloita(null, "");
+        KotityotMuokkaaTehtaviaController.aloita(null, ktalous);
     }
 
 

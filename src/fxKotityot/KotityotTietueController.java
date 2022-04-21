@@ -20,7 +20,7 @@ import kanta.Tietue;
 /**
  * Kysytään tietueen tiedot luomalla sille uusi dialogi
  * @author Anniina
- * @version 13.4.2022
+ * @version 21.4.2022
  * @param <TYPE> minkä tyyppisiä olioita käsitellään
  */
 public class KotityotTietueController<TYPE extends Tietue> implements ModalControllerInterface<TYPE>, Initializable {
@@ -53,7 +53,9 @@ public class KotityotTietueController<TYPE extends Tietue> implements ModalContr
     public void setDefault(TYPE oletus) {
         this.tietueKohdalla = oletus;
         
+        // Ruksi pois käytöstä, koska se ei palauttanut null vaan virheellisen tietueen (esim. käyttäjän ilman nimeä)
         ModalController.getStage(labelOtsikko).setOnCloseRequest(event -> event.consume());
+        
         alusta();
         naytaTietue(edits, tietueKohdalla);
     }
@@ -71,8 +73,8 @@ public class KotityotTietueController<TYPE extends Tietue> implements ModalContr
         ModalController.closeStage(labelVirhe);
     }
     
-    @FXML private void handleCancel() {     //TODO ruksia painamalla ei toteuta cancel vaan palauttaa käyttäjän jonka myös tallentaa
-        tietueKohdalla = null;              //TODO laita sittenkin ruksi pois päältä kokonaan ^ syystä
+    @FXML private void handleCancel() { 
+        tietueKohdalla = null;
         ModalController.closeStage(labelVirhe);
     }
     

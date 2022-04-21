@@ -12,7 +12,7 @@ import fi.jyu.mit.ohj2.Mjonot;
  * - osaa antaa merkkijonona i:n kentän tiedot
  * - osaa laittaa merkkijonon i:nneksi kentäksi
  * @author Anniina
- * @version 6.3.2022
+ * @version 21.4.2022
  */
 public class SovittuTehtava {
     

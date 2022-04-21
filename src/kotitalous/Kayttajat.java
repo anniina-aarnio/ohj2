@@ -17,7 +17,7 @@ import java.io.PrintStream;
  * Lukee ja kirjoittaa käyttäjien tiedostoon
  * Osaa etsiä ja lajitella
  * @author Anniina
- * @version 21.2.2022
+ * @version 21.4.2022
  *
  */
 public class Kayttajat implements Iterable<Kayttaja> {
