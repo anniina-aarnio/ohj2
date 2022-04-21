@@ -89,7 +89,7 @@
    <bottom>
       <BorderPane BorderPane.alignment="CENTER">
          <left>
-            <Button onAction="#handleMuokkaaKayttajia" text="Muokkaa käyttäjiä" BorderPane.alignment="CENTER">
+            <Button onAction="#handleUusiKayttaja" text="Uusi käyttäjä" BorderPane.alignment="CENTER">
                <tooltip>
                   <Tooltip text="Lisää uusi käyttäjä" />
                </tooltip>

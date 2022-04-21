@@ -15,7 +15,7 @@ import java.util.Scanner;
  * - pitää yllä varsinaista tehtävärekisteriä, eli osaa lisätä ja poistaa tehtävän
  * - lukee ja kirjoittaa tehtävät tiedostoon
  * - osaa etsiä ja lajitella
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.4.2022
  */
 public class Tehtavat implements Iterable<Tehtava> {

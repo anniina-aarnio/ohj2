@@ -13,7 +13,7 @@ import kanta.Tietue;
  * - osaa muuttaa 1|Imurointi|30|10 -merkkijonon tehtävän tiedoiksi
  * - osaa antaa merkkijonona i:n kentän tiedot
  * - osaa laittaa merkkijonon i:nneksi kentäksi
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.4.2022
  */
 public class Tehtava implements Cloneable, Tietue {

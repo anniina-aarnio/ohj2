@@ -14,7 +14,7 @@ import kanta.Tietue;
  * Osaa muuttaa 1|Aada|35 -merkkijonon käyttäjän tiedoiksi
  * Osaa antaa merkkijonona i:nnen kentän tiedot
  * Osaa laittaa merkkijonon i:nneksi kentäksi
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 13.4.2022
  */
 public class Kayttaja implements Cloneable, Tietue {

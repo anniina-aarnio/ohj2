@@ -11,7 +11,7 @@ import fi.jyu.mit.ohj2.Mjonot;
  * - osaa muuttaa 1|1-merkkijonon sovituksi tehtäväksi
  * - osaa antaa merkkijonona i:n kentän tiedot
  * - osaa laittaa merkkijonon i:nneksi kentäksi
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.4.2022
  */
 public class SovittuTehtava {

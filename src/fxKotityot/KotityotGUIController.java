@@ -24,7 +24,7 @@ import fi.jyu.mit.fxgui.StringGrid;
 
 /**
  * Luokka käyttöliittymän tapahtumien hoitamiseksi
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.4.2022
  *
  */

@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 /**
- * @author Anniina Aarnio
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 12.2.2022
  *
  */

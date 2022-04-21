@@ -19,7 +19,7 @@ import kanta.Tietue;
 
 /**
  * Kysytään tietueen tiedot luomalla sille uusi dialogi
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.4.2022
  * @param <TYPE> minkä tyyppisiä olioita käsitellään
  */
@@ -197,6 +197,6 @@ public class KotityotTietueController<TYPE extends Tietue> implements ModalContr
         return ModalController.<TYPE, KotityotTietueController<TYPE>>showModal(
                 KotityotTietueController.class.getResource("KotityotTietueView.fxml"), "Kotityöt",
                 modalityStage, oletus, null);
-                
+                //TODO lisää otsikko, jolla saa muutettua labelOtsikko toivotuksi, kun nyt kaikki on "Uusi käyttäjä" vaikka kyseessä olisi tehtävä
     }
 }

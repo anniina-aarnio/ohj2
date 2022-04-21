@@ -9,7 +9,7 @@ import java.util.List;
  * Lukee ja kirjoittaa Kotitalouden tiedostoon pyytämällä apua valmistajiltaan
  * 
  * Pääosin kaikki metodit ovat vain "välittäjämetodeja" käyttäjistöön.
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.4.2022
  *
  */

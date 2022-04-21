@@ -16,7 +16,7 @@ import java.io.PrintStream;
  * Pitää yllä varsinaista käyttäjärekisteriä, eli osaa lisätä ja poistaa käyttäjän
  * Lukee ja kirjoittaa käyttäjien tiedostoon
  * Osaa etsiä ja lajitella
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.4.2022
  *
  */

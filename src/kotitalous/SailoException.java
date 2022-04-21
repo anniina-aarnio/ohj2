@@ -1,7 +1,7 @@
 package kotitalous;
 
 /**
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.2.2022
  *
  */

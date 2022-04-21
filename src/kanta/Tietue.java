@@ -3,7 +3,7 @@ package kanta;
 /**
  * Rajapinta tietueelle, johon voi taulukon avulla rakentaa
  * "attribuutit"
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 13.4.2022
  *
  */

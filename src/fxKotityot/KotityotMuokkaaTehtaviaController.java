@@ -35,10 +35,8 @@ public class KotityotMuokkaaTehtaviaController
     @FXML private TextField textHaku;
     @FXML private StringGrid<Tehtava> tableTehtavat;
 
-    @FXML void handleMuokkaaKayttajia() {
+    @FXML void handleUusiKayttaja() {
         uusiKayttaja();
-        //TODO vaihda tämän tilalle "muokkaa tehtävää" ja sen mukaisesti ikkunat yms
-        // Samalla edit-poisto string gridiin ehkä?
     }
 
 
@@ -86,14 +84,19 @@ public class KotityotMuokkaaTehtaviaController
     // private String nimi = null;   
     private Kotitalous ktalous;
     private Tehtava aputehtava = new Tehtava();
+    
+    // TODO pitäisikö tehdä tänne stringGrid staattisena, jolloin voisi käyttää samaa GUIcontrollerin puolella?
+    // TODO missä vaiheessa tallennus kun tehtävää muokkaa?
+    // TODO tehtävien sopiminen (sovi tehtävä jollekin)
+    // TODO jos tehtävää ei sovittu kellekään, olisiko "sovittu tehtävä" suunnattu käyttäjäid:lle nro -1 tms, joka ei ole kenenkään?
 
     private void alusta() {
         alustaKayttajat();
 //        naytaTehtavatVANHA();
         alustaTehtavat();
         naytaTehtavat();
+//        tableTehtavat.addSelectionListener(e -> naytaKayttaja()); TODO etsi vastaava, jotta voi vaihtaa sovittuja käyttäjiä
         tableTehtavat.setOnMouseClicked(e -> {if (e.getClickCount() > 1) muokkaa(); });
-        // TODO hae ihmiset ja tehtävät
     }
     
     private void alustaKayttajat() {
@@ -143,9 +146,6 @@ public class KotityotMuokkaaTehtaviaController
         } catch (CloneNotSupportedException e) {
             Dialogs.showMessageDialog("Ongelmia muuttamisessa: " + e.getMessage());
         }
-        
-        // TODO palatessa ei valittuna sama kenttä
-        // TODO palatessa muokkauksesta tulee uusi kenttä, mutta kuitenkin tiedostoon korvaa vanhan
     }
       
     
@@ -156,7 +156,7 @@ public class KotityotMuokkaaTehtaviaController
             Dialogs.showMessageDialog("Tallennuksessa jokin virhe: " + e.getMessage());
         }
     }
-    
+     
     
     private void naytaTehtavat() { 
         tableTehtavat.clear();
@@ -175,8 +175,9 @@ public class KotityotMuokkaaTehtaviaController
             rivi[i] = t.anna(k);
         }
         tableTehtavat.add(t, rivi);
-     // pitäisi näyttää rivi[2] ja rivi[3] int että voisi katsoa suuruudet oikein jne...
     }
+    
+
     
     
     /**
@@ -196,13 +197,18 @@ public class KotityotMuokkaaTehtaviaController
         tableTehtavat.setEditable(false);
         tableTehtavat.setPlaceholder(new Label("Ei vielä tehtäviä"));
         
-        // TODO tee automaattisesti oikeankokoiseksi muuttuva alla olevasta
-        tableTehtavat.setColumnSortOrderNumber(1);
-        tableTehtavat.setColumnSortOrderNumber(2);
-        tableTehtavat.setColumnSortOrderNumber(3);
-        tableTehtavat.setColumnWidth(1, 60);
-        tableTehtavat.setColumnWidth(2, 60);
-        tableTehtavat.setColumnWidth(3, 60);
+        for (int i = eka; i < lkm; i++) {
+            tableTehtavat.setColumnSortOrderNumber(i);
+            tableTehtavat.setColumnWidth(i, 60);
+        }
+        
+//        // TODO tee automaattisesti oikeankokoiseksi muuttuva alla olevasta
+//        tableTehtavat.setColumnSortOrderNumber(1);
+//        tableTehtavat.setColumnSortOrderNumber(2);
+//        tableTehtavat.setColumnSortOrderNumber(3);
+//        tableTehtavat.setColumnWidth(1, 60);
+//        tableTehtavat.setColumnWidth(2, 60);
+//        tableTehtavat.setColumnWidth(3, 60);
     }
     
     
@@ -219,8 +225,7 @@ public class KotityotMuokkaaTehtaviaController
         tallenna();
         alustaKayttajat();
     }
-    
-    // TODO pitäisikö tehdä tänne stringGrid staattisena, jolloin voisi käyttää samaa GUIcontrollerin puolella?
+
     
     /**
      * @param modalityStage mille ollaan modaalisia, null = sovellukselle
