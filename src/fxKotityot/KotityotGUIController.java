@@ -192,7 +192,22 @@ public class KotityotGUIController implements Initializable {
         }
     }
     
+    
+    /**
+     * Lisätään uusi käyttäjä
+     */
+    private void uusiKayttaja() {
+        Kayttaja uusi = new Kayttaja();
+        uusi = KotityotTietueController.kysyTietue(null, uusi);
+        if (uusi == null) return;
+        
+        uusi.rekisteroi();
+        ktalous.lisaa(uusi);
+        tallenna();
+        hae(uusi.getKid());
+    }
 
+    
     /*
      * Avaa käyttäjienmuokkaus-ikkunan
      */
@@ -210,7 +225,19 @@ public class KotityotGUIController implements Initializable {
         } catch (CloneNotSupportedException e) {
             Dialogs.showMessageDialog(e.getMessage());
         }
-
+    }
+    
+    
+    private void hae(int kayttajaId) {
+        lcKayttajat.clear();
+        
+        int index = 0;
+        for (int i = 0; i < ktalous.getKayttajia(); i++) {
+            Kayttaja kayttaja = ktalous.annaKayttaja(i);
+            if (kayttaja.getKid() == kayttajaId) index = i;
+            lcKayttajat.add(""+kayttaja.getNimi(), kayttaja);
+        }
+        lcKayttajat.setSelectedIndex(index);
     }
 
 
@@ -236,34 +263,6 @@ public class KotityotGUIController implements Initializable {
      */
     public void setKotitalous(Kotitalous kotitalous) {
         this.ktalous = kotitalous;
-    }
-    
-    
-    private void hae(int kayttajaId) {
-        lcKayttajat.clear();
-        
-        int index = 0;
-        for (int i = 0; i < ktalous.getKayttajia(); i++) {
-            Kayttaja kayttaja = ktalous.annaKayttaja(i);
-            if (kayttaja.getKid() == kayttajaId) index = i;
-            lcKayttajat.add(""+kayttaja.getNimi(), kayttaja);
-        }
-        lcKayttajat.setSelectedIndex(index);
-    }
-    
-    
-    /**
-     * Lisätään uusi käyttäjä
-     */
-    private void uusiKayttaja() {
-        Kayttaja uusi = new Kayttaja();
-        uusi = KotityotTietueController.kysyTietue(null, uusi);
-        if (uusi == null) return;
-        
-        uusi.rekisteroi();
-        ktalous.lisaa(uusi);
-        tallenna();
-        hae(uusi.getKid());
     }
     
  

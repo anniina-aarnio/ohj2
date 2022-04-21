@@ -11,6 +11,9 @@ import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import fi.jyu.mit.fxgui.StringGrid;
+
+import java.util.List;
+
 import fi.jyu.mit.fxgui.CheckBoxChooser;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Slider;
@@ -81,6 +84,7 @@ public class KotityotMuokkaaTehtaviaController
 
     private void alusta() {
         alustaKayttajat();
+        naytaTehtavat();
         // TODO hae ihmiset ja tehtävät
     }
     
@@ -93,6 +97,7 @@ public class KotityotMuokkaaTehtaviaController
             cbKayttajat.add(nimi, kayttaja);
         }
     }
+    
 
     private void poista() {
         Dialogs.showMessageDialog("Ei osata vielä poistaa tehtäviä.");
@@ -113,13 +118,20 @@ public class KotityotMuokkaaTehtaviaController
         uusi.rekisteroi();
         ktalous.lisaa(uusi);
         tallenna();
-        hae(uusi.getTid());
+//        hae(uusi.getTid());
     }
     
     
-    private void hae(@SuppressWarnings("unused") int id) {
-        // TODO
+    private void naytaTehtavat() {      //TODO tee toimimaan paremmin...
+        tableTehtavat.clear();
+        List<Tehtava> kaikki = ktalous.annaTehtavat();
+        for (Tehtava t : kaikki) {
+            String[] rivi = t.toString().split("\\|");
+            tableTehtavat.add(t, rivi[1], rivi[2], rivi[3]);
+            // pitäisi näyttää rivi[2] ja rivi[3] int että voisi katsoa suuruudet oikein jne...
+        }
     }
+    
     
     private void tallenna() {
         try {
