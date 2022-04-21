@@ -215,6 +215,7 @@ public class KotityotGUIController implements Initializable {
 
 
     private void muokkaaTehtavia() {
+        KotityotMuokkaaTehtaviaController.setKotitalous(ktalous);
         KotityotMuokkaaTehtaviaController.aloita(null, "");
     }
 

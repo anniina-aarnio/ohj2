@@ -63,18 +63,45 @@ public class Kayttajat implements Iterable<Kayttaja> {
         }
         this.alkiot[lkm] = kayttaja;
         this.lkm++;
+        this.muutettu = true;
     }
     
     /**
-     * Korvaa //TODO tee testit ja tekstit 
+     * Korvaa käyttäjän tietorakenteessa. Ottaa käyttäjän omistukseensa.
+     * Etsitään samalla tunnusnumerolla oleva käyttäjä.
+     * Jos ei löydy, niin lisätään uutena käyttäjänä.
      * @param kayttaja korvattava tai lisättävä käyttäjä
+     * @example
+     * #THROWS CloneNotSupportedException
+     * <pre name="test">
+     * Kayttajat kayttajat = new Kayttajat();
+     * Kayttaja k = new Kayttaja(), k2 = new Kayttaja();
+     * k.rekisteroi(); k2.rekisteroi();
+     * kayttajat.getLkm() === 0;
+     * kayttajat.korvaaTaiLisaa(k); kayttajat.getLkm() === 1;
+     * kayttajat.korvaaTaiLisaa(k2); kayttajat.getLkm() === 2;
+     * Kayttaja k3 = new Kayttaja();
+     * try {
+     *  k3 = k.clone();
+     * } catch (CloneNotSupportedException e) {
+     *  System.out.println(e.getMessage());
+     * }
+     * k3.aseta(1, "Aada");
+     * Iterator<Kayttaja> it = kayttajat.iterator();
+     * it.next() == k === true;
+     * kayttajat.korvaaTaiLisaa(k3); kayttajat.getLkm() === 2;
+     * it = kayttajat.iterator();
+     * Kayttaja k0 = it.next();
+     * k0 === k3;
+     * k0 == k === false;
+     * </pre>
      */
     public void korvaaTaiLisaa(Kayttaja kayttaja) {
         int id = kayttaja.getKid();
         for (int i = 0; i < lkm; i++) {
-            if (alkiot[i].getKid() == id) {
-                alkiot[i] = kayttaja;
-                muutettu = true;
+            if (this.alkiot[i].getKid() == id) {
+                this.alkiot[i] = kayttaja;
+                this.muutettu = true;
                 return;
             }
         }
@@ -116,7 +143,7 @@ public class Kayttajat implements Iterable<Kayttaja> {
     
     
     /**
-     * Lukee jäsenistön tiedostosta, kesken.
+     * Lukee jäsenistön tiedostosta.
      * @param hakemisto tiedoston hakemisto
      * @throws SailoException jos lukeminen epäonnistuu
      * @example

@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -21,7 +20,8 @@ import java.util.Scanner;
  */
 public class Tehtavat implements Iterable<Tehtava> {
     
-    private final Collection<Tehtava> alkiot = new ArrayList<Tehtava>();
+    private final List<Tehtava> alkiot = new ArrayList<Tehtava>();
+    private boolean muutettu = false;
     
     /**
      * Lisää tehtävän
@@ -29,6 +29,51 @@ public class Tehtavat implements Iterable<Tehtava> {
      */
     public void lisaa(Tehtava tehtava) {
         this.alkiot.add(tehtava);
+        this.muutettu = true;
+    }
+    
+    
+    /**
+     * Korvaa käyttäjän tietorakenteessa. Ottaa käyttäjän omistukseensa.
+     * Etsitään samalla tunnusnumerolla oleva käyttäjä.
+     * Jos ei löydy, niin lisätään uutena käyttäjänä.
+     * @param tehtava korvattava tai lisättävä käyttäjä
+     * @example
+     * #THROWS CloneNotSupportedException
+     * <pre name="test">
+     * Tehtavat tehtavat = new Tehtavat();
+     * Tehtava t = new Tehtava(), t2 = new Tehtava();
+     * t.rekisteroi(); t2.rekisteroi();
+     * tehtavat.getLkm() === 0;
+     * tehtavat.korvaaTaiLisaa(t); tehtavat.getLkm() === 1;
+     * tehtavat.korvaaTaiLisaa(t2); tehtavat.getLkm() === 2;
+     * Tehtava t3 = new Tehtava();
+     * try {
+     *  t3 = t.clone();
+     * } catch (CloneNotSupportedException e) {
+     *  System.out.println(e.getMessage());
+     * }
+     * t3.aseta(1, "Imurointi");
+     * Iterator<Tehtava> it = tehtavat.iterator();
+     * it.next() == t === true;
+     * tehtavat.korvaaTaiLisaa(t3); tehtavat.getLkm() === 2;
+     * it = tehtavat.iterator();
+     * Tehtava t0 = it.next();
+     * t0 === t3;
+     * t0 == t === false;
+     * </pre>
+     */
+    public void korvaaTaiLisaa(Tehtava tehtava) {
+        int id = tehtava.getTid();
+
+        for (int i = 0; i < getLkm(); i++) {
+            if (this.alkiot.get(i).getTid() == id) {
+                this.alkiot.set(i, tehtava);
+                muutettu = true;
+                return;
+            }
+        }
+        lisaa(tehtava);
     }
     
        
@@ -147,6 +192,7 @@ public class Tehtavat implements Iterable<Tehtava> {
      * @throws SailoException jos talletus epäonnistuu
      */
     public void tallenna(String hakemisto) throws SailoException {
+        if (this.muutettu == false) return;
         File ftied = new File(hakemisto + "/tehtavat.dat");
         try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) {
             for (var teht : this.alkiot) {
@@ -200,7 +246,4 @@ public class Tehtavat implements Iterable<Tehtava> {
         
         
     }
-
-
-
 }

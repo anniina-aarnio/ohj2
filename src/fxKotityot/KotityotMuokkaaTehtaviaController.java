@@ -3,6 +3,9 @@ package fxKotityot;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import kotitalous.Kayttaja;
+import kotitalous.Kotitalous;
+import kotitalous.Tehtava;
 import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
@@ -16,16 +19,12 @@ import javafx.scene.control.Slider;
  *
  */
 public class KotityotMuokkaaTehtaviaController
-        implements ModalControllerInterface<String> {
+        implements ModalControllerInterface<Kotitalous> {
 
     @FXML private CheckBox cbIka;
-
     @FXML private CheckBoxChooser<?> cbKayttajat;
-
     @FXML private CheckBox cbVapaat;
-
     @FXML private Slider sliderIka;
-
     @FXML private TextField textHaku;
 
     @FXML void handleMuokkaaKayttajia() {
@@ -47,12 +46,32 @@ public class KotityotMuokkaaTehtaviaController
     @FXML void handleUusiTehtava() {
         uusi();
     }
+    
+
+    @Override
+    public Kotitalous getResult() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    @Override
+    public void setDefault(Kotitalous oletus) {
+        this.ktalous = oletus;
+        alusta();
+        
+    }
+
 
     // =========================================
     
     // private int ika = 0;
-    // private String nimi = null;
+    // private String nimi = null;   
+    private Kotitalous ktalous;
 
+    private void alusta() {
+        // TODO hae ihmiset ja tehtävät
+    }
 
     private void poista() {
         Dialogs.showMessageDialog("Ei osata vielä poistaa tehtäviä.");
@@ -60,48 +79,47 @@ public class KotityotMuokkaaTehtaviaController
 
 
     private void muokkaa() {    // TODO ei tule toimimaan oikein
-        KotityotMuokkaaKayttajaaController.kysyKayttaja(null, null);
+        KotityotMuokkaaKayttajaaController.kysyKayttaja(null, null);    //TODO keksi ratkaisu
     }
 
 
-    private static void uusi() {
-        KotityotUusiTehtavaController.aloita(null, "");
+    private void uusi() {
+        Tehtava tehtavaKohdalla = null;
+        
+        try {
+            Tehtava tehtava = KotityotTietueController.kysyTietue(null, tehtavaKohdalla.clone());
+            if (tehtava == null) return;
+            
+            this.ktalous.korvaaTaiLisaa(tehtava);
+            tallenna();
+            hae(tehtava.getTid());
+        } catch (CloneNotSupportedException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
     }
-
-
-    @Override
-    public String getResult() {
-        // TODO Auto-generated method stub
-        return null;
+    
+    
+    private void hae(@SuppressWarnings("unused") int id) {
+        // TODO
     }
-
-
-    /**
-     * Mitä tehdään, kun dialogi on näytetty
-     */
-    @Override
-    public void handleShown() {
-        //textNimi.requestFocus();
+    
+    private void tallenna() {
+        // TODO
     }
-
-
-    @Override
-    public void setDefault(String oletus) {
-        //textNimi.setText(oletus);
-
-    }
-
+    
+    // TODO pitäisikö tehdä tänne stringGrid staattisena, jolloin voisi käyttää samaa GUIcontrollerin puolella?
     
     /**
      * @param modalityStage mille ollaan modaalisia, null = sovellukselle
      * @param oletus mitä nimeä näytetään oletuksena
      * @return null, jos painetaan Cancel, muuten kirjoitettu nimi
      */
-    public static String aloita(Stage modalityStage, String oletus) {
+    public static String aloita(Stage modalityStage, Kotitalous oletus) {
         return ModalController.showModal(
                 KotityotMuokkaaTehtaviaController.class
                         .getResource("KotityotMuokkaaTehtaviaView.fxml"),
                 "Tehtävien muokkaus", modalityStage, oletus);
     }
+
 
 }

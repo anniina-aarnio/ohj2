@@ -74,6 +74,17 @@ public class Kotitalous {
 
 
     /**
+     * Korvaa tehtävän tietorakenteessa.
+     * Ottaa tehtävän omistukseensa.
+     * Etsitään samalla tunnusnumerolla oleva tehtävä. Jos ei löydy,
+     * lisätään uutena tehtävänä.
+     * @param tehtava lisätään tehtävän viite, huom! Tietorakenne muuttuu omistajaksi!
+     */
+    public void korvaaTaiLisaa(Tehtava tehtava) {
+        this.tehtavat.korvaaTaiLisaa(tehtava);
+    }
+
+    /**
      * @param sovittutehtava lisättävä sovittu tehtävä
      */
     public void lisaa(SovittuTehtava sovittutehtava) {
