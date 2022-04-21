@@ -3,6 +3,8 @@ package fxKotityot;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import kotitalous.Kayttaja;
 import kotitalous.Kotitalous;
 import kotitalous.SailoException;
@@ -84,8 +86,9 @@ public class KotityotGUIController implements Initializable {
     }
 
     // ====================oma osuus======================================
-    
+    // TODO: kokonaiskeston laskenta kullekin käyttäjälle
     private Kotitalous ktalous;
+    private Tehtava aputehtava = new Tehtava();
     
     
     /**
@@ -93,6 +96,7 @@ public class KotityotGUIController implements Initializable {
      */
     private void alusta() {
         lcKayttajat.clear();
+        alustaTehtavat();
         lcKayttajat.addSelectionListener(e -> naytaKayttaja());
         lcKayttajat.setOnMouseClicked(
                 e -> {if ( e.getClickCount() > 1) muokkaaKayttajaa();}
@@ -185,10 +189,38 @@ public class KotityotGUIController implements Initializable {
     private void naytaTehtava(SovittuTehtava st) {
         try {
             Tehtava t = ktalous.etsiTehtava(st.getTid());
-            String[] rivi = t.toString().split("\\|");
-            tableTehtavat.add(t, rivi[1], rivi[2]);    //TODO korjaa joskus
+            int kenttia = t.getKenttia();
+            String[] rivi = new String[kenttia - t.ekaKentta()];
+            for (int i = 0, k = t.ekaKentta(); k < kenttia; i++, k++) {
+                rivi[i] = t.anna(k);
+            }
+            tableTehtavat.add(t, rivi);
         } catch (SailoException e) {
             Dialogs.showMessageDialog("Jotain meni pieleen: " + e.getMessage());
+        }
+    }
+    
+    
+    /**
+     * Alustaa harrastustaulukon otsikot
+     */
+    private void alustaTehtavat() {
+        int eka = aputehtava.ekaKentta();
+        int lkm = aputehtava.getKenttia();
+        
+        String[] otsikot = new String[lkm-eka];
+        for (int i = 0, k = eka; k < lkm; i++, k++) {
+            otsikot[i] = aputehtava.getKysymys(k);
+        }
+        
+        tableTehtavat.initTable(otsikot);
+        tableTehtavat.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableTehtavat.setEditable(false);
+        tableTehtavat.setPlaceholder(new Label("Ei vielä tehtäviä"));
+        
+        for (int i = eka; i < lkm; i++) {
+            tableTehtavat.setColumnSortOrderNumber(i);
+            tableTehtavat.setColumnWidth(i, 60);
         }
     }
     

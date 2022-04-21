@@ -92,7 +92,6 @@ public class KotityotMuokkaaTehtaviaController
 
     private void alusta() {
         alustaKayttajat();
-//        naytaTehtavatVANHA();
         alustaTehtavat();
         naytaTehtavat();
 //        tableTehtavat.addSelectionListener(e -> naytaKayttaja()); TODO etsi vastaava, jotta voi vaihtaa sovittuja käyttäjiä
@@ -177,8 +176,6 @@ public class KotityotMuokkaaTehtaviaController
         tableTehtavat.add(t, rivi);
     }
     
-
-    
     
     /**
      * Alustaa harrastustaulukon otsikot
@@ -201,14 +198,6 @@ public class KotityotMuokkaaTehtaviaController
             tableTehtavat.setColumnSortOrderNumber(i);
             tableTehtavat.setColumnWidth(i, 60);
         }
-        
-//        // TODO tee automaattisesti oikeankokoiseksi muuttuva alla olevasta
-//        tableTehtavat.setColumnSortOrderNumber(1);
-//        tableTehtavat.setColumnSortOrderNumber(2);
-//        tableTehtavat.setColumnSortOrderNumber(3);
-//        tableTehtavat.setColumnWidth(1, 60);
-//        tableTehtavat.setColumnWidth(2, 60);
-//        tableTehtavat.setColumnWidth(3, 60);
     }
     
     
