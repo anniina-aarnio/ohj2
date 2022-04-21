@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 
 /**
  * Hoitaa uusien tehtävien (ja mahd. tehtävien muokkauksen) ikkunan
+ * HUOM! //TODO POISTA ja laita kutsuja käyttämään tietuecontrolleria
  * @author Anniina
  * @version 14.2.2022
  *

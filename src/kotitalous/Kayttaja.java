@@ -130,11 +130,12 @@ public class Kayttaja implements Cloneable, Tietue {
      *  kayttaja.aseta(1, "") === "Nimi ei saa olla tyhjä";
      *  kayttaja.aseta(1, "Aada |") === "Merkki | ei ole sallittu";
      *  kayttaja.aseta(1, "Aada") === null;
-     *  kayttaja.aseta(2, "kissa") === "Anna kokonaisluku";
+     *  kayttaja.aseta(2, "kissa") === "Anna positiivinen kokonaisluku";
      *  kayttaja.aseta(2, "100") === "Yli 100-vuotias saa levätä";
-     *  kayttaja.aseta(2, "02") === "Anna kokonaisluku";
-     *  kayttaja.aseta(2, "-1") === "Anna kokonaisluku";
-     *  kayttaja.aseta(2, "0") === null;
+     *  kayttaja.aseta(2, "02") === "Anna positiivinen kokonaisluku";
+     *  kayttaja.aseta(2, "-1") === "Anna positiivinen kokonaisluku";
+     *  kayttaja.aseta(2, "0") === "Anna positiivinen kokonaisluku";
+     *  kayttaja.aseta(2, "1") === null;
      * </pre>
      */
     @Override
@@ -151,9 +152,9 @@ public class Kayttaja implements Cloneable, Tietue {
             this.nimi = tjono;
             return null;
         case 2:
-            if (tjono == null || tjono.isEmpty()) return "Iän tulee olla vähintään 0";
+            if (tjono == null || tjono.isEmpty()) return "Iän tulee olla vähintään 1";
             if (tjono.matches("[1-9][0-9][0-9]+")) return "Yli 100-vuotias saa levätä";
-            if (!tjono.matches("[0]|[1-9][0-9]?")) return "Anna kokonaisluku";
+            if (!tjono.matches("[1-9][0-9]?")) return "Anna positiivinen kokonaisluku";
             this.ika = Integer.parseInt(tjono);
             return null;
         default:
@@ -261,6 +262,30 @@ public class Kayttaja implements Cloneable, Tietue {
         uusi = (Kayttaja) super.clone();    // toimii koska vain int- ja String-attribuutteja
         return uusi;
     }
+    
+//    /**
+//     * Vastaa, onko annetussa tietueessa virheitä
+//     * @return true, jos on virheitä, false jos kaikki kunnossa
+//     * @example
+//     * <pre name="test">
+//     * Kayttaja k = new Kayttaja();
+//     * k.parse("   3 |     Aada | 35   ");
+//     * k.onkoVirheita() === false;
+//     * k.parse("   3  |  |    20");
+//     * k.onkoVirheita() === true;
+//     * k.parse("3 | Aada | -1");
+//     * k.onkoVirheita() === true;
+//     * </pre>
+//     */
+//    @Override
+//    public boolean onkoVirheita() {
+//        String vastaus = null;
+//        for (int i = this.ekaKentta(); i < this.getKenttia(); i++) {
+//            vastaus = this.aseta(i, this.anna(i));
+//            if (vastaus != null) return true;
+//        }
+//        return false;
+//    }
     
     /**
      * @param args ei käytössä

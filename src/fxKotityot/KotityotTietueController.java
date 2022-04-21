@@ -52,13 +52,27 @@ public class KotityotTietueController<TYPE extends Tietue> implements ModalContr
     @Override
     public void setDefault(TYPE oletus) {
         this.tietueKohdalla = oletus;
+        
+        ModalController.getStage(labelOtsikko).setOnCloseRequest(event -> event.consume());
         alusta();
         naytaTietue(edits, tietueKohdalla);
     }
 
     
-    @FXML private void handleCancel() {
-        tietueKohdalla = null;
+    @FXML private void handleOK() {
+//        if (tietueKohdalla.onkoVirheita() == true) {    // pitäisi tarkistaa editsit...
+//            naytaVirhe("Virheitä kentissä, korjaa");    //
+//            return;
+//        }
+        if (tietueKohdalla != null && tietueKohdalla.anna(tietueKohdalla.ekaKentta()).trim().equals("")) { 
+            kasitteleMuutosTietueeseen(edits[tietueKohdalla.ekaKentta()]);
+            return;
+        }
+        ModalController.closeStage(labelVirhe);
+    }
+    
+    @FXML private void handleCancel() {     //TODO ruksia painamalla ei toteuta cancel vaan palauttaa käyttäjän jonka myös tallentaa
+        tietueKohdalla = null;              //TODO laita sittenkin ruksi pois päältä kokonaan ^ syystä
         ModalController.closeStage(labelVirhe);
     }
     
@@ -133,6 +147,13 @@ public class KotityotTietueController<TYPE extends Tietue> implements ModalContr
             naytaVirhe(virhe);
         }
     }
+    
+    
+//    public void tarkistaTietueet() {      TODO tee for loop jossa tarkistat kaikkien tietueiden virheet
+//        for (int i = 0; thi) {
+//            
+//        }
+//    }
     
     
     /**

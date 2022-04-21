@@ -69,7 +69,7 @@ public interface Tietue {
      * @example
      * <pre name="test">
      * Kayttaja k = new Kayttaja();
-     * k.aseta(2, "kissa") === "Anna kokonaisluku";
+     * k.aseta(2, "kissa") === "Anna positiivinen kokonaisluku";
      * k.aseta(2, "13") === null;
      * </pre>
      */
@@ -93,6 +93,23 @@ public interface Tietue {
      * </pre>
      */
     public abstract Tietue clone() throws CloneNotSupportedException;
+    
+    
+//    /**
+//     * Vastaa, onko annetussa tietueessa virheitä
+//     * @return true, jos on virheitä, false jos kaikki kunnossa
+//     * @example
+//     * <pre name="test">
+//     * Kayttaja k = new Kayttaja();
+//     * k.parse("   3 |     Aada | 35   ");
+//     * k.onkoVirheita() === false;
+//     * k.parse("   3  |  |    20");
+//     * k.onkoVirheita() === true;
+//     * k.parse("3 | Aada | -1");
+//     * k.onkoVirheita() === true;
+//     * </pre>
+//     */
+//    public abstract boolean onkoVirheita();       TODO tarvitaanko?
 
     
     /**

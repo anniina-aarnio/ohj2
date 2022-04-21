@@ -23,11 +23,13 @@ import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.StringGrid;
 
 /**
+ * Luokka käyttöliittymän tapahtumien hoitamiseksi
  * @author Anniina
- * @version 19.1.2022
+ * @version 13.4.2022
  *
  */
 public class KotityotGUIController implements Initializable {
+    
     @FXML private ListChooser<Kayttaja> lcKayttajat;
     @FXML private StringGrid<Tehtava> tableTehtavat;
 
@@ -57,7 +59,7 @@ public class KotityotGUIController implements Initializable {
     }
     
     @FXML void handlePoistaKayttaja() {
-        // TODO
+        Dialogs.showMessageDialog("Vielä ei osata poistaa käyttäjää");
     }
 
         
@@ -72,7 +74,7 @@ public class KotityotGUIController implements Initializable {
 
         
     @FXML void handleUusiTehtava() {
-        uusiTehtava(); // 5-vaihetta varten tehdään höpöversio
+        //uusiTehtava(); // 5-vaihetta varten tehdään höpöversio
     }
     
     
@@ -90,10 +92,13 @@ public class KotityotGUIController implements Initializable {
      * Alustaa kokonaisuuden....
      */
     private void alusta() {
-        lcKayttajat.clear(); //tyhjentää
+        lcKayttajat.clear();
         lcKayttajat.addSelectionListener(e -> naytaKayttaja());
-        lcKayttajat.setOnMouseClicked( e -> {if ( e.getClickCount() > 1) muokkaaKayttajaa();});
+        lcKayttajat.setOnMouseClicked(
+                e -> {if ( e.getClickCount() > 1) muokkaaKayttajaa();}
+                ); // voi muokata käyttäjää tuplaklikkauksella
     }
+    
     
     private void lueTiedosto(String nimi) {
         try {
@@ -103,6 +108,28 @@ public class KotityotGUIController implements Initializable {
             Dialogs.showMessageDialog(e.getMessage());
         }
     }
+    
+    
+    /*
+     * Tallennuksen toiminnallisuus
+     */
+    private void tallenna() {
+        try {
+            ktalous.tallenna();
+        } catch (SailoException e) {
+            Dialogs.showMessageDialog(e.getMessage());
+        }
+    }
+    
+//    TODO tarvitaanko?
+//    /**
+//     * Tarkistetaan onko tallennus tehty
+//     * @return true, jos saa sulkea sovelluksen, false jos ei
+//     */
+//    public boolean voikoSulkea() {
+//        tallenna();
+//        return true;
+//    }
     
     
     /*
@@ -123,23 +150,38 @@ public class KotityotGUIController implements Initializable {
     }
 
     
+    /**
+     * Laittaa hiirellä valitulle käyttäjälle sovitut tehtävät näkyviin
+     */
     private void naytaKayttaja() {
         Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
         if (kayttajaKohdalla == null) return;
+        
         naytaTehtavat(kayttajaKohdalla);
     }
     
     
+    /** 
+     * Hakee ja näyttää annetulle käyttäjälle sovitut tehtävät
+     * @param kayttaja käyttäjä, jonka tehtävät näytetään
+     */
     private void naytaTehtavat(Kayttaja kayttaja) {
         tableTehtavat.clear();
         if (kayttaja == null) return;
+        
         List<SovittuTehtava> sovitut = ktalous.annaSovitutTehtavat(kayttaja);
         if (sovitut.size() == 0) return;
+        
         for (SovittuTehtava st : sovitut) {
             naytaTehtava(st);
         }
     }
     
+    
+    /**
+     * Näyttää yksittäisen sovitun tehtävän
+     * @param st sovittu tehtävä
+     */
     private void naytaTehtava(SovittuTehtava st) {
         try {
             Tehtava t = ktalous.etsiTehtava(st.getTid());
@@ -157,16 +199,16 @@ public class KotityotGUIController implements Initializable {
     private void muokkaaKayttajaa() {
         Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
         if (kayttajaKohdalla == null) return;
-//        KotityotMuokkaaKayttajiaController.setKotitalous(ktalous);
+        
         try {
-            Kayttaja kayttaja = KotityotMuokkaaKayttajaaController.kysyKayttaja(null, kayttajaKohdalla.clone());
+            Kayttaja kayttaja = KotityotTietueController.kysyTietue(null, kayttajaKohdalla.clone());
             if (kayttaja == null) return;
+            
             ktalous.korvaaTaiLisaa(kayttaja);
             tallenna();
             hae(kayttaja.getKid());
         } catch (CloneNotSupportedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Dialogs.showMessageDialog(e.getMessage());
         }
 
     }
@@ -185,18 +227,6 @@ public class KotityotGUIController implements Initializable {
                 "KotityotAlkuikkunaView.fxml"), "Aloitus", null, "");
         lueTiedosto("kotitalous");
         return true;
-    }
-
-
-    /*
-     * Tallennuksen toiminnallisuus
-     */
-    private void tallenna() {
-        try {
-            ktalous.tallenna();
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog(e.getMessage());
-        }
     }
 
     
@@ -227,21 +257,22 @@ public class KotityotGUIController implements Initializable {
      */
     private void uusiKayttaja() {
         Kayttaja uusi = new Kayttaja();
-        uusi = KotityotMuokkaaKayttajaaController.kysyKayttaja(null, uusi);
+        uusi = KotityotTietueController.kysyTietue(null, uusi);
         if (uusi == null) return;
+        
         uusi.rekisteroi();
         ktalous.lisaa(uusi);
         tallenna();
         hae(uusi.getKid());
     }
     
-    
-    private void uusiTehtava() {
-        Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
-        if (kayttajaKohdalla == null) return;
-        Tehtava teht = new Tehtava();
-        teht.taytaImurointiTiedoilla();
-    }
+//    TODO: poista tämä ja tee oikea tilalle
+//    private void uusiTehtava() {
+//        Kayttaja kayttajaKohdalla = lcKayttajat.getSelectedObject();
+//        if (kayttajaKohdalla == null) return;
+//        Tehtava teht = new Tehtava();
+//        teht.taytaImurointiTiedoilla();
+//    }
     
 
     /*

@@ -12,6 +12,7 @@ import kotitalous.Kayttaja;
 /**
  * Kontrolleri yhden käyttäjän tietojen muokkaamista
  * tai uuden käyttäjän tietojen luomista varten
+ * HUOM! //TODO POISTA ja laita kutsuja käyttämään tietuecontrolleria
  * @author Anniina
  * @version 12.4.2022
  */

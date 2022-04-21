@@ -68,7 +68,7 @@
                         <Tooltip text="Peru muutokset" />
                      </tooltip>
                   </Button>
-                  <Button defaultButton="true" mnemonicParsing="false" onAction="#handleTallenna" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOK" text="Tallenna" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <tooltip>
                         <Tooltip text="Tallenna tehtävä" />
                      </tooltip>
