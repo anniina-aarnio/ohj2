@@ -11,13 +11,34 @@ import fi.jyu.mit.ohj2.Mjonot;
  * - osaa muuttaa 1|1-merkkijonon sovituksi tehtäväksi
  * - osaa antaa merkkijonona i:n kentän tiedot
  * - osaa laittaa merkkijonon i:nneksi kentäksi
+ * Uudessa sovitussa tehtävässä id-arvot ovat -1, mikä tarkoittaa,
+ * ettei tehtävää tai käyttäjää ole sovittu
  * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.4.2022
  */
 public class SovittuTehtava {
     
-    private int kid;
-    private int tid;
+    private int kid;        // käyttäjä-id
+    private int tid;        // tehtävä-id
+    
+    
+    /**
+     * Luo oletus-asetuksilla sovitun tehtävän, joka 
+     */
+    public SovittuTehtava() {
+        this.kid = -1;
+        this.tid = -1;
+    }
+    
+    /**
+     * Luodaan sovittu tehtävä, jossa tehtävälle ei ole
+     * vielä sovittu käyttäjää (joten käyttäjä-id = -1)
+     * @param tehtava tehtävä, josta otetaan id käyttöön
+     */
+    public SovittuTehtava(Tehtava tehtava) {
+        this.kid = -1;
+        setTehtava(tehtava);
+    }
     
     /**
      * Asettaa käyttäjän sovittuun tehtävään

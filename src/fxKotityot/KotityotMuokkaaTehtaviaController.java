@@ -1,6 +1,5 @@
 package fxKotityot;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -15,7 +14,6 @@ import fi.jyu.mit.fxgui.ModalControllerInterface;
 import fi.jyu.mit.fxgui.StringGrid;
 import java.util.List;
 import fi.jyu.mit.fxgui.CheckBoxChooser;
-import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -89,7 +87,6 @@ public class KotityotMuokkaaTehtaviaController
     // TODO pitäisikö tehdä tänne stringGrid staattisena, jolloin voisi käyttää samaa GUIcontrollerin puolella?
     // TODO missä vaiheessa tallennus kun tehtävää muokkaa?
     // TODO tehtävien sopiminen (sovi tehtävä jollekin)
-    // TODO jos tehtävää ei sovittu kellekään, olisiko "sovittu tehtävä" suunnattu käyttäjäid:lle nro -1 tms, joka ei ole kenenkään?
 
     private void alusta() {
         alustaKayttajat();
@@ -125,6 +122,7 @@ public class KotityotMuokkaaTehtaviaController
 
         uusi.rekisteroi();
         ktalous.lisaa(uusi);
+        ktalous.lisaa(new SovittuTehtava(uusi));
         tallenna();
         naytaTehtava(uusi);
     }
