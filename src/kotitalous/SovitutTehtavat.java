@@ -63,7 +63,7 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
     
     
     /**
-     * Poistaa sovituntehtävän, jossa on molemmat:
+     * Poistaa sovituntehtävän, jossa on molemmat:  //TODO tee testit poistamisesta
      * annettu käyttäjä ja annettu tehtävä
      * @param kayttaja annettu käyttäjä
      * @param tehtava annettu tehtävä
@@ -75,6 +75,7 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
             if (st.getKid() == kayttaja.getKid() && st.getTid() == tehtava.getTid()) {
                 this.alkiot.remove(st);
                 this.muutettu = true;
+                return;
             }
         }
 

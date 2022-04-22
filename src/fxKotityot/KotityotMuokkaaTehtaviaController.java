@@ -176,27 +176,39 @@ public class KotityotMuokkaaTehtaviaController
      * nyt lisää uudet valitut. Ei vielä osaa poistaa (eli jos check lähtee pois,
      * jää edelleen sovittutehtävä listoille)
      */
-    private void kayKayttajatLapi() {       // TODO vain lisää, ei poista valintoja
+    private void kayKayttajatLapi() {
         
-        List<Kayttaja> eiValitut = cbKayttajat.getObjects();  // tämän avulla saisi kaikki käyttäjät, jolloin voisi vertailla...
         List<Kayttaja> valitut = cbKayttajat.getSelectedObjects();
-        List<SovittuTehtava> sovitut = ktalous.annaSovitutKayttajat(this.valittuTehtava);
+        // TODO lisää tähän, että jos valitut tyhjä niin voi poistaa kaikki sovitut ja return
         
+        // otetaan listat kaikista (nimellä eiValitut) ja tehtävälle sovituista käyttäjistä
+        List<Kayttaja> eiValitut = cbKayttajat.getObjects();  // tässä vaiheessa kaikki...
+        List<SovittuTehtava> sovitut = ktalous.annaSovitutKayttajat(this.valittuTehtava);
+             
+        // tekijät on lista sovittujen käyttäjien id:stä, lisätään sovittujen listasta
         ArrayList<Integer> tekijat = new ArrayList<Integer>();
         for (SovittuTehtava st : sovitut) {
             tekijat.add(st.getKid());
         }
         
+        // käydään valittuina olevat läpi
         for (Kayttaja kayt : valitut) {
+            // poistetaan kaikista jos on valittu, jolloin lopuksi saadaan puhdas eiValitut-lista
             eiValitut.remove(kayt);
+            
+            // jos tekijöissä on jo sama käyttäjä-id, ei tarvitse muokata
             if (tekijat.contains(kayt.getKid())) continue;
+            
+            // luodaan uusi sovittutehtava ja asetetaan siihen tiedot, lisätään kotitalouteen
             SovittuTehtava st = new SovittuTehtava();
             st.setKayttaja(kayt);
             st.setTehtava(this.valittuTehtava);
             ktalous.lisaa(st);
         }
         
+        // käydään ei-valitut läpi
         for (Kayttaja kayt : eiValitut) {
+            // jos tekijöistä löytyy ei-valittu, poistetaan yhteys  - TODO tallennus milloin?
             if (tekijat.contains(kayt.getKid()))
                 ktalous.poistaSovittu(kayt, valittuTehtava);
         }
