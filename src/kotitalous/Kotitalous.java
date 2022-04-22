@@ -93,6 +93,17 @@ public class Kotitalous {
     
     
     /**
+     * Poistaa sovituntehtävän, jossa on molemmat:
+     * annettu käyttäjä ja annettu tehtävä
+     * @param kayttaja annettu käyttäjä
+     * @param tehtava annettu tehtävä
+     */
+    public void poistaSovittu(Kayttaja kayttaja, Tehtava tehtava) {
+        this.sovitut.poista(kayttaja, tehtava);
+    }
+    
+    
+    /**
      * Lisää sovittuun tehtävään käyttäjän (id:n).
      * @param st sovittu tehtävä, jota muokataan
      * @param kayttaja käyttäjä, jonka id halutaan lisätä

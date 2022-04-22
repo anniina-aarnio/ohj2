@@ -171,9 +171,14 @@ public class KotityotMuokkaaTehtaviaController
     }
     
     
+    /**
+     * Käy käyttäjät läpi siten, että jos tehtävällä ei ollut tekijää
+     * nyt lisää uudet valitut. Ei vielä osaa poistaa (eli jos check lähtee pois,
+     * jää edelleen sovittutehtävä listoille)
+     */
     private void kayKayttajatLapi() {       // TODO vain lisää, ei poista valintoja
         
-//        List<Kayttaja> kaikki = cbKayttajat.getObjects();  // tämän avulla saisi kaikki käyttäjät, jolloin voisi vertailla...
+        List<Kayttaja> eiValitut = cbKayttajat.getObjects();  // tämän avulla saisi kaikki käyttäjät, jolloin voisi vertailla...
         List<Kayttaja> valitut = cbKayttajat.getSelectedObjects();
         List<SovittuTehtava> sovitut = ktalous.annaSovitutKayttajat(this.valittuTehtava);
         
@@ -183,11 +188,17 @@ public class KotityotMuokkaaTehtaviaController
         }
         
         for (Kayttaja kayt : valitut) {
+            eiValitut.remove(kayt);
             if (tekijat.contains(kayt.getKid())) continue;
             SovittuTehtava st = new SovittuTehtava();
             st.setKayttaja(kayt);
             st.setTehtava(this.valittuTehtava);
             ktalous.lisaa(st);
+        }
+        
+        for (Kayttaja kayt : eiValitut) {
+            if (tekijat.contains(kayt.getKid()))
+                ktalous.poistaSovittu(kayt, valittuTehtava);
         }
     }
       

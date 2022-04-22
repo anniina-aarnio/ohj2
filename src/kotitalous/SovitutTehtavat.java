@@ -23,6 +23,7 @@ import java.util.Scanner;
 public class SovitutTehtavat implements Iterable<SovittuTehtava> {
     
     private final Collection<SovittuTehtava> alkiot = new ArrayList<SovittuTehtava>();  // pitäisikö olla hashmap??
+    private boolean muutettu = false;
     
     
     /**
@@ -57,6 +58,26 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
      */
     public void lisaa(SovittuTehtava sovittutehtava) {
         this.alkiot.add(sovittutehtava);
+        this.muutettu = true;
+    }
+    
+    
+    /**
+     * Poistaa sovituntehtävän, jossa on molemmat:
+     * annettu käyttäjä ja annettu tehtävä
+     * @param kayttaja annettu käyttäjä
+     * @param tehtava annettu tehtävä
+     */
+    public void poista(Kayttaja kayttaja, Tehtava tehtava) {
+        if (kayttaja == null || tehtava == null) return;
+        
+        for (SovittuTehtava st : this.alkiot) {
+            if (st.getKid() == kayttaja.getKid() && st.getTid() == tehtava.getTid()) {
+                this.alkiot.remove(st);
+                this.muutettu = true;
+            }
+        }
+
     }
     
     
@@ -242,6 +263,7 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
      * @throws SailoException jos talletus epäonnistuu
      */
     public void tallenna(String hakemisto) throws SailoException {
+        if (this.muutettu == false) return;
         File ftied = new File(hakemisto + "/sovitut.dat");
         try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) {
             for (var st : this.alkiot) {
