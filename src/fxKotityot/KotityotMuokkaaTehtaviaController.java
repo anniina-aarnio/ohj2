@@ -12,6 +12,8 @@ import fi.jyu.mit.fxgui.Dialogs;
 import fi.jyu.mit.fxgui.ModalController;
 import fi.jyu.mit.fxgui.ModalControllerInterface;
 import fi.jyu.mit.fxgui.StringGrid;
+
+import java.util.ArrayList;
 import java.util.List;
 import fi.jyu.mit.fxgui.CheckBoxChooser;
 import javafx.scene.control.CheckBox;
@@ -83,6 +85,7 @@ public class KotityotMuokkaaTehtaviaController
     // private String nimi = null;   
     private Kotitalous ktalous;
     private Tehtava aputehtava = new Tehtava();
+    private Tehtava valittuTehtava;
     
     // TODO pitäisikö tehdä tänne stringGrid staattisena, jolloin voisi käyttää samaa GUIcontrollerin puolella?
     // TODO missä vaiheessa tallennus kun tehtävää muokkaa?
@@ -95,8 +98,10 @@ public class KotityotMuokkaaTehtaviaController
 //        tableTehtavat.addSelectionListener(e -> naytaKayttaja()); TODO etsi vastaava, jotta voi vaihtaa sovittuja käyttäjiä
         tableTehtavat.setOnMouseClicked(e -> {
             if (e.getClickCount() > 1) muokkaa();
+            this.valittuTehtava = tableTehtavat.getObject();
             naytaKayttajat();
         });
+        cbKayttajat.addSelectionListener(e -> muokkaaSovittua());
     }
     
     private void alustaKayttajat() {
@@ -134,21 +139,56 @@ public class KotityotMuokkaaTehtaviaController
         int r = tableTehtavat.getRowNr();
         if ( r < 0) return;     // esim otsikkorivi
         
-        Tehtava teht = tableTehtavat.getObject();
-        if (teht == null) return;
+        if (this.valittuTehtava == null) return;
         
 //        int k = tableTehtavat.getColumnNr()+teht.ekaKentta();
         
         try {
-            teht = KotityotTietueController.kysyTietue(null, teht.clone());
-            if (teht == null) return;
-            ktalous.korvaaTaiLisaa(teht);
+            this.valittuTehtava = KotityotTietueController.kysyTietue(null, this.valittuTehtava.clone());
+            if (this.valittuTehtava == null) return;
+            ktalous.korvaaTaiLisaa(this.valittuTehtava);
             naytaTehtavat();
             // tallenna() ???   //TODO mieti milloin tallennetaan
             tableTehtavat.selectRow(r);
         } catch (CloneNotSupportedException e) {
             Dialogs.showMessageDialog("Ongelmia muuttamisessa: " + e.getMessage());
         }
+    }
+    
+    
+    /**
+     * Kun cbKayttajiin tulee muutos, tarkistaa valitun tehtävän tableTehtavista
+     * Tarkistaa tehtävälle sovitut käyttäjät
+     * Lisää uudet valinnat ja poistaa pois-valitut (SovittuTehtava-luokan avulla)
+     */
+    private void muokkaaSovittua() {
+        if (this.valittuTehtava == null) return;
+        
+        // tähän tieto onko valittu vai otettu pois, toistaiseksi kaikki muutokset lisää..?
+        kayKayttajatLapi();
+       
+        tallenna();
+    }
+    
+    
+    private void kayKayttajatLapi() {
+        
+        List<Kayttaja> valitut = cbKayttajat.getSelectedObjects();
+        List<SovittuTehtava> sovitut = ktalous.annaSovitutKayttajat(this.valittuTehtava);
+        
+        ArrayList<Integer> tekijat = new ArrayList<Integer>();
+        for (SovittuTehtava st : sovitut) {
+            tekijat.add(st.getKid());
+        }
+        
+        for (Kayttaja kayt : valitut) {
+            if (tekijat.contains(kayt.getKid())) continue;
+            SovittuTehtava st = new SovittuTehtava();
+            st.setKayttaja(kayt);
+            st.setTehtava(this.valittuTehtava);
+            ktalous.lisaa(st);
+        }
+        
     }
       
     
