@@ -171,8 +171,9 @@ public class KotityotMuokkaaTehtaviaController
     }
     
     
-    private void kayKayttajatLapi() {
+    private void kayKayttajatLapi() {       // TODO vain lisää, ei poista valintoja
         
+//        List<Kayttaja> kaikki = cbKayttajat.getObjects();  // tämän avulla saisi kaikki käyttäjät, jolloin voisi vertailla...
         List<Kayttaja> valitut = cbKayttajat.getSelectedObjects();
         List<SovittuTehtava> sovitut = ktalous.annaSovitutKayttajat(this.valittuTehtava);
         
@@ -188,10 +189,12 @@ public class KotityotMuokkaaTehtaviaController
             st.setTehtava(this.valittuTehtava);
             ktalous.lisaa(st);
         }
-        
     }
       
     
+    /**
+     * Tallentaa tiedostoon muutokset
+     */
     private void tallenna() {
         try {
             ktalous.tallenna();
@@ -201,6 +204,9 @@ public class KotityotMuokkaaTehtaviaController
     }
      
     
+    /**
+     * Käy läpi kaikki tehtävät ja näyttää ne oikein tableTehtävissä
+     */
     private void naytaTehtavat() { 
         tableTehtavat.clear();
         List<Tehtava> kaikki = ktalous.annaTehtavat();
@@ -211,6 +217,11 @@ public class KotityotMuokkaaTehtaviaController
         }
     }
     
+    
+    /**
+     * Näyttää tehtävän tableTehtavat:ssa oikein
+     * @param t näytettävä tehtävä
+     */
     private void naytaTehtava(Tehtava t) {
         int kenttia = t.getKenttia();
         String[] rivi = new String[kenttia - t.ekaKentta()];
@@ -261,22 +272,24 @@ public class KotityotMuokkaaTehtaviaController
 
     
     private void naytaKayttajat() {     //TODO ei ehkä näytä kaikkia!
-        Tehtava t = tableTehtavat.getObject();
-        List<SovittuTehtava> sovitut = ktalous.annaSovitutKayttajat(t);
+        if (this.valittuTehtava == null) return;
+        List<SovittuTehtava> sovitut = ktalous.annaSovitutKayttajat(this.valittuTehtava);
         if (sovitut.size() == 0) {
             alustaKayttajat();
             return;
         }
         
+        List<Boolean> valinnat = new ArrayList<>();
         for (SovittuTehtava st : sovitut) {
-            naytaKayttaja(st);
+            naytaKayttaja(st, valinnat);
         }
+        cbKayttajat.setSelectedIndices(valinnat);
     }
     
     /**
      * Näyttää yksittäisen sovitun käyttäjän
      */
-    private void naytaKayttaja(SovittuTehtava st) {
+    private void naytaKayttaja(SovittuTehtava st, List<Boolean> valinnat) {
         try {
             Kayttaja k = ktalous.etsiKayttaja(st.getKid());
             int kID = k.getKid();
@@ -285,8 +298,9 @@ public class KotityotMuokkaaTehtaviaController
             for (int i = 0; i < ktalous.getKayttajia(); i++) {
                 Kayttaja kayttaja = ktalous.annaKayttaja(i);
                 cbKayttajat.add(kayttaja.getNimi(), kayttaja);
+                if (valinnat.size() < ktalous.getKayttajia()) valinnat.add(false);
                 if (kID == kayttaja.getKid()) {
-                    cbKayttajat.setSelectedIndex(i);
+                    valinnat.set(i, true);
                 }
             }
         } catch (SailoException e) {
