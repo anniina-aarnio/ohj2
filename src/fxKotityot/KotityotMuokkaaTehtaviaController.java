@@ -122,7 +122,6 @@ public class KotityotMuokkaaTehtaviaController
 
         uusi.rekisteroi();
         ktalous.lisaa(uusi);
-        ktalous.lisaa(new SovittuTehtava(uusi));
         tallenna();
         naytaTehtava(uusi);
     }
@@ -224,7 +223,7 @@ public class KotityotMuokkaaTehtaviaController
     private void naytaKayttajat() {     //TODO ei ehkä näytä kaikkia!
         Tehtava t = tableTehtavat.getObject();
         List<SovittuTehtava> sovitut = ktalous.annaSovitutKayttajat(t);
-        if (sovitut.size() == 0) return;
+        if (sovitut.size() == 1) if (sovitut.get(0).getKid() == -1) return;
         
         for (SovittuTehtava st : sovitut) {
             naytaKayttaja(st);
@@ -235,6 +234,7 @@ public class KotityotMuokkaaTehtaviaController
      * Näyttää yksittäisen sovitun käyttäjän
      */
     private void naytaKayttaja(SovittuTehtava st) {
+        if (st.getKid() == -1) return;
         try {
             Kayttaja k = ktalous.etsiKayttaja(st.getKid());
             int kID = k.getKid();

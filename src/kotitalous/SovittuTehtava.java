@@ -23,24 +23,6 @@ public class SovittuTehtava {
     
     
     /**
-     * Luo oletus-asetuksilla sovitun tehtävän, joka 
-     */
-    public SovittuTehtava() {
-        this.kid = -1;
-        this.tid = -1;
-    }
-    
-    /**
-     * Luodaan sovittu tehtävä, jossa tehtävälle ei ole
-     * vielä sovittu käyttäjää (joten käyttäjä-id = -1)
-     * @param tehtava tehtävä, josta otetaan id käyttöön
-     */
-    public SovittuTehtava(Tehtava tehtava) {
-        this.kid = -1;
-        setTehtava(tehtava);
-    }
-    
-    /**
      * Asettaa käyttäjän sovittuun tehtävään
      * @param kayttaja käyttäjän id
      * @example
