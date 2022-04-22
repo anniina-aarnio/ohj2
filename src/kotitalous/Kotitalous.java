@@ -155,12 +155,14 @@ public class Kotitalous {
     
     
     /**
-     * Poistaa annetun käyttäjän
+     * Poistaa annetun käyttäjän ja tallentaa tiedoston
      * @param kayttaja annettu käyttäjä
+     * @throws SailoException jos tallennus ei onnistu
      */
-    public void poista(Kayttaja kayttaja) {
+    public void poista(Kayttaja kayttaja) throws SailoException {
         this.kayttajat.poista(kayttaja);
         poistaSovitut(kayttaja);
+        tallenna();
     }
     
     /**
@@ -258,26 +260,29 @@ public class Kotitalous {
      *  Tehtava imu23 = new Tehtava(); imu23.rekisteroi(); imu23.taytaImurointiTiedoilla();
      *  Tehtava imu34 = new Tehtava(); imu34.rekisteroi(); imu34.taytaImurointiTiedoilla();
      *  SovittuTehtava st = new SovittuTehtava(); st.setKayttaja(aada1); st.setTehtava(imu12);
+     *  
      *  String tiedNimi = "testiKotitalous";
      *  File ftied = new File(tiedNimi + "/kayttajat.dat");
      *  File ftied2 = new File(tiedNimi + "/tehtavat.dat");
      *  File ftied3 = new File(tiedNimi + "/sovitut.dat");
      *  ftied.delete(); ftied2.delete(); ftied3.delete();
-     *  kt.lueTiedostosta(ftied); #THROWS SailoException
-     *  kt.lueTiedostosta(ftied2); #THROWS SailoException
-     *  kt.lueTiedostosta(ftied3); #THROWS SailoException
+     *  kt.lueTiedostosta(tiedNimi); #THROWS SailoException
      *  kt.lisaa(aada1); kt.lisaa(aada2); kt.lisaa(aada3);
      *  kt.lisaa(imu12); kt.lisaa(imu23); kt.lisaa(imu34);
      *  kt.lisaa(st);
      *  kt.tallenna(tiedNimi);
+     *  
      *  kt = new Kotitalous();
      *  kt.lueTiedostosta(tiedNimi);
-     *  kt.lisaa(aada1);
-     *  kt.getKayttajia() === 4;
-     *  kt.poista(aada1);
      *  kt.getKayttajia() === 3;
+     *  kt.annaKayttaja(0).toString() === aada1.toString();
+     *  kt.poista(aada1);
+     *  kt.annaKayttaja(0).toString() == aada1.toString() === false;
+     *  kt.annaKayttaja(0).toString() === aada2.toString();
+     *  kt.getKayttajia() === 2;
      *  kt.etsiTehtava(imu12.getTid()).toString() === imu12.toString();
      *  kt.tallenna(tiedNimi);
+     *  
      *  ftied.delete() === true;
      *  ftied2.delete() === true;
      *  ftied3.delete() === true;

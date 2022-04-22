@@ -125,14 +125,26 @@ public class Kayttajat implements Iterable<Kayttaja> {
      */
     public void poista(Kayttaja kayttaja) {
         if (kayttaja == null) return;
-        for (int i = 0; i < this.alkiot.length; i++) {
+        
+        int index = -1;
+        for (int i = 0; i < this.getLkm(); i++) {
             if (this.alkiot[i].getKid() == kayttaja.getKid()) {
-                this.alkiot[i] = this.alkiot[this.lkm];
-                this.lkm--;
-                this.muutettu = true;
-                return;
+                this.alkiot[i] = null;
+                index = i;
+                break;
             }
         }
+        
+        if (index == -1) return;
+        
+        this.alkiot[index] = null;
+        // siirtää poistetun indeksin tilalle yhden kerrallaan
+        for (int i = index; i+1 < this.getLkm(); i++) {
+            this.alkiot[i] = this.alkiot[i+1];
+        }
+        
+        this.lkm--;
+        this.muutettu = true;
     }
 
     
@@ -197,7 +209,8 @@ public class Kayttajat implements Iterable<Kayttaja> {
      *  i.next().toString() === aada2.toString();
      *  i.next().toString() === aada3.toString();
      *  i.hasNext() === false;
-     *  kayttajat.lisaa(aada1);
+     *  kayttajat.poista(aada1);
+     *  kayttajat.getLkm() === 2;
      *  kayttajat.tallenna(tiedNimi);
      *  ftied.delete() === true;
      * </pre>
@@ -238,6 +251,7 @@ public class Kayttajat implements Iterable<Kayttaja> {
         try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) {
             for (int i = 0; i < this.getLkm(); i++) {
                 Kayttaja kayttaja = this.anna(i);
+//                if (kayttaja == null) continue;
                 fo.println(kayttaja.toString());
             }
         } catch (FileNotFoundException ex) {
