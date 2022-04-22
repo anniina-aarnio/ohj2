@@ -104,6 +104,26 @@ public class Kotitalous {
     
     
     /**
+     * Poistaa sovituntehtävän 
+     * @param st poistettava sovittutehtävä
+     */
+    public void poistaSovittu(SovittuTehtava st) {
+        this.sovitut.poista(st);
+    }
+    
+    
+    /**
+     * Poistaa sovitutTehtävät, joilla on annettu käyttäjä // TODO testit..
+     * @param kayttaja joka ollaan poistamassa kotitaloudesta
+     */
+    public void poistaSovitut(Kayttaja kayttaja) {
+        List<SovittuTehtava> kayttajalleSovitut = annaSovitutTehtavat(kayttaja);
+        for (SovittuTehtava st : kayttajalleSovitut) {
+            this.sovitut.poista(st);
+        }
+    }
+    
+    /**
      * Lisää sovittuun tehtävään käyttäjän (id:n).
      * @param st sovittu tehtävä, jota muokataan
      * @param kayttaja käyttäjä, jonka id halutaan lisätä
@@ -131,6 +151,16 @@ public class Kotitalous {
      */
     public Kayttaja etsiKayttaja(int kayttajaId) throws SailoException {
         return this.kayttajat.etsi(kayttajaId);
+    }
+    
+    
+    /**
+     * Poistaa annetun käyttäjän
+     * @param kayttaja annettu käyttäjä
+     */
+    public void poista(Kayttaja kayttaja) {
+        this.kayttajat.poista(kayttaja);
+        poistaSovitut(kayttaja);
     }
     
     /**
@@ -227,19 +257,25 @@ public class Kotitalous {
      *  Tehtava imu12 = new Tehtava(); imu12.rekisteroi(); imu12.taytaImurointiTiedoilla();
      *  Tehtava imu23 = new Tehtava(); imu23.rekisteroi(); imu23.taytaImurointiTiedoilla();
      *  Tehtava imu34 = new Tehtava(); imu34.rekisteroi(); imu34.taytaImurointiTiedoilla();
+     *  SovittuTehtava st = new SovittuTehtava(); st.setKayttaja(aada1); st.setTehtava(imu12);
      *  String tiedNimi = "testiKotitalous";
      *  File ftied = new File(tiedNimi + "/kayttajat.dat");
      *  File ftied2 = new File(tiedNimi + "/tehtavat.dat");
      *  File ftied3 = new File(tiedNimi + "/sovitut.dat");
-     *  ftied.delete(); ftied2.delete();
-     *  kt.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *  ftied.delete(); ftied2.delete(); ftied3.delete();
+     *  kt.lueTiedostosta(ftied); #THROWS SailoException
+     *  kt.lueTiedostosta(ftied2); #THROWS SailoException
+     *  kt.lueTiedostosta(ftied3); #THROWS SailoException
      *  kt.lisaa(aada1); kt.lisaa(aada2); kt.lisaa(aada3);
      *  kt.lisaa(imu12); kt.lisaa(imu23); kt.lisaa(imu34);
+     *  kt.lisaa(st);
      *  kt.tallenna(tiedNimi);
      *  kt = new Kotitalous();
      *  kt.lueTiedostosta(tiedNimi);
      *  kt.lisaa(aada1);
      *  kt.getKayttajia() === 4;
+     *  kt.poista(aada1);
+     *  kt.getKayttajia() === 3;
      *  kt.etsiTehtava(imu12.getTid()).toString() === imu12.toString();
      *  kt.tallenna(tiedNimi);
      *  ftied.delete() === true;

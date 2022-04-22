@@ -65,7 +65,7 @@ public class KotityotGUIController implements Initializable {
     }
     
     @FXML void handlePoistaKayttaja() {
-        Dialogs.showMessageDialog("Vielä ei osata poistaa käyttäjää");
+        poistaKayttaja();
     }
 
         
@@ -246,6 +246,14 @@ public class KotityotGUIController implements Initializable {
         } catch (CloneNotSupportedException e) {
             Dialogs.showMessageDialog(e.getMessage());
         }
+    }
+    
+    
+    private void poistaKayttaja() {
+        Kayttaja k = lcKayttajat.getSelectedObject();
+        String kysymys = "Oletko varma, että haluat poistaa käyttäjän " + k.getNimi() + "?";
+        boolean poistetaanko = Dialogs.showQuestionDialog("Käyttäjän poistaminen", kysymys, "Poista", "Peruuta");
+        if (poistetaanko) ktalous.poista(k);
     }
     
     

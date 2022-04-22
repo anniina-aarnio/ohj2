@@ -108,6 +108,33 @@ public class Kayttajat implements Iterable<Kayttaja> {
         lisaa(kayttaja);
     }
     
+    /**
+     * Poistaa annetun käyttäjän
+     * @param kayttaja annettu käyttäjä
+     * @example
+     * <pre name="test">
+     * Kayttajat kt = new Kayttajat();
+     * kt.getLkm() === 0;
+     * Kayttaja k = new Kayttaja();
+     * k.rekisteroi();
+     * kt.lisaa(k);
+     * kt.getLkm() === 1;
+     * kt.poista(k);
+     * kt.getLkm() === 0;
+     * </pre>
+     */
+    public void poista(Kayttaja kayttaja) {
+        if (kayttaja == null) return;
+        for (int i = 0; i < this.alkiot.length; i++) {
+            if (this.alkiot[i].getKid() == kayttaja.getKid()) {
+                this.alkiot[i] = this.alkiot[this.lkm];
+                this.lkm--;
+                this.muutettu = true;
+                return;
+            }
+        }
+    }
+
     
     /**
      * @param kayttajaId etsitty käyttäjä-id

@@ -78,7 +78,18 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
                 return;
             }
         }
-
+    }
+    
+    
+    /**
+     * Poistaa sovituntehtävän                  //TODO testit tästäkin poistamisesta
+     * @param st poistettava sovittutehtävä
+     */
+    public void poista(SovittuTehtava st) {
+        if (st == null) return;
+        
+        this.alkiot.remove(st);
+        this.muutettu = true;
     }
     
     
