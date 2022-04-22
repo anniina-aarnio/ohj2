@@ -219,6 +219,7 @@ public class Kotitalous {
      *  String tiedNimi = "testiKotitalous";
      *  File ftied = new File(tiedNimi + "/kayttajat.dat");
      *  File ftied2 = new File(tiedNimi + "/tehtavat.dat");
+     *  File ftied3 = new File(tiedNimi + "/sovitut.dat");
      *  ftied.delete(); ftied2.delete();
      *  kt.lueTiedostosta(tiedNimi); #THROWS SailoException
      *  kt.lisaa(aada1); kt.lisaa(aada2); kt.lisaa(aada3);
@@ -232,6 +233,7 @@ public class Kotitalous {
      *  kt.tallenna(tiedNimi);
      *  ftied.delete() === true;
      *  ftied2.delete() === true;
+     *  ftied3.delete() === true;
      * </pre>
      */
     public void lueTiedostosta(String nimi) throws SailoException {
