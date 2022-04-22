@@ -123,17 +123,7 @@ public class KotityotGUIController implements Initializable {
             Dialogs.showMessageDialog(e.getMessage());
         }
     }
-    
-//    TODO tarvitaanko?
-//    /**
-//     * Tarkistetaan onko tallennus tehty
-//     * @return true, jos saa sulkea sovelluksen, false jos ei
-//     */
-//    public boolean voikoSulkea() {
-//        tallenna();
-//        return true;
-//    }
-    
+
     
     /*
      * Avaa alkuikkunan

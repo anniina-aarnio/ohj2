@@ -57,14 +57,14 @@ public class KotityotMuokkaaTehtaviaController
 
     @Override
     public void handleShown() {
-        // TODO Auto-generated method stub
+        // TODO Tarvitaanko jotain tähän
         
     }
 
     
     @Override
     public Kotitalous getResult() {
-        // TODO Auto-generated method stub
+        // palauttaa null, koska ei tarvitse palauttaa muutakaan
         return null;
     }
 
@@ -95,7 +95,7 @@ public class KotityotMuokkaaTehtaviaController
 //        tableTehtavat.addSelectionListener(e -> naytaKayttaja()); TODO etsi vastaava, jotta voi vaihtaa sovittuja käyttäjiä
         tableTehtavat.setOnMouseClicked(e -> {
             if (e.getClickCount() > 1) muokkaa();
-            else naytaKayttajat();
+            naytaKayttajat();
         });
     }
     
@@ -223,7 +223,10 @@ public class KotityotMuokkaaTehtaviaController
     private void naytaKayttajat() {     //TODO ei ehkä näytä kaikkia!
         Tehtava t = tableTehtavat.getObject();
         List<SovittuTehtava> sovitut = ktalous.annaSovitutKayttajat(t);
-        if (sovitut.size() == 1) if (sovitut.get(0).getKid() == -1) return;
+        if (sovitut.size() == 0) {
+            alustaKayttajat();
+            return;
+        }
         
         for (SovittuTehtava st : sovitut) {
             naytaKayttaja(st);
@@ -234,25 +237,23 @@ public class KotityotMuokkaaTehtaviaController
      * Näyttää yksittäisen sovitun käyttäjän
      */
     private void naytaKayttaja(SovittuTehtava st) {
-        if (st.getKid() == -1) return;
         try {
             Kayttaja k = ktalous.etsiKayttaja(st.getKid());
             int kID = k.getKid();
             cbKayttajat.clear();
             
-            int index = 0;
             for (int i = 0; i < ktalous.getKayttajia(); i++) {
                 Kayttaja kayttaja = ktalous.annaKayttaja(i);
-                if (kID == kayttaja.getKid()) index = i;
                 cbKayttajat.add(kayttaja.getNimi(), kayttaja);
+                if (kID == kayttaja.getKid()) {
+                    cbKayttajat.setSelectedIndex(i);
+                }
             }
-            cbKayttajat.setSelectedIndex(index);
         } catch (SailoException e) {
             Dialogs.showMessageDialog("Jotain meni pieleen: " + e.getMessage());
         }
         
     }
-    
     
     
     /**

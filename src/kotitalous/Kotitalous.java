@@ -17,7 +17,7 @@ public class Kotitalous {
     private Kayttajat kayttajat = new Kayttajat();
     private Tehtavat tehtavat = new Tehtavat();
     private SovitutTehtavat sovitut = new SovitutTehtavat();
-    private String hakemisto = "kotitalous";    // TODO: haluanko final? testit vaikeutuu jos ei...
+    private String hakemisto = "kotitalous";
 
     
     /**
@@ -202,9 +202,37 @@ public class Kotitalous {
     
     
     /**
-     * Lukee kerhon tiedot tiedostosta //TODO tee testit
+     * Lukee kerhon tiedot tiedostosta
      * @param nimi hakemiston nimi
      * @throws SailoException jos lukemisessa ongelmia
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * #import java.io.File;
+     *  Kotitalous kt = new Kotitalous();
+     *  Kayttaja aada1 = new Kayttaja(); aada1.rekisteroi(); aada1.taytaAadaTiedoilla();
+     *  Kayttaja aada2 = new Kayttaja(); aada2.rekisteroi(); aada2.taytaAadaTiedoilla();
+     *  Kayttaja aada3 = new Kayttaja(); aada3.rekisteroi(); aada3.taytaAadaTiedoilla();
+     *  Tehtava imu12 = new Tehtava(); imu12.rekisteroi(); imu12.taytaImurointiTiedoilla();
+     *  Tehtava imu23 = new Tehtava(); imu23.rekisteroi(); imu23.taytaImurointiTiedoilla();
+     *  Tehtava imu34 = new Tehtava(); imu34.rekisteroi(); imu34.taytaImurointiTiedoilla();
+     *  String tiedNimi = "testiKotitalous";
+     *  File ftied = new File(tiedNimi + "/kayttajat.dat");
+     *  File ftied2 = new File(tiedNimi + "/tehtavat.dat");
+     *  ftied.delete(); ftied2.delete();
+     *  kt.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *  kt.lisaa(aada1); kt.lisaa(aada2); kt.lisaa(aada3);
+     *  kt.lisaa(imu12); kt.lisaa(imu23); kt.lisaa(imu34);
+     *  kt.tallenna(tiedNimi);
+     *  kt = new Kotitalous();
+     *  kt.lueTiedostosta(tiedNimi);
+     *  kt.lisaa(aada1);
+     *  kt.getKayttajia() === 4;
+     *  kt.etsiTehtava(imu12.getTid()).toString() === imu12.toString();
+     *  kt.tallenna(tiedNimi);
+     *  ftied.delete() === true;
+     *  ftied2.delete() === true;
+     * </pre>
      */
     public void lueTiedostosta(String nimi) throws SailoException {
         File dir = new File(nimi);
@@ -246,7 +274,38 @@ public class Kotitalous {
         
         if (!"".equals(virhe)) throw new SailoException(virhe);
     }
+    
+    
+    /**
+     * Testejä varten tallenna()-metodia vastaava, jossa hakemiston nimen voi vaihtaa
+     * @param hakemistonNimi testihakemiston nimi
+     * @throws SailoException jos tallettamisessa ongelmia
+     */
+    public void tallenna(String hakemistonNimi) throws SailoException {
+        String virhe = "";
+        try {
+            kayttajat.tallenna(hakemistonNimi);
+        } catch ( SailoException ex) {
+            virhe = ex.getMessage();
+        }
+        
+        try {
+            tehtavat.tallenna(hakemistonNimi);
+        } catch (SailoException ex) {
+            virhe += ex.getMessage();
+        }
+        
+        try {
+            sovitut.tallenna(hakemistonNimi);
+        } catch (SailoException ex) {
+            virhe += ex.getMessage();
+        }
+        
+        if (!"".equals(virhe)) throw new SailoException(virhe);
+    }
 
+    
+    
     /**
      * @param args ei käytössä
      */
