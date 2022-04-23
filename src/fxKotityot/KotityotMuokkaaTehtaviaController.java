@@ -94,7 +94,7 @@ public class KotityotMuokkaaTehtaviaController
         alustaTehtavat();
         naytaTehtavat();
         tableTehtavat.setOnMouseClicked(e -> {
-            if (e.getClickCount() > 1) muokkaa();
+            if (e.getClickCount() > 1) muokkaa();   // tässä huono se, että jos haluaa vaihtaa otsikon mukaan järjestystä, tuplaklikkauksella avaa muokkausikkunan
             this.valittuTehtava = tableTehtavat.getObject();
             naytaKayttajat();
         });

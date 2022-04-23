@@ -444,7 +444,7 @@ public class Kotitalous {
         Kotitalous kt = new Kotitalous();
 
         try {
-            kt.lueTiedostosta("kotitalous");
+            kt.lueTiedostosta("testiKotitalous");
         } catch (SailoException e1) {
             System.err.println(e1.getMessage());
         }
@@ -509,7 +509,7 @@ public class Kotitalous {
         }
         
         try {
-            kt.tallenna();
+            kt.tallenna("testiKotitalous");
         } catch (SailoException e) {
             System.err.println(e.getMessage());
         }

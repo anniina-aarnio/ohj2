@@ -162,12 +162,12 @@ public class Kayttajat implements Iterable<Kayttaja> {
      * 
      * koot.etsi(k1.getKid()).toString() === k1.toString();
      * koot.etsi(k2.getKid()).toString() === k2.toString();
-     * koot.etsi(-10); THROWS SailoException;
+     * koot.etsi(-10); #THROWS SailoException
      * </pre>
      */
     public Kayttaja etsi(int kayttajaId) throws SailoException {
-        for (Kayttaja k : this.alkiot) {
-            if (k.getKid() == kayttajaId) return k;
+        for (int i = 0; i < getLkm(); i++) {
+            if (this.alkiot[i].getKid() == kayttajaId) return this.alkiot[i];
         }
         throw new SailoException("Ei löydy annetulla käyttäjäindeksillä " + kayttajaId + ".");
     }
