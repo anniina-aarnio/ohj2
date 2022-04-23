@@ -122,7 +122,7 @@ public class KotityotMuokkaaTehtaviaController
 
     private void uusi() {
         Tehtava uusi = new Tehtava();
-        uusi = KotityotTietueController.kysyTietue(null, uusi);
+        uusi = KotityotTietueController.kysyTietue(null, uusi, "Uusi tehtävä");
         if (uusi == null) return;
 
         uusi.rekisteroi();
@@ -144,7 +144,7 @@ public class KotityotMuokkaaTehtaviaController
 //        int k = tableTehtavat.getColumnNr()+teht.ekaKentta();
         
         try {
-            this.valittuTehtava = KotityotTietueController.kysyTietue(null, this.valittuTehtava.clone());
+            this.valittuTehtava = KotityotTietueController.kysyTietue(null, this.valittuTehtava.clone(), "Muokkaa tehtävää");
             if (this.valittuTehtava == null) return;
             ktalous.korvaaTaiLisaa(this.valittuTehtava);
             naytaTehtavat();
@@ -284,7 +284,7 @@ public class KotityotMuokkaaTehtaviaController
      */
     private void uusiKayttaja() {
         Kayttaja uusi = new Kayttaja();
-        uusi = KotityotTietueController.kysyTietue(null, uusi);
+        uusi = KotityotTietueController.kysyTietue(null, uusi, "Uusi käyttäjä");
         if (uusi == null) return;
         
         uusi.rekisteroi();

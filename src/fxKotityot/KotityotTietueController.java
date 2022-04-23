@@ -188,15 +188,25 @@ public class KotityotTietueController<TYPE extends Tietue> implements ModalContr
     
     
     /**
+     * Laitetaan sopiva otsikko
+     * @param otsikko tietojen kysymislaatikoiden yläpuolelle otsikko
+     */
+    public void setOtsikko(String otsikko) {
+        this.labelOtsikko.setText(otsikko);
+    }
+    
+    
+    /**
      * Luodaan tietueen kysymisdialogi ja palautetaan sama tietue muutettuna tai null
      * @param modalityStage mille ollaan modaalisia, null = sovellukselle
      * @param oletus mitä dataa näytetään oletuksena
+     * @param otsikko mikä otsikko laitetaan kyselyn ylle
      * @return null, jos painetaan cancel, muuten täytetty tietue
      */
-    public static<TYPE extends Tietue> TYPE kysyTietue(Stage modalityStage, TYPE oletus) {
+    public static<TYPE extends Tietue> TYPE kysyTietue(Stage modalityStage, TYPE oletus, String otsikko) {
         return ModalController.<TYPE, KotityotTietueController<TYPE>>showModal(
                 KotityotTietueController.class.getResource("KotityotTietueView.fxml"), "Kotityöt",
-                modalityStage, oletus, null);
+                modalityStage, oletus, ctrl -> {ctrl.setOtsikko(otsikko);} );
                 //TODO lisää otsikko, jolla saa muutettua labelOtsikko toivotuksi, kun nyt kaikki on "Uusi käyttäjä" vaikka kyseessä olisi tehtävä
     }
 }

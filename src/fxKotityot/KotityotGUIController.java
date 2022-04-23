@@ -219,7 +219,7 @@ public class KotityotGUIController implements Initializable {
      */
     private void uusiKayttaja() {
         Kayttaja uusi = new Kayttaja();
-        uusi = KotityotTietueController.kysyTietue(null, uusi);
+        uusi = KotityotTietueController.kysyTietue(null, uusi, "Uusi käyttäjä");
         if (uusi == null) return;
         
         uusi.rekisteroi();
@@ -237,7 +237,7 @@ public class KotityotGUIController implements Initializable {
         if (kayttajaKohdalla == null) return;
         
         try {
-            Kayttaja kayttaja = KotityotTietueController.kysyTietue(null, kayttajaKohdalla.clone());
+            Kayttaja kayttaja = KotityotTietueController.kysyTietue(null, kayttajaKohdalla.clone(), "Muokkaa käyttäjää");
             if (kayttaja == null) return;
             
             ktalous.korvaaTaiLisaa(kayttaja);
