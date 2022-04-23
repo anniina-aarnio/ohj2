@@ -226,6 +226,14 @@ public class Kotitalous {
      * Pyytää tehtäviä palauttamaan listan,
      * jossa on kaikki tämän hetken tehtävät
      * @return kaikki tehtävät listana
+     * @example
+     * <pre name="test">
+     * Kotitalous kt = new Kotitalous();
+     * Tehtava t1 = new Tehtava(); Tehtava t2 = new Tehtava();
+     * kt.lisaa(t1); kt.lisaa(t2);
+     * List<Tehtava> kaikki = kt.annaTehtavat();
+     * kaikki.size() === 2;
+     * </pre>
      */
     public List<Tehtava> annaTehtavat() {
         return this.tehtavat.annaKaikki();

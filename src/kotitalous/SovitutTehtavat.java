@@ -63,10 +63,34 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
     
     
     /**
-     * Poistaa sovituntehtävän, jossa on molemmat:  //TODO tee testit poistamisesta
+     * Poistaa sovituntehtävän, jossa on molemmat:
      * annettu käyttäjä ja annettu tehtävä
      * @param kayttaja annettu käyttäjä
      * @param tehtava annettu tehtävä
+     * @example
+     * <pre name="test">
+     * SovitutTehtavat steet = new SovitutTehtavat();
+     * SovittuTehtava st1 = new SovittuTehtava();
+     * SovittuTehtava st2 = new SovittuTehtava();
+     * Kayttaja k1 = new Kayttaja(); k1.rekisteroi();
+     * Kayttaja k2 = new Kayttaja(); k2.rekisteroi();
+     * Tehtava t1 = new Tehtava(); t1.rekisteroi();
+     * st1.setKayttaja(k1); st2.setKayttaja(k2);
+     * st1.setTehtava(t1); st2.setTehtava(t1);
+     * steet.lisaa(st1); steet.lisaa(st2);
+     * 
+     * List<SovittuTehtava> sovitutT1 = steet.annaSovitutKayttajat(t1);
+     * sovitutT1.size() === 2;
+     * sovitutT1.get(0).toString() === st1.toString();
+     * 
+     * steet.poista(k1, t1);
+     * sovitutT1 = steet.annaSovitutKayttajat(t1);
+     * sovitutT1.get(0).toString() === st2.toString();
+     * 
+     * steet.poista(st2);
+     * sovitutT1 = steet.annaSovitutKayttajat(t1);
+     * sovitutT1.size() === 0;
+     * </pre>
      */
     public void poista(Kayttaja kayttaja, Tehtava tehtava) {
         if (kayttaja == null || tehtava == null) return;
@@ -82,7 +106,8 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
     
     
     /**
-     * Poistaa sovituntehtävän                  //TODO testit tästäkin poistamisesta
+     * Poistaa sovituntehtävän
+     * Testi "poista(Kayttaja kayttaja, Tehtava tehtava)" kanssa samassa
      * @param st poistettava sovittutehtävä
      */
     public void poista(SovittuTehtava st) {
