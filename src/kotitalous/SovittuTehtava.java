@@ -40,6 +40,7 @@ public class SovittuTehtava {
         this.kid = kayttaja.getKid();
     }
     
+    
     /**
      * Asettaa tehtävän sovittuun tehtävään
      * @param tehtava asetettava tehtävä
@@ -56,6 +57,7 @@ public class SovittuTehtava {
     public void setTehtava(Tehtava tehtava) {
         this.tid = tehtava.getTid();
     }
+    
     
     /**
      * Palauttaa sovittuun tehtävään tallennetun käyttäjä-id:n
@@ -74,6 +76,7 @@ public class SovittuTehtava {
         return this.kid;
     }
     
+    
     /**
      * Palauttaa sovittuun tehtävään tallennetun tehtävä-id:n
      * @return tehtävän id
@@ -91,6 +94,7 @@ public class SovittuTehtava {
     public int getTid() {
         return this.tid;
     }
+    
     
     /**
      * Tulostetaan sovitun tehtävän tiedot
@@ -132,6 +136,7 @@ public class SovittuTehtava {
         this.kid = Mjonot.erota(sb,  '|', this.kid);
         this.tid = Mjonot.erota(sb, '|', this.tid);
     }
+    
     
     /**
      * @param args ei käytössä

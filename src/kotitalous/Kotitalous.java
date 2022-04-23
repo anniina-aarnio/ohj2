@@ -61,7 +61,7 @@ public class Kotitalous {
      * niin lisätään uutena käyttäjänä.
      * @param kayttaja lisätään käyttäjän viite. Huom. tietorakenne muuttuu omistajaksi!
      */
-    public void korvaaTaiLisaa(Kayttaja kayttaja) {
+    public void korvaaTaiLisaa(Kayttaja kayttaja) { //TODO testit?
         kayttajat.korvaaTaiLisaa(kayttaja);
     }
 
@@ -80,7 +80,7 @@ public class Kotitalous {
      * lisätään uutena tehtävänä.
      * @param tehtava lisätään tehtävän viite, huom! Tietorakenne muuttuu omistajaksi!
      */
-    public void korvaaTaiLisaa(Tehtava tehtava) {
+    public void korvaaTaiLisaa(Tehtava tehtava) {   //TODO testit?
         this.tehtavat.korvaaTaiLisaa(tehtava);
     }
 
@@ -97,6 +97,40 @@ public class Kotitalous {
      * annettu käyttäjä ja annettu tehtävä
      * @param kayttaja annettu käyttäjä
      * @param tehtava annettu tehtävä
+     * @example
+     * <pre name="test">
+     * Kotitalous kt = new Kotitalous();
+     * Kayttaja k1 = new Kayttaja(); Kayttaja k2 = new Kayttaja();
+     * Tehtava t1 = new Tehtava(); Tehtava t2 = new Tehtava();
+     * SovittuTehtava s1 = new SovittuTehtava(); SovittuTehtava s2 = new SovittuTehtava();
+     * SovittuTehtava s3 = new SovittuTehtava();
+     * k1.rekisteroi(); k2.rekisteroi();
+     * t1.rekisteroi(); t2.rekisteroi();
+     * s1.setKayttaja(k1); s2.setKayttaja(k2); s3.setKayttaja(k1);
+     * s1.setTehtava(t1); s2.setTehtava(t1); s3.setTehtava(t2);
+     * kt.lisaa(k1); kt.lisaa(k2); kt.lisaa(t1); kt.lisaa(t2);
+     * kt.lisaa(s1); kt.lisaa(s2); kt.lisaa(s3);
+     * 
+     * List<SovittuTehtava> sovitutT1 = kt.annaSovitutKayttajat(t1);
+     * sovitutT1.get(0).toString() === s1.toString();
+     * sovitutT1.get(1).toString() === s2.toString();
+     * kt.poistaSovittu(k2, t1);
+     * sovitutT1 = kt.annaSovitutKayttajat(t1);
+     * sovitutT1.size() === 1;
+     * sovitutT1.get(0).toString() === s1.toString();
+     * kt.lisaa(s2);
+     * sovitutT1 = kt.annaSovitutKayttajat(t1);
+     * sovitutT1.size() === 2;
+     * kt.poistaSovittu(s2);
+     * sovitutT1 = kt.annaSovitutKayttajat(t1);
+     * sovitutT1.size() === 1;
+     * 
+     * List<SovittuTehtava> sovitutK1 = kt.annaSovitutTehtavat(k1);
+     * sovitutK1.size() === 2;
+     * kt.poistaSovitut(k1);
+     * sovitutK1 = kt.annaSovitutTehtavat(k1);
+     * sovitutK1.size() === 0;
+     * </pre>
      */
     public void poistaSovittu(Kayttaja kayttaja, Tehtava tehtava) {
         this.sovitut.poista(kayttaja, tehtava);
@@ -104,7 +138,8 @@ public class Kotitalous {
     
     
     /**
-     * Poistaa sovituntehtävän 
+     * Poistaa sovituntehtävän
+     * Testejä "poistaSovittu(Kayttaja kayttaja, Tehtava tehtava)" kohdalla
      * @param st poistettava sovittutehtävä
      */
     public void poistaSovittu(SovittuTehtava st) {
@@ -113,7 +148,8 @@ public class Kotitalous {
     
     
     /**
-     * Poistaa sovitutTehtävät, joilla on annettu käyttäjä // TODO testit..
+     * Poistaa sovitutTehtävät, joilla on annettu käyttäjä
+     * Testejä "poistaSovittu(Kayttaja kayttaja, Tehtava tehtava)" kohdalla
      * @param kayttaja joka ollaan poistamassa kotitaloudesta
      */
     public void poistaSovitut(Kayttaja kayttaja) {
@@ -158,6 +194,16 @@ public class Kotitalous {
      * Poistaa annetun käyttäjän ja tallentaa tiedoston
      * @param kayttaja annettu käyttäjä
      * @throws SailoException jos tallennus ei onnistu
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * Kotitalous kt = new Kotitalous();
+     * Kayttaja k1 = new Kayttaja(); k1.rekisteroi();
+     * kt.lisaa(k1);
+     * kt.annaKayttaja(0).toString() === k1.toString();
+     * kt.poista(k1);
+     * kt.annaKayttaja(0); #THROWS IndexOutOfBoundsException
+     * </pre>
      */
     public void poista(Kayttaja kayttaja) throws SailoException {
         this.kayttajat.poista(kayttaja);

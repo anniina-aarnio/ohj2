@@ -152,6 +152,18 @@ public class Kayttajat implements Iterable<Kayttaja> {
      * @param kayttajaId etsitty käyttäjä-id
      * @return etsitty käyttäjä
      * @throws SailoException jos ei löydy käyttäjää annetulla id:llä
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * Kayttajat koot = new Kayttajat();
+     * Kayttaja k1 = new Kayttaja(); k1.rekisteroi();
+     * Kayttaja k2 = new Kayttaja(); k2.rekisteroi();
+     * koot.lisaa(k1); koot.lisaa(k2);
+     * 
+     * koot.etsi(k1.getKid()).toString() === k1.toString();
+     * koot.etsi(k2.getKid()).toString() === k2.toString();
+     * koot.etsi(-10); THROWS SailoException;
+     * </pre>
      */
     public Kayttaja etsi(int kayttajaId) throws SailoException {
         for (Kayttaja k : this.alkiot) {
