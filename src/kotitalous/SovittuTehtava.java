@@ -142,10 +142,25 @@ public class SovittuTehtava {
      * Vertaa tätä ja annettua sovittua tehtävää toisiinsa
      * @param st verrattava sovittu tehtävä
      * @return true, jos samat, false jos eri
+     * @example
+     * <pre name="test">
+     * SovittuTehtava st1 = new SovittuTehtava();
+     * SovittuTehtava st2 = new SovittuTehtava();
+     * SovittuTehtava st3 = new SovittuTehtava();
+     * st1.parse("1 | 1");
+     * st2.parse("   2 | 1");
+     * st3.parse("   1|1   ");
+     * 
+     * st1.equals(st2) === false;
+     * st2.equals(st1) === false;
+     * st2.equals(st3) === false;
+     * st1.equals(st3) === true;
+     * st3.equals(st1) === true;
+     * </pre>
      */
     public boolean equals(SovittuTehtava st) {
         if (st == null) return false;
-        return st.toString() == this.toString();
+        return st.toString().equals(this.toString());
     }
     
     

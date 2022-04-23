@@ -257,9 +257,25 @@ public class Tehtava implements Cloneable, Tietue {
      * Palauttaa tiedon, onko tämä ja verrattava samat
      * @param tehtava verrattava tehtävä
      * @return true jos samat, false jos eri
+     * @example
+     * <pre name="test">
+     * Tehtava t1 = new Tehtava();
+     * t1.parse(" 2  |   Imurointi | 23 | 11 ");
+     * Tehtava t2 = new Tehtava();
+     * t2.parse(" 3  | Roskien vienti     | 2 | 2");
+     * Tehtava t3 = new Tehtava();
+     * t3.parse("  3 |  Roskien vienti |2|2");
+     * 
+     * t1.equals(t2) === false;
+     * t2.equals(t1) === false;
+     * t1.equals(t3) === false;
+     * t2.equals(t3) === true;
+     * t3.equals(t3) === true;
+     * </pre>
      */
     public boolean equals(Tehtava tehtava) {
-        return this.toString() == tehtava.toString();
+        // tämä kannattaisi tehdä käymällä kentät läpi, toistaiseksi tämä riittää
+        return this.toString().equals(tehtava.toString()); 
     }
     
     

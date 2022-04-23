@@ -258,9 +258,25 @@ public class Kayttaja implements Cloneable, Tietue {
      * Palauttaa tiedon, onko sama
      * @param kayttaja verrattava käyttäjä
      * @return true jos tämä ja verrattava samat, false jos ei
+     * @example
+     * <pre name="test">
+     * Kayttaja k1 = new Kayttaja();
+     * k1.parse(" 2  |   Aada | 23  ");
+     * Kayttaja k2 = new Kayttaja();
+     * k2.parse(" 3  | Ben     | 2");
+     * Kayttaja k3 = new Kayttaja();
+     * k3.parse("  3 |   Ben | 2");
+     * 
+     * k1.equals(k2) === false;
+     * k2.equals(k1) === false;
+     * k1.equals(k3) === false;
+     * k2.equals(k3) === true;
+     * k3.equals(k3) === true;
+     * </pre>
      */
     public boolean equals(Kayttaja kayttaja) {
-        return this.toString() == kayttaja.toString();
+        // tämä kannattaisi tehdä käymällä kentät läpi, toistaiseksi tämä riittää
+        return this.toString().equals(kayttaja.toString());
     }
     
     @Override
@@ -327,6 +343,15 @@ public class Kayttaja implements Cloneable, Tietue {
         
         aada.tulosta(System.out);               // malliksi tulostus
         ben.tulosta(System.out);                // malliksi tulostus
+        
+        aada.parse("1 | Aada | 34");
+        ben.parse("3 | Ben | 34");
+        Kayttaja aada2 = new Kayttaja();
+        aada2.parse("   1 |Aada | 34");
+        
+        System.out.println(aada + " " + aada2);
+        System.out.println(aada.equals(aada2));
+        System.out.println(ben.equals(aada));
         
     }
 }
