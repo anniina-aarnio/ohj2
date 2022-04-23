@@ -99,6 +99,7 @@ public class KotityotMuokkaaTehtaviaController
             naytaKayttajat();
         });
         cbKayttajat.addSelectionListener(e -> muokkaaSovittua());
+        cbVapaat.setOnAction(e -> rajaaVapaat());
     }
     
     private void alustaKayttajat() {
@@ -239,6 +240,15 @@ public class KotityotMuokkaaTehtaviaController
     }
     
     
+    private void naytaValitutTehtavat(List<Tehtava> valitut) {
+        tableTehtavat.clear();
+        if (valitut.size() == 0) return;
+        
+        for (Tehtava t : valitut) {
+            naytaTehtava(t);
+        }
+    }
+    
     /**
      * Näyttää tehtävän tableTehtavat:ssa oikein
      * @param t näytettävä tehtävä
@@ -276,6 +286,17 @@ public class KotityotMuokkaaTehtaviaController
         }
     }
     
+    /**
+     * Etsii tehtävät, joilla ei ole vielä tekijää ja näyttää vain ne
+     */
+    private void rajaaVapaat() {
+        if (cbVapaat.isSelected()) {
+            List<Tehtava> vapaat = ktalous.annaVapaatTehtavat();
+            naytaValitutTehtavat(vapaat);
+        } else {
+            naytaTehtavat();
+        }
+    }
     
     /**
      * Lisätään uusi käyttäjä

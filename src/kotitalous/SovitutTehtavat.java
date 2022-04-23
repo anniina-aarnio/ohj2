@@ -218,6 +218,19 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
     
     
     /**
+     * Tutkii, onko annetulle tehtävälle edes yksi tekijä
+     * @param t tehtävä, jolle etsitään tekijää
+     * @return true, jos edes yksi sovittu käyttäjä, false jos ei yhtään
+     */
+    public boolean tehtavalleTekija(Tehtava t) {    //TODO testit
+        for (SovittuTehtava st : this.alkiot) {
+            if (st.getTid() == t.getTid()) return true;
+        }
+        return false;
+    }
+    
+    
+    /**
      * Lukee sovitut tehtävät tiedostosta
      * @param hakemisto tiedoston nimen alkuosa
      * @throws SailoException jos lukeminen epäonnistuu

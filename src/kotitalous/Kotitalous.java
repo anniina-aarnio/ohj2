@@ -1,6 +1,7 @@
 package kotitalous;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -260,6 +261,31 @@ public class Kotitalous {
      */
     public List<Tehtava> annaTehtavat() {
         return this.tehtavat.annaKaikki();
+    }
+    
+    
+    /**
+     * Etsii kaikista tehtävistä ne, joille ei ole vielä tekijöitä ja 
+     * palauttaa ne listana // TODO testit
+     * @return lista sellaisista tehtävistä, joilla ei ole vielä tekijää
+     */
+    public List<Tehtava> annaVapaatTehtavat() {
+        List<Tehtava> kaikki = annaTehtavat();
+        List<Tehtava> vapaat = new ArrayList<Tehtava>();
+        for (Tehtava t : kaikki) {
+            if (!tehtavalleTekija(t)) vapaat.add(t);
+        }
+        return vapaat;  // voi palauttaa myös tyhjän listan 
+    }
+    
+    
+    /**
+     * Palauttaa tiedon, onko tehtävälle tekijä
+     * @param t tehtävä, jolle etsitään tekijää
+     * @return true jos on edes yksi sovittu käyttäjä, false jos ei yhtään
+     */
+    public boolean tehtavalleTekija(Tehtava t) {
+        return this.sovitut.tehtavalleTekija(t);
     }
     
     /**
