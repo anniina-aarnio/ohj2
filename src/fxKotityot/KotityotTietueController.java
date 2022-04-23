@@ -207,6 +207,5 @@ public class KotityotTietueController<TYPE extends Tietue> implements ModalContr
         return ModalController.<TYPE, KotityotTietueController<TYPE>>showModal(
                 KotityotTietueController.class.getResource("KotityotTietueView.fxml"), "Kotityöt",
                 modalityStage, oletus, ctrl -> {ctrl.setOtsikko(otsikko);} );
-                //TODO lisää otsikko, jolla saa muutettua labelOtsikko toivotuksi, kun nyt kaikki on "Uusi käyttäjä" vaikka kyseessä olisi tehtävä
     }
 }

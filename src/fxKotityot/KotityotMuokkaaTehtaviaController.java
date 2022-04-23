@@ -87,15 +87,12 @@ public class KotityotMuokkaaTehtaviaController
     private Tehtava aputehtava = new Tehtava();
     private Tehtava valittuTehtava;
     
-    // TODO pitäisikö tehdä tänne stringGrid staattisena, jolloin voisi käyttää samaa GUIcontrollerin puolella?
-    // TODO missä vaiheessa tallennus kun tehtävää muokkaa?
-    // TODO tehtävien sopiminen (sovi tehtävä jollekin)
+    // pitäisikö tehdä tänne stringGrid staattisena, jolloin voisi käyttää samaa GUIcontrollerin puolella?
 
     private void alusta() {
         alustaKayttajat();
         alustaTehtavat();
         naytaTehtavat();
-//        tableTehtavat.addSelectionListener(e -> naytaKayttaja()); TODO etsi vastaava, jotta voi vaihtaa sovittuja käyttäjiä
         tableTehtavat.setOnMouseClicked(e -> {
             if (e.getClickCount() > 1) muokkaa();
             this.valittuTehtava = tableTehtavat.getObject();
@@ -116,7 +113,8 @@ public class KotityotMuokkaaTehtaviaController
     
 
     private void poista() {
-        Dialogs.showMessageDialog("Ei osata vielä poistaa tehtäviä.");
+        if (!Dialogs.showQuestionDialog("Tehtävän poisto", "Poistetaanko tehtävä " + valittuTehtava.getNimi(), "Poista", "Peruuta")) return;
+        ktalous.poista(valittuTehtava);
     }
 
 
@@ -179,7 +177,7 @@ public class KotityotMuokkaaTehtaviaController
     private void kayKayttajatLapi() {
         
         List<Kayttaja> valitut = cbKayttajat.getSelectedObjects();
-        // TODO lisää tähän, että jos valitut tyhjä niin voi poistaa kaikki sovitut ja return
+        // lisää tähän voisi lisätä, että jos valitut tyhjä niin voi poistaa kaikki sovitut ja return
         
         // otetaan listat kaikista (nimellä eiValitut) ja tehtävälle sovituista käyttäjistä
         List<Kayttaja> eiValitut = cbKayttajat.getObjects();  // tässä vaiheessa kaikki...
@@ -208,7 +206,7 @@ public class KotityotMuokkaaTehtaviaController
         
         // käydään ei-valitut läpi
         for (Kayttaja kayt : eiValitut) {
-            // jos tekijöistä löytyy ei-valittu, poistetaan yhteys  - TODO tallennus milloin?
+            // jos tekijöistä löytyy ei-valittu, poistetaan yhteys
             if (tekijat.contains(kayt.getKid()))
                 ktalous.poistaSovittu(kayt, valittuTehtava);
         }
@@ -294,7 +292,7 @@ public class KotityotMuokkaaTehtaviaController
     }
 
     
-    private void naytaKayttajat() {     //TODO ei ehkä näytä kaikkia!
+    private void naytaKayttajat() { 
         if (this.valittuTehtava == null) return;
         List<SovittuTehtava> sovitut = ktalous.annaSovitutKayttajat(this.valittuTehtava);
         if (sovitut.size() == 0) {

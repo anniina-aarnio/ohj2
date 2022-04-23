@@ -139,6 +139,30 @@ public class SovittuTehtava {
     
     
     /**
+     * Vertaa tätä ja annettua sovittua tehtävää toisiinsa
+     * @param st verrattava sovittu tehtävä
+     * @return true, jos samat, false jos eri
+     */
+    public boolean equals(SovittuTehtava st) {
+        if (st == null) return false;
+        return st.toString() == this.toString();
+    }
+    
+    
+    @Override
+    public boolean equals(Object st) {
+        if (st instanceof SovittuTehtava ) return equals((SovittuTehtava)st);
+        return false;
+    }
+    
+    
+    @Override
+    public int hashCode() {
+        return 1000 * this.kid + 1000 / this.tid;
+    }
+
+
+    /**
      * @param args ei käytössä
      */
     public static void main(String[] args) {

@@ -253,6 +253,23 @@ public class Kayttaja implements Cloneable, Tietue {
                 this.ika;
     }
      
+    
+    /**
+     * Palauttaa tiedon, onko sama
+     * @param kayttaja verrattava käyttäjä
+     * @return true jos tämä ja verrattava samat, false jos ei
+     */
+    public boolean equals(Kayttaja kayttaja) {
+        return this.toString() == kayttaja.toString();
+    }
+    
+    @Override
+    public boolean equals(Object kayttaja) {
+        if (kayttaja == null) return false;
+        if (kayttaja instanceof Kayttaja) return equals((Kayttaja)kayttaja);
+        return false;
+    }
+    
     /**
      * Tekee käyttäjästä kloonin
      */
@@ -287,6 +304,11 @@ public class Kayttaja implements Cloneable, Tietue {
 //        return false;
 //    }
     
+    @Override
+    public int hashCode() {
+        return getKid();
+    }
+
     /**
      * @param args ei käytössä
      */

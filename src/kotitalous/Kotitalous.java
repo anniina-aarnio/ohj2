@@ -84,6 +84,16 @@ public class Kotitalous {
         this.tehtavat.korvaaTaiLisaa(tehtava);
     }
 
+    
+    /**
+     * Poistaa tehtävän ja siihen sidotut sovituttehtävät
+     * @param tehtava joka poistetaan
+     */
+    public void poista(Tehtava tehtava) {
+        this.tehtavat.poista(tehtava);
+        poistaSovitut(tehtava);
+    }
+    
     /**
      * @param sovittutehtava lisättävä sovittu tehtävä
      */
@@ -158,6 +168,19 @@ public class Kotitalous {
             this.sovitut.poista(st);
         }
     }
+    
+    
+    /**
+     * Poistaa sovitutTehtävät, joilla annettu tehtävä
+     * @param tehtava jonka perusteella poistetaan
+     */
+    public void poistaSovitut(Tehtava tehtava) {
+        List<SovittuTehtava> tehtavalleSovitut = annaSovitutKayttajat(tehtava);
+        for (SovittuTehtava st : tehtavalleSovitut) {
+            this.sovitut.poista(st);
+        }
+    }
+    
     
     /**
      * Lisää sovittuun tehtävään käyttäjän (id:n).

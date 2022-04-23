@@ -37,6 +37,15 @@ public class Tehtava implements Cloneable, Tietue {
     
     
     /**
+     * Palauttaa tehtävän nimen
+     * @return tehtävän nimi
+     */
+    public String getNimi() {
+        return this.nimi;
+    }
+    
+    
+    /**
      * Antaa tehtävälle seuraavan rekisterinumeron
      * @return tehtävän uusi id-numero
      * @example
@@ -182,6 +191,34 @@ public class Tehtava implements Cloneable, Tietue {
     
     
     /**
+     * Selvittää tehtävän tiedot | erotellusta merkkijonosta.
+     * Pitää huolen, että seuraavaNro on suurempi kuin tuleva tunnusnro.
+     * @param rivi josta tehtävän tiedot otetaan
+     * @example
+     * <pre name="test">
+     *  Tehtava tehtava = new Tehtava();
+     *  tehtava.parse("   2   |  Imurointi     | 30 |  10    ");
+     *  tehtava.getTid() === 2;
+     *  tehtava.toString() === "2|Imurointi|30|10";
+     *  
+     *  tehtava.rekisteroi();
+     *  int n = tehtava.getTid();
+     *  tehtava.parse(""+(n+20));
+     *  tehtava.rekisteroi();
+     *  tehtava.getTid() === n+20+1;
+     *  tehtava.toString() === "" + (n+20+1) + "|Imurointi|30|10";
+     * </pre>
+     */
+    public void parse(String rivi) {
+        StringBuffer sb = new StringBuffer(rivi);
+        setTid(Mjonot.erota(sb,  '|', getTid()));
+        this.nimi = Mjonot.erota(sb, '|', this.nimi);
+        this.kesto = Mjonot.erota(sb, '|', this.kesto);
+        this.ika = Mjonot.erota(sb, '|', this.ika);
+    }
+    
+    
+    /**
      * Tehdään identtinen klooni tehtävästä
      * @return Object kloonattu tehtävä
      * @example
@@ -214,35 +251,31 @@ public class Tehtava implements Cloneable, Tietue {
     public String toString() {
         return this.tid + "|" + this.nimi + "|" + this.kesto + "|" + this.ika;
     }
-    
+
     
     /**
-     * Selvittää tehtävän tiedot | erotellusta merkkijonosta.
-     * Pitää huolen, että seuraavaNro on suurempi kuin tuleva tunnusnro.
-     * @param rivi josta tehtävän tiedot otetaan
-     * @example
-     * <pre name="test">
-     *  Tehtava tehtava = new Tehtava();
-     *  tehtava.parse("   2   |  Imurointi     | 30 |  10    ");
-     *  tehtava.getTid() === 2;
-     *  tehtava.toString() === "2|Imurointi|30|10";
-     *  
-     *  tehtava.rekisteroi();
-     *  int n = tehtava.getTid();
-     *  tehtava.parse(""+(n+20));
-     *  tehtava.rekisteroi();
-     *  tehtava.getTid() === n+20+1;
-     *  tehtava.toString() === "" + (n+20+1) + "|Imurointi|30|10";
-     * </pre>
+     * Palauttaa tiedon, onko tämä ja verrattava samat
+     * @param tehtava verrattava tehtävä
+     * @return true jos samat, false jos eri
      */
-    public void parse(String rivi) {
-        StringBuffer sb = new StringBuffer(rivi);
-        setTid(Mjonot.erota(sb,  '|', getTid()));
-        this.nimi = Mjonot.erota(sb, '|', this.nimi);
-        this.kesto = Mjonot.erota(sb, '|', this.kesto);
-        this.ika = Mjonot.erota(sb, '|', this.ika);
+    public boolean equals(Tehtava tehtava) {
+        return this.toString() == tehtava.toString();
     }
     
+    
+    @Override
+    public boolean equals(Object tehtava) {
+        if (tehtava == null) return false;
+        if (tehtava instanceof Tehtava) return equals((Tehtava)tehtava);
+        return false;
+    }
+    
+    @Override
+    public int hashCode() {
+        return getTid();
+    }
+
+
     /**
      * Testaa Tehtävä-luokkaa
      * @param args ei käytössä

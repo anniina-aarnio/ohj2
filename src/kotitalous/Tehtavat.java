@@ -76,6 +76,18 @@ public class Tehtavat implements Iterable<Tehtava> {
         lisaa(tehtava);
     }
     
+    
+    /**
+     * Poistaa tehtävän tehtävistä
+     * @param tehtava tehtävä joka poistetaan
+     * @return true jos poistettiin, false jos ei
+     */
+    public boolean poista(Tehtava tehtava) {
+        boolean poistettu = this.alkiot.remove(tehtava);
+        if (poistettu) this.muutettu = true;
+        return poistettu;
+    }
+    
        
     /**
      * Etsii ja palauttaa tehtävä-id:n perusteella tehtävän
