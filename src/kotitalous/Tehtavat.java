@@ -144,8 +144,25 @@ public class Tehtavat implements Iterable<Tehtava> {
      * Palauttaa listan tehtävistä, joihin sopii hakuehto
      * @param hakuehto merkkijono, joka tulee löytyä nimestä
      * @return lista sopivista tehtävistä
+     * @example
+     * <pre name="test">
+     * #import java.util.List;
+     * Tehtavat teet = new Tehtavat();
+     *  Tehtava imu = new Tehtava(); imu.rekisteroi(); imu.parse("2  | Imurointi | 20 |15");
+     *  Tehtava wc = new Tehtava(); wc.rekisteroi(); wc.parse("3  | WC:n pesu | 10 |18");
+     *  Tehtava astiat = new Tehtava(); astiat.rekisteroi(); astiat.parse("2  | Astioiden vienti | 20 |1");
+     *  teet.lisaa(imu); teet.lisaa(wc); teet.lisaa(astiat);
+     *  List<Tehtava> iilliset = teet.annaHakuehdolla("i");
+     *  iilliset.size() === 2;
+     *  iilliset.get(0) === imu;
+     *  iilliset.get(1) === astiat;
+     *  iilliset = teet.annaHakuehdolla("wc");
+     *  iilliset.size() === 1;
+     *  iilliset.get(0) === wc;
+     * </pre>
      */
     public List<Tehtava> annaHakuehdolla(String hakuehto) {
+        if (hakuehto == null || hakuehto.isEmpty()) return annaKaikki();
         List<Tehtava> haetut = new ArrayList<Tehtava>();
         for (Tehtava t : this.alkiot) {
             if (t.ehto(hakuehto)) haetut.add(t);

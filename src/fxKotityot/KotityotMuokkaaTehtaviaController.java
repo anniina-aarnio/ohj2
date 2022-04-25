@@ -95,7 +95,7 @@ public class KotityotMuokkaaTehtaviaController
     private void alusta() {
         alustaKayttajat();
         alustaTehtavat();
-        naytaTehtavat();
+        naytaValitutTehtavat(ktalous.annaTehtavat());
         tableTehtavat.setOnMouseClicked(e -> {
             // tuplaklikkauksella muokkaamaan tehtävää
             if (e.getClickCount() > 1) muokkaa();
@@ -153,7 +153,7 @@ public class KotityotMuokkaaTehtaviaController
             this.valittuTehtava = KotityotTietueController.kysyTietue(null, this.valittuTehtava.clone(), "Muokkaa tehtävää");
             if (this.valittuTehtava == null) return;
             ktalous.korvaaTaiLisaa(this.valittuTehtava);
-            naytaTehtavat();
+            naytaValitutTehtavat(ktalous.annaTehtavat());
             // tallenna() ???   //TODO mieti milloin tallennetaan
             tableTehtavat.selectRow(r);
         } catch (CloneNotSupportedException e) {
@@ -233,20 +233,6 @@ public class KotityotMuokkaaTehtaviaController
     }
      
     
-    /**
-     * Käy läpi kaikki tehtävät ja näyttää ne oikein tableTehtävissä
-     */
-    private void naytaTehtavat() { 
-        tableTehtavat.clear();
-        List<Tehtava> kaikki = ktalous.annaTehtavat();
-        if (kaikki.size() == 0) return;
-        
-        for (Tehtava t : kaikki) {
-            naytaTehtava(t);
-        }
-    }
-    
-    
     private void naytaValitutTehtavat(List<Tehtava> valitut) {
         tableTehtavat.clear();
         if (valitut.size() == 0) return;
@@ -301,14 +287,14 @@ public class KotityotMuokkaaTehtaviaController
             List<Tehtava> vapaat = ktalous.annaVapaatTehtavat();
             naytaValitutTehtavat(vapaat);
         } else {
-            naytaTehtavat();
+            naytaValitutTehtavat(ktalous.annaTehtavat());
         }
     }
     
     
     private void hae() {    // TODO tulee vain tyhjä lista ulos
         String ehto = textHaku.getText();
-        if (ehto.indexOf('*') < 0) ehto = "*" + ehto + "*";
+//        if (ehto.indexOf('*') < 0) ehto = "*" + ehto + "*";
         
         List<Tehtava> haetut = ktalous.annaTehtavatHakuehdolla(ehto);
         naytaValitutTehtavat(haetut);
