@@ -280,6 +280,16 @@ public class Kotitalous {
     
     
     /**
+     * Etsii kaikista tehtävistä ne, joitka 
+     * @param hakuehto merkkijono, joka täytyy löytyä tehtävän nimestä
+     * @return lista tehtävistä, joissa on hakuehto nimessä
+     */
+    public List<Tehtava> annaTehtavatHakuehdolla(String hakuehto) {
+        return this.tehtavat.annaHakuehdolla(hakuehto);
+    }
+    
+    
+    /**
      * Palauttaa tiedon, onko tehtävälle tekijä
      * @param t tehtävä, jolle etsitään tekijää
      * @return true jos on edes yksi sovittu käyttäjä, false jos ei yhtään

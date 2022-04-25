@@ -140,6 +140,19 @@ public class Tehtavat implements Iterable<Tehtava> {
         return kaikki;
     }
     
+    /**
+     * Palauttaa listan tehtävistä, joihin sopii hakuehto
+     * @param hakuehto merkkijono, joka tulee löytyä nimestä
+     * @return lista sopivista tehtävistä
+     */
+    public List<Tehtava> annaHakuehdolla(String hakuehto) {
+        List<Tehtava> haetut = new ArrayList<Tehtava>();
+        for (Tehtava t : this.alkiot) {
+            if (t.ehto(hakuehto)) haetut.add(t);
+        }
+        return haetut;
+    }
+    
     
     /**
      * Lukee tehtävät tiedostosta.

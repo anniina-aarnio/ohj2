@@ -40,6 +40,9 @@ public class KotityotMuokkaaTehtaviaController
         uusiKayttaja();
     }
 
+    @FXML void handleHakuehto() {
+        hae();
+    }
 
     @FXML void handlePoistaTehtava() {
         poista();
@@ -94,11 +97,15 @@ public class KotityotMuokkaaTehtaviaController
         alustaTehtavat();
         naytaTehtavat();
         tableTehtavat.setOnMouseClicked(e -> {
-            if (e.getClickCount() > 1) muokkaa();   // tässä huono se, että jos haluaa vaihtaa otsikon mukaan järjestystä, tuplaklikkauksella avaa muokkausikkunan
-            this.valittuTehtava = tableTehtavat.getObject();
+            // tuplaklikkauksella muokkaamaan tehtävää
+            if (e.getClickCount() > 1) muokkaa();
+            // muuten näyttää kyseiselle tehtävälle valitut käyttäjät
+            this.valittuTehtava = tableTehtavat.getObject();   // TODO käyttäjien näyttäminen myös kun focus vaihtuu esim nuolinäppäimillä
             naytaKayttajat();
         });
         cbKayttajat.addSelectionListener(e -> muokkaaSovittua());
+        
+        // vapaana olevien tehtävien napin toiminta -- ei refreshaa jos valittuna ja lisää käyttäjiä tehtävälle ja vaihtaa tehtävää, pitäisikö olla?
         cbVapaat.setOnAction(e -> rajaaVapaat());
     }
     
@@ -296,6 +303,16 @@ public class KotityotMuokkaaTehtaviaController
         } else {
             naytaTehtavat();
         }
+    }
+    
+    
+    private void hae() {    // TODO tulee vain tyhjä lista ulos
+        String ehto = textHaku.getText();
+        if (ehto.indexOf('*') < 0) ehto = "*" + ehto + "*";
+        
+        List<Tehtava> haetut = ktalous.annaTehtavatHakuehdolla(ehto);
+        naytaValitutTehtavat(haetut);
+        
     }
     
     /**

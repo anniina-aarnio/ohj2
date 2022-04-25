@@ -191,6 +191,28 @@ public class Tehtava implements Cloneable, Tietue {
     
     
     /**
+     * Palauttaa tiedon, onko tehtävän nimessä hakuehto
+     * Ehdossa * tarkoittaa että mikä vain merkki
+     * @param hakuehto merkkijono, jota etsitään nimestä
+     * @return true, jos merkkijono löytyy, false jos ei
+     * @example
+     * <pre name="test">
+     * Tehtava t1 = new Tehtava();
+     * t1.parse("1 |  Imurointi | 23 | 10");
+     * t1.ehto("Imurointi") === true;
+     * t1.ehto("imurointi") === true;
+     * t1.ehto("mur") === true;
+     * t1.ehto("") === true;
+     * t1.ehto("kissa") === false;
+     * t1.ehto(null) === false;
+     * </pre>
+     */
+    public boolean ehto(String hakuehto) {
+        if (hakuehto == null) return false;
+        return this.nimi.toLowerCase().contains(hakuehto.toLowerCase());
+    }
+    
+    /**
      * Selvittää tehtävän tiedot | erotellusta merkkijonosta.
      * Pitää huolen, että seuraavaNro on suurempi kuin tuleva tunnusnro.
      * @param rivi josta tehtävän tiedot otetaan
