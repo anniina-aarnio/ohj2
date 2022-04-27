@@ -256,14 +256,9 @@ public class KotityotGUIController implements Initializable {
         String kysymys = "Oletko varma, että haluat poistaa käyttäjän " + k.getNimi() + "?";
         boolean poistetaanko = Dialogs.showQuestionDialog("Käyttäjän poistaminen", kysymys, "Poista", "Peruuta");
         if (poistetaanko == false) return;
-        try {
-            ktalous.poista(k);
-            tallenna();
-            hae(0);
-        } catch (SailoException e) {
-            Dialogs.showMessageDialog("Jotain meni pieleen: e.getMessage()");
-        }
-
+        ktalous.poista(k);
+        tallenna();
+        hae(0);
     }
     
     

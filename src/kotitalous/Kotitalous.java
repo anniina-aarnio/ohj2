@@ -217,7 +217,6 @@ public class Kotitalous {
     /**
      * Poistaa annetun käyttäjän ja tallentaa tiedoston
      * @param kayttaja annettu käyttäjä
-     * @throws SailoException jos tallennus ei onnistu
      * @example
      * <pre name="test">
      * #THROWS SailoException
@@ -229,10 +228,10 @@ public class Kotitalous {
      * kt.annaKayttaja(0); #THROWS IndexOutOfBoundsException
      * </pre>
      */
-    public void poista(Kayttaja kayttaja) throws SailoException {
+    public void poista(Kayttaja kayttaja) {
         this.kayttajat.poista(kayttaja);
         poistaSovitut(kayttaja);
-        tallenna();
+//        tallenna();                                 //TODO tyhjentää tiedoston testeissä
     }
     
     /**
