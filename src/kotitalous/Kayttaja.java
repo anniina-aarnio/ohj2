@@ -16,6 +16,8 @@ import kanta.Tietue;
  * Osaa laittaa merkkijonon i:nneksi kentäksi
  * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 13.4.2022
+ * TODO: tulevaisuudessa "pohjatietue", josta käyttäjä ja tehtävä (ehkä myös sovittutehtävä?) periytyvät
+ * TODO: oikeellisuustarkistukset omiin luokkiinsa, jolloin ei jää enää tietueen tehtäväksi tehdä kaikkea
  */
 public class Kayttaja implements Cloneable, Tietue {
     
