@@ -24,7 +24,7 @@ import javafx.scene.control.TableView;
 /**
  * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.4.2022
- *
+ * TODO: Slider pois käytöstä, koska koen sen sittenkin turhaksi toiminnoksi
  */
 public class KotityotMuokkaaTehtaviaController
         implements ModalControllerInterface<Kotitalous> {

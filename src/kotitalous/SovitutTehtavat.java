@@ -22,7 +22,7 @@ import java.util.Scanner;
  */
 public class SovitutTehtavat implements Iterable<SovittuTehtava> {
     
-    private final Collection<SovittuTehtava> alkiot = new ArrayList<SovittuTehtava>();  // pitäisikö olla hashmap??
+    private final Collection<SovittuTehtava> alkiot = new ArrayList<SovittuTehtava>();  // pitäisikö olla hashmap tms??
     private boolean muutettu = false;
     
     

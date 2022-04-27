@@ -22,6 +22,7 @@ import kanta.Tietue;
  * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 21.4.2022
  * @param <TYPE> minkä tyyppisiä olioita käsitellään
+ * TODO: Parempi virheentarkistus kontrollerista poistumiseen (nyt pelkästään nimen tarkistus)
  */
 public class KotityotTietueController<TYPE extends Tietue> implements ModalControllerInterface<TYPE>, Initializable {
 
