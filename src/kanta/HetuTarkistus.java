@@ -3,7 +3,7 @@ package kanta;
 
 /**
  * Luokka henkilötunnuksen tarkistamiseksi
- * @author vesal
+ * @author vesal ohjelmointi 2 -kurssin materiaaleissa
  * @version 9.1.2011
  * 
  */

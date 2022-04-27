@@ -3,29 +3,31 @@ package kotitalous;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-//import java.io.FileOutputStream;
-//import java.io.PrintStream;
 import java.io.PrintStream;
+
 
 /**
  * Käyttäjät-luokka, vastuualueet:
  * Pitää yllä varsinaista käyttäjärekisteriä, eli osaa lisätä ja poistaa käyttäjän
  * Lukee ja kirjoittaa käyttäjien tiedostoon
  * Osaa etsiä ja lajitella
- * @author Anniina
- * @version 21.2.2022
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
+ * @version 21.4.2022
  *
  */
-public class Kayttajat {
+public class Kayttajat implements Iterable<Kayttaja> {
     
     private static final int MAX_JASENIA = 5;
     
     private int             lkm;
     private Kayttaja[]      alkiot;
-
+    private boolean         muutettu = false;
+    
     /**
      * Luodaan alustava taulukko
      */
@@ -61,17 +63,111 @@ public class Kayttajat {
         }
         this.alkiot[lkm] = kayttaja;
         this.lkm++;
+        this.muutettu = true;
     }
     
+    /**
+     * Korvaa käyttäjän tietorakenteessa. Ottaa käyttäjän omistukseensa.
+     * Etsitään samalla tunnusnumerolla oleva käyttäjä.
+     * Jos ei löydy, niin lisätään uutena käyttäjänä.
+     * @param kayttaja korvattava tai lisättävä käyttäjä
+     * @example
+     * #THROWS CloneNotSupportedException
+     * <pre name="test">
+     * Kayttajat kayttajat = new Kayttajat();
+     * Kayttaja k = new Kayttaja(), k2 = new Kayttaja();
+     * k.rekisteroi(); k2.rekisteroi();
+     * kayttajat.getLkm() === 0;
+     * kayttajat.korvaaTaiLisaa(k); kayttajat.getLkm() === 1;
+     * kayttajat.korvaaTaiLisaa(k2); kayttajat.getLkm() === 2;
+     * Kayttaja k3 = new Kayttaja();
+     * try {
+     *  k3 = k.clone();
+     * } catch (CloneNotSupportedException e) {
+     *  System.out.println(e.getMessage());
+     * }
+     * k3.aseta(1, "Aada");
+     * Iterator<Kayttaja> it = kayttajat.iterator();
+     * it.next() == k === true;
+     * kayttajat.korvaaTaiLisaa(k3); kayttajat.getLkm() === 2;
+     * it = kayttajat.iterator();
+     * Kayttaja k0 = it.next();
+     * k0 === k3;
+     * k0 == k === false;
+     * </pre>
+     */
+    public void korvaaTaiLisaa(Kayttaja kayttaja) {
+        int id = kayttaja.getKid();
+        for (int i = 0; i < lkm; i++) {
+            if (this.alkiot[i].getKid() == id) {
+                this.alkiot[i] = kayttaja;
+                this.muutettu = true;
+                return;
+            }
+        }
+        lisaa(kayttaja);
+    }
+    
+    /**
+     * Poistaa annetun käyttäjän
+     * @param kayttaja annettu käyttäjä
+     * @example
+     * <pre name="test">
+     * Kayttajat kt = new Kayttajat();
+     * kt.getLkm() === 0;
+     * Kayttaja k = new Kayttaja();
+     * k.rekisteroi();
+     * kt.lisaa(k);
+     * kt.getLkm() === 1;
+     * kt.poista(k);
+     * kt.getLkm() === 0;
+     * </pre>
+     */
+    public void poista(Kayttaja kayttaja) {
+        if (kayttaja == null) return;
+        
+        int index = -1;
+        for (int i = 0; i < this.getLkm(); i++) {
+            if (this.alkiot[i].getKid() == kayttaja.getKid()) {
+                this.alkiot[i] = null;
+                index = i;
+                break;
+            }
+        }
+        
+        if (index == -1) return;
+        
+        this.alkiot[index] = null;
+        // siirtää poistetun indeksin tilalle yhden kerrallaan
+        for (int i = index; i+1 < this.getLkm(); i++) {
+            this.alkiot[i] = this.alkiot[i+1];
+        }
+        
+        this.lkm--;
+        this.muutettu = true;
+    }
+
     
     /**
      * @param kayttajaId etsitty käyttäjä-id
      * @return etsitty käyttäjä
      * @throws SailoException jos ei löydy käyttäjää annetulla id:llä
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * Kayttajat koot = new Kayttajat();
+     * Kayttaja k1 = new Kayttaja(); k1.rekisteroi();
+     * Kayttaja k2 = new Kayttaja(); k2.rekisteroi();
+     * koot.lisaa(k1); koot.lisaa(k2);
+     * 
+     * koot.etsi(k1.getKid()).toString() === k1.toString();
+     * koot.etsi(k2.getKid()).toString() === k2.toString();
+     * koot.etsi(-10); #THROWS SailoException
+     * </pre>
      */
     public Kayttaja etsi(int kayttajaId) throws SailoException {
-        for (Kayttaja k : this.alkiot) {
-            if (k.getKid() == kayttajaId) return k;
+        for (int i = 0; i < getLkm(); i++) {
+            if (this.alkiot[i].getKid() == kayttajaId) return this.alkiot[i];
         }
         throw new SailoException("Ei löydy annetulla käyttäjäindeksillä " + kayttajaId + ".");
     }
@@ -98,12 +194,41 @@ public class Kayttajat {
     
     
     /**
-     * Lukee jäsenistön tiedostosta, kesken.
+     * Lukee jäsenistön tiedostosta.
      * @param hakemisto tiedoston hakemisto
      * @throws SailoException jos lukeminen epäonnistuu
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * #import java.io.File;
+     * #import java.util.Iterator;
+     *  Kayttajat kayttajat = new Kayttajat();
+     *  Kayttaja aada1 = new Kayttaja(); aada1.rekisteroi(); aada1.taytaAadaTiedoilla();
+     *  Kayttaja aada2 = new Kayttaja(); aada2.rekisteroi(); aada2.taytaAadaTiedoilla();
+     *  Kayttaja aada3 = new Kayttaja(); aada3.rekisteroi(); aada3.taytaAadaTiedoilla();
+     *  String tiedNimi = "testiKotitalous";
+     *  File ftied = new File(tiedNimi + "/kayttajat.dat");
+     *  ftied.delete();
+     *  kayttajat.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *  kayttajat.lisaa(aada1);
+     *  kayttajat.lisaa(aada2);
+     *  kayttajat.lisaa(aada3);
+     *  kayttajat.tallenna(tiedNimi);
+     *  kayttajat = new Kayttajat();
+     *  kayttajat.lueTiedostosta(tiedNimi);
+     *  Iterator<Kayttaja> i = kayttajat.iterator();
+     *  i.next().toString() === aada1.toString();
+     *  i.next().toString() === aada2.toString();
+     *  i.next().toString() === aada3.toString();
+     *  i.hasNext() === false;
+     *  kayttajat.poista(aada1);
+     *  kayttajat.getLkm() === 2;
+     *  kayttajat.tallenna(tiedNimi);
+     *  ftied.delete() === true;
+     * </pre>
      */
     public void lueTiedostosta(String hakemisto) throws SailoException {
-        String nimi = hakemisto + "/nimet.dat";
+        String nimi = hakemisto + "/kayttajat.dat";
         File ftied = new File(nimi);
         
         try (Scanner fi = new Scanner(new FileInputStream(ftied))) {
@@ -117,6 +242,7 @@ public class Kayttajat {
         } catch (FileNotFoundException e) {
             throw new SailoException("Ei saa luettua tiedostoa " + nimi);
         }
+        this.muutettu = false;
     }
     
     
@@ -131,17 +257,91 @@ public class Kayttajat {
      * @throws SailoException jos talletus epäonnistuu
      */
     public void tallenna(String hakemisto) throws SailoException {
-        File ftied = new File(hakemisto + "/nimet.dat"); // TODO tee tiedosto, jos sitä ei ole
+        if (!muutettu) return;
+        File ftied = new File(hakemisto + "/kayttajat.dat"); // TODO tee tiedosto, jos sitä ei ole
         
-        try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) { //tarkista tuleeko false vai true
+        try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) {
             for (int i = 0; i < this.getLkm(); i++) {
                 Kayttaja kayttaja = this.anna(i);
+//                if (kayttaja == null) continue;
                 fo.println(kayttaja.toString());
             }
         } catch (FileNotFoundException ex) {
             throw new SailoException("Tiedosto " + ftied.getAbsolutePath() + " ei aukea");
         }
     }
+    
+    
+    /**
+     * Luokka käyttäjien iteroimiseksi.
+     * @excample
+     * <pre name="test">
+     * #THROWS SailoException
+     * #import java.util.*;
+     * 
+     *  Kayttajat kayttajat = new Kayttajat();
+     *  Kayttaja aada1 = new Kayttaja(), aada2 = new Kayttaja();
+     *  aada1.rekisteroi(); aada2.rekisteroi();
+     *  
+     *  kayttajat.lisaa(aada1);
+     *  kayttajat.lisaa(aada2);
+     *  kayttajat.lisaa(aada1);
+     *  
+     *  StringBuffer ids = new StringBuffer(30);
+     *  for (Kayttaja kayttaja : kayttajat)
+     *      ids.append(" " + kayttaja.getKid());
+     *  String tulos = " " + aada1.getKid() + " " + aada2.getKid() + " " + aada1.getKid();
+     *  
+     *  ids.toString() === tulos;
+     *  
+     *  ids = new StringBuffer(30);
+     *  for (Iterator<Kayttaja> i = kayttajat.iterator(); i.hasNext();) {
+     *      Kayttaja k = i.next();
+     *      ids.append(" " + k.getKid());
+     *  }
+     *  
+     *  ids.toString() === tulos;
+     *  
+     *  Iterator<Kayttaja> i = kayttajat.iterator();
+     *  i.next() == aada1 === true;
+     *  i.next() == aada2 === true;
+     *  i.next() == aada1 === true;
+     *  
+     *  i.next(); #THROWS NoSuchElementException
+     */
+    @Override
+    public Iterator<Kayttaja> iterator() {
+        return new KayttajatIterator();
+    }
+    
+    /**
+     * @author Anniina
+     * @version 28.3.2022
+     */
+    public class KayttajatIterator implements Iterator<Kayttaja> {
+        private int kohdalla = 0;
+
+        /**
+         * Onko olemassa vielä seuraava käyttäjä
+         * @return true, jos on vielä käyttäjiä
+         */
+        @Override
+        public boolean hasNext() {
+            return kohdalla < getLkm();
+        }
+
+        /**
+         * Annetaan seuraava käyttäjä
+         * @return seuraava käyttäjä
+         * @throws NoSuchElementException jos seuraavaa alkiota ei enää ole
+         */
+        @Override
+        public Kayttaja next() throws NoSuchElementException {
+            if (!hasNext()) throw new NoSuchElementException("Ei oo");
+            return anna(kohdalla++);
+        }
+    }
+    
     
     /**
      * @param args ei käytössä
@@ -150,7 +350,7 @@ public class Kayttajat {
         Kayttajat kayttajat = new Kayttajat();
         
         try {
-            kayttajat.lueTiedostosta("kotitalous");
+            kayttajat.lueTiedostosta("testiKotitalous");
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
         }
@@ -180,11 +380,19 @@ public class Kayttajat {
         }
         
         try {
-            kayttajat.tallenna("kotitalous"); 
+            kayttajat.tallenna("testiKotitalous"); 
         } catch (SailoException e) {
             e.printStackTrace();
         }
         
+        try {
+            kayttajat.lueTiedostosta("testiKotitalous");
+        } catch (SailoException ex) {
+            System.err.println(ex.getMessage());
+        }
+        
         
     }
+
+
 }

@@ -5,6 +5,7 @@ import java.io.PrintStream;
 
 import fi.jyu.mit.ohj2.Mjonot;
 import kanta.HetuTarkistus;
+import kanta.Tietue;
 
 /**
  * Käyttäjä-luokka, vastuualueet:
@@ -13,10 +14,12 @@ import kanta.HetuTarkistus;
  * Osaa muuttaa 1|Aada|35 -merkkijonon käyttäjän tiedoiksi
  * Osaa antaa merkkijonona i:nnen kentän tiedot
  * Osaa laittaa merkkijonon i:nneksi kentäksi
- * @author Anniina
- * @version 21.2.2022
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
+ * @version 13.4.2022
+ * TODO: tulevaisuudessa "pohjatietue", josta käyttäjä ja tehtävä (ehkä myös sovittutehtävä?) periytyvät
+ * TODO: oikeellisuustarkistukset omiin luokkiinsa, jolloin ei jää enää tietueen tehtäväksi tehdä kaikkea
  */
-public class Kayttaja {
+public class Kayttaja implements Cloneable, Tietue {
     
     private int         kid;                            // käyttäjä id
     private String      nimi         = "";              // etunimi riittää
@@ -80,6 +83,105 @@ public class Kayttaja {
     
     
     /**
+     * Palauttaa käyttäjän iän
+     * @return käyttäjän ikä: vuodet kokonaislukuna
+     */
+    public int getIka() {
+        return this.ika;
+    }
+    
+
+    /**
+     * Palauttaa käyttäjän kenttien lukumäärän
+     * @return kenttien lukumäärä
+     */
+    @Override
+    public int getKenttia() {
+        return 3;
+    }
+    
+    /**
+     * Ensimmäinen kenttä, joka on mielekäs kysyttäväksi
+     * @return ensimmäisen kentän indeksi
+     */
+    @Override
+    public int ekaKentta() {
+        return 1;
+    }
+    
+    
+    @Override
+    public String anna(int k) {
+        switch (k) {
+        case 0: return "" + this.kid;
+        case 1: return "" + this.nimi;
+        case 2: return "" + this.ika;
+        default: return "???";
+        }
+    }
+    
+    
+    /**
+     * Asettaa k:n kentän arvoksi parametrina tuodun merkkijonon arvon
+     * @param k kuinka monennen kentän arvo asetetaan
+     * @param merkkijono jono, joka asetetaan kentän arvoksi
+     * @return null, jos asettaminen onnistuu, muuten vastaava virheilmoitus
+     * @example
+     * <pre name="test">
+     *  Kayttaja kayttaja = new Kayttaja();
+     *  kayttaja.aseta(1, "") === "Nimi ei saa olla tyhjä";
+     *  kayttaja.aseta(1, "Aada |") === "Merkki | ei ole sallittu";
+     *  kayttaja.aseta(1, "Aada") === null;
+     *  kayttaja.aseta(2, "kissa") === "Anna positiivinen kokonaisluku";
+     *  kayttaja.aseta(2, "100") === "Yli 100-vuotias saa levätä";
+     *  kayttaja.aseta(2, "02") === "Anna positiivinen kokonaisluku";
+     *  kayttaja.aseta(2, "-1") === "Anna positiivinen kokonaisluku";
+     *  kayttaja.aseta(2, "0") === "Anna positiivinen kokonaisluku";
+     *  kayttaja.aseta(2, "1") === null;
+     * </pre>
+     */
+    @Override
+    public String aseta(int k, String merkkijono) {
+        String tjono = merkkijono.trim();
+        StringBuilder sb = new StringBuilder(tjono);
+        switch (k) {
+        case 0:
+            setKid(Mjonot.erota(sb, '§', getKid()));    // selvitä miksi näin
+            return null;
+        case 1:
+            if (tjono == null || tjono.isEmpty()) return "Nimi ei saa olla tyhjä";
+            if (tjono.contains("|")) return "Merkki | ei ole sallittu";
+            this.nimi = tjono;
+            return null;
+        case 2:
+            if (tjono == null || tjono.isEmpty()) return "Iän tulee olla vähintään 1";
+            if (tjono.matches("[1-9][0-9][0-9]+")) return "Yli 100-vuotias saa levätä";
+            if (!tjono.matches("[1-9][0-9]?")) return "Anna positiivinen kokonaisluku";
+            this.ika = Integer.parseInt(tjono);
+            return null;
+        default:
+            return "???"; 
+        }
+    }
+    
+    /**
+     * Palauttaa k:tta jäsenen kenttää vastaavan kysymyksen
+     * @param k kuinka monennen kentän kysymys palautetaan (0-alkuinen)
+     * @return k:nnetta kenttää vastaava kysymys
+     */
+    @Override
+    public String getKysymys(int k) {
+        switch (k) {
+        case 0: return "Käyttäjän ID";
+        case 1: return "Nimi";
+        case 2: return "Ikä";
+        default: return "???";
+        }
+    }
+    
+    
+    
+    /**
      * Apumetodi, jolla saadaan täytettyä testiarvot jäsenelle.
      * Nimestä tulee "Aada " ja leikkihenkilötunnus.
      * Ikä arvotaan välillä 1-99.
@@ -110,7 +212,7 @@ public class Kayttaja {
     
     
     /**
-     * Selvittää jäsenen tiedot | erotellusta merkkijonosta
+     * Selvittää käyttäjän tiedot | erotellusta merkkijonosta
      * Pitää huolen, että seuraavaNro on suurempi kuin tuleva tunnusNro
      * @param rivi josta käyttäjän tiedot otetaan
      * 
@@ -151,10 +253,80 @@ public class Kayttaja {
                 this.getKid() + "|" +
                 this.nimi + "|" + 
                 this.ika;
-                
+    }
+     
+    
+    /**
+     * Palauttaa tiedon, onko sama
+     * @param kayttaja verrattava käyttäjä
+     * @return true jos tämä ja verrattava samat, false jos ei
+     * @example
+     * <pre name="test">
+     * Kayttaja k1 = new Kayttaja();
+     * k1.parse(" 2  |   Aada | 23  ");
+     * Kayttaja k2 = new Kayttaja();
+     * k2.parse(" 3  | Ben     | 2");
+     * Kayttaja k3 = new Kayttaja();
+     * k3.parse("  3 |   Ben | 2");
+     * 
+     * k1.equals(k2) === false;
+     * k2.equals(k1) === false;
+     * k1.equals(k3) === false;
+     * k2.equals(k3) === true;
+     * k3.equals(k3) === true;
+     * </pre>
+     */
+    public boolean equals(Kayttaja kayttaja) {
+        // tämä kannattaisi tehdä käymällä kentät läpi, toistaiseksi tämä riittää
+        return this.toString().equals(kayttaja.toString());
     }
     
+    @Override
+    public boolean equals(Object kayttaja) {
+        if (kayttaja == null) return false;
+        if (kayttaja instanceof Kayttaja) return equals((Kayttaja)kayttaja);
+        return false;
+    }
     
+    /**
+     * Tekee käyttäjästä kloonin
+     */
+    @Override
+    public Kayttaja clone() throws CloneNotSupportedException {
+        Kayttaja uusi;
+        uusi = (Kayttaja) super.clone();    // toimii koska vain int- ja String-attribuutteja
+        return uusi;
+    }
+    
+//    /**
+//     * Vastaa, onko annetussa tietueessa virheitä
+//     * @return true, jos on virheitä, false jos kaikki kunnossa
+//     * @example
+//     * <pre name="test">
+//     * Kayttaja k = new Kayttaja();
+//     * k.parse("   3 |     Aada | 35   ");
+//     * k.onkoVirheita() === false;
+//     * k.parse("   3  |  |    20");
+//     * k.onkoVirheita() === true;
+//     * k.parse("3 | Aada | -1");
+//     * k.onkoVirheita() === true;
+//     * </pre>
+//     */
+//    @Override
+//    public boolean onkoVirheita() {
+//        String vastaus = null;
+//        for (int i = this.ekaKentta(); i < this.getKenttia(); i++) {
+//            vastaus = this.aseta(i, this.anna(i));
+//            if (vastaus != null) return true;
+//        }
+//        return false;
+//    }
+    
+    @Override
+    public int hashCode() {
+        return getKid();
+    }
+
     /**
      * @param args ei käytössä
      */
@@ -173,6 +345,15 @@ public class Kayttaja {
         
         aada.tulosta(System.out);               // malliksi tulostus
         ben.tulosta(System.out);                // malliksi tulostus
+        
+        aada.parse("1 | Aada | 34");
+        ben.parse("3 | Ben | 34");
+        Kayttaja aada2 = new Kayttaja();
+        aada2.parse("   1 |Aada | 34");
+        
+        System.out.println(aada + " " + aada2);
+        System.out.println(aada.equals(aada2));
+        System.out.println(ben.equals(aada));
         
     }
 }

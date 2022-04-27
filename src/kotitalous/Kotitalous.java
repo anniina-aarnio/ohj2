@@ -1,6 +1,7 @@
 package kotitalous;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,8 +10,8 @@ import java.util.List;
  * Lukee ja kirjoittaa Kotitalouden tiedostoon pyytämällä apua valmistajiltaan
  * 
  * Pääosin kaikki metodit ovat vain "välittäjämetodeja" käyttäjistöön.
- * @author Anniina
- * @version 22.2.2022
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
+ * @version 21.4.2022
  *
  */
 public class Kotitalous {
@@ -19,6 +20,7 @@ public class Kotitalous {
     private SovitutTehtavat sovitut = new SovitutTehtavat();
     private String hakemisto = "kotitalous";
 
+    
     /**
      * Palauttaa käyttäjien määrän
      * @return käyttäjien määrä
@@ -26,7 +28,6 @@ public class Kotitalous {
     public int getKayttajia() {
         return this.kayttajat.getLkm();
     }
-    
     
 
     /**
@@ -55,6 +56,17 @@ public class Kotitalous {
 
 
     /**
+     * Korvaa käyttäjän tietorakenteessa.
+     * Ottaa käyttäjän omistukseensa.
+     * Etsitään samalla tunnusnumerolla oleva käyttäjä. Jos ei löydy,
+     * niin lisätään uutena käyttäjänä.
+     * @param kayttaja lisätään käyttäjän viite. Huom. tietorakenne muuttuu omistajaksi!
+     */
+    public void korvaaTaiLisaa(Kayttaja kayttaja) { //TODO testit?
+        kayttajat.korvaaTaiLisaa(kayttaja);
+    }
+
+    /**
      * @param tehtava lisättävä tehtävä
      */
     public void lisaa(Tehtava tehtava) {
@@ -63,10 +75,111 @@ public class Kotitalous {
 
 
     /**
+     * Korvaa tehtävän tietorakenteessa.
+     * Ottaa tehtävän omistukseensa.
+     * Etsitään samalla tunnusnumerolla oleva tehtävä. Jos ei löydy,
+     * lisätään uutena tehtävänä.
+     * @param tehtava lisätään tehtävän viite, huom! Tietorakenne muuttuu omistajaksi!
+     */
+    public void korvaaTaiLisaa(Tehtava tehtava) {   //TODO testit?
+        this.tehtavat.korvaaTaiLisaa(tehtava);
+    }
+
+    
+    /**
+     * Poistaa tehtävän ja siihen sidotut sovituttehtävät
+     * @param tehtava joka poistetaan
+     */
+    public void poista(Tehtava tehtava) {
+        this.tehtavat.poista(tehtava);
+        poistaSovitut(tehtava);
+    }
+    
+    /**
      * @param sovittutehtava lisättävä sovittu tehtävä
      */
     public void lisaa(SovittuTehtava sovittutehtava) {
         this.sovitut.lisaa(sovittutehtava);
+    }
+    
+    
+    /**
+     * Poistaa sovituntehtävän, jossa on molemmat:
+     * annettu käyttäjä ja annettu tehtävä
+     * @param kayttaja annettu käyttäjä
+     * @param tehtava annettu tehtävä
+     * @example
+     * <pre name="test">
+     * Kotitalous kt = new Kotitalous();
+     * Kayttaja k1 = new Kayttaja(); Kayttaja k2 = new Kayttaja();
+     * Tehtava t1 = new Tehtava(); Tehtava t2 = new Tehtava();
+     * SovittuTehtava s1 = new SovittuTehtava(); SovittuTehtava s2 = new SovittuTehtava();
+     * SovittuTehtava s3 = new SovittuTehtava();
+     * k1.rekisteroi(); k2.rekisteroi();
+     * t1.rekisteroi(); t2.rekisteroi();
+     * s1.setKayttaja(k1); s2.setKayttaja(k2); s3.setKayttaja(k1);
+     * s1.setTehtava(t1); s2.setTehtava(t1); s3.setTehtava(t2);
+     * kt.lisaa(k1); kt.lisaa(k2); kt.lisaa(t1); kt.lisaa(t2);
+     * kt.lisaa(s1); kt.lisaa(s2); kt.lisaa(s3);
+     * 
+     * List<SovittuTehtava> sovitutT1 = kt.annaSovitutKayttajat(t1);
+     * sovitutT1.get(0).toString() === s1.toString();
+     * sovitutT1.get(1).toString() === s2.toString();
+     * kt.poistaSovittu(k2, t1);
+     * sovitutT1 = kt.annaSovitutKayttajat(t1);
+     * sovitutT1.size() === 1;
+     * sovitutT1.get(0).toString() === s1.toString();
+     * kt.lisaa(s2);
+     * sovitutT1 = kt.annaSovitutKayttajat(t1);
+     * sovitutT1.size() === 2;
+     * kt.poistaSovittu(s2);
+     * sovitutT1 = kt.annaSovitutKayttajat(t1);
+     * sovitutT1.size() === 1;
+     * 
+     * List<SovittuTehtava> sovitutK1 = kt.annaSovitutTehtavat(k1);
+     * sovitutK1.size() === 2;
+     * kt.poistaSovitut(k1);
+     * sovitutK1 = kt.annaSovitutTehtavat(k1);
+     * sovitutK1.size() === 0;
+     * </pre>
+     */
+    public void poistaSovittu(Kayttaja kayttaja, Tehtava tehtava) {
+        this.sovitut.poista(kayttaja, tehtava);
+    }
+    
+    
+    /**
+     * Poistaa sovituntehtävän
+     * Testejä "poistaSovittu(Kayttaja kayttaja, Tehtava tehtava)" kohdalla
+     * @param st poistettava sovittutehtävä
+     */
+    public void poistaSovittu(SovittuTehtava st) {
+        this.sovitut.poista(st);
+    }
+    
+    
+    /**
+     * Poistaa sovitutTehtävät, joilla on annettu käyttäjä
+     * Testejä "poistaSovittu(Kayttaja kayttaja, Tehtava tehtava)" kohdalla
+     * @param kayttaja joka ollaan poistamassa kotitaloudesta
+     */
+    public void poistaSovitut(Kayttaja kayttaja) {
+        List<SovittuTehtava> kayttajalleSovitut = annaSovitutTehtavat(kayttaja);
+        for (SovittuTehtava st : kayttajalleSovitut) {
+            this.sovitut.poista(st);
+        }
+    }
+    
+    
+    /**
+     * Poistaa sovitutTehtävät, joilla annettu tehtävä
+     * @param tehtava jonka perusteella poistetaan
+     */
+    public void poistaSovitut(Tehtava tehtava) {
+        List<SovittuTehtava> tehtavalleSovitut = annaSovitutKayttajat(tehtava);
+        for (SovittuTehtava st : tehtavalleSovitut) {
+            this.sovitut.poista(st);
+        }
     }
     
     
@@ -100,6 +213,27 @@ public class Kotitalous {
         return this.kayttajat.etsi(kayttajaId);
     }
     
+    
+    /**
+     * Poistaa annetun käyttäjän ja tallentaa tiedoston
+     * @param kayttaja annettu käyttäjä
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * Kotitalous kt = new Kotitalous();
+     * Kayttaja k1 = new Kayttaja(); k1.rekisteroi();
+     * kt.lisaa(k1);
+     * kt.annaKayttaja(0).toString() === k1.toString();
+     * kt.poista(k1);
+     * kt.annaKayttaja(0); #THROWS IndexOutOfBoundsException
+     * </pre>
+     */
+    public void poista(Kayttaja kayttaja) {
+        this.kayttajat.poista(kayttaja);
+        poistaSovitut(kayttaja);
+//        tallenna();                                 //TODO tyhjentää tiedoston testeissä
+    }
+    
     /**
      * Palauttaa tehtävän tehtavaId:n perusteella
      * @param tehtavaId id, jonka perusteella tehtävä etsitään
@@ -115,9 +249,52 @@ public class Kotitalous {
      * Pyytää tehtäviä palauttamaan listan,
      * jossa on kaikki tämän hetken tehtävät
      * @return kaikki tehtävät listana
+     * @example
+     * <pre name="test">
+     * Kotitalous kt = new Kotitalous();
+     * Tehtava t1 = new Tehtava(); Tehtava t2 = new Tehtava();
+     * kt.lisaa(t1); kt.lisaa(t2);
+     * List<Tehtava> kaikki = kt.annaTehtavat();
+     * kaikki.size() === 2;
+     * </pre>
      */
     public List<Tehtava> annaTehtavat() {
         return this.tehtavat.annaKaikki();
+    }
+    
+    
+    /**
+     * Etsii kaikista tehtävistä ne, joille ei ole vielä tekijöitä ja 
+     * palauttaa ne listana // TODO testit
+     * @return lista sellaisista tehtävistä, joilla ei ole vielä tekijää
+     */
+    public List<Tehtava> annaVapaatTehtavat() {
+        List<Tehtava> kaikki = annaTehtavat();
+        List<Tehtava> vapaat = new ArrayList<Tehtava>();
+        for (Tehtava t : kaikki) {
+            if (!tehtavalleTekija(t)) vapaat.add(t);
+        }
+        return vapaat;  // voi palauttaa myös tyhjän listan 
+    }
+    
+    
+    /**
+     * Etsii kaikista tehtävistä ne, joitka 
+     * @param hakuehto merkkijono, joka täytyy löytyä tehtävän nimestä
+     * @return lista tehtävistä, joissa on hakuehto nimessä
+     */
+    public List<Tehtava> annaTehtavatHakuehdolla(String hakuehto) {
+        return this.tehtavat.annaHakuehdolla(hakuehto);
+    }
+    
+    
+    /**
+     * Palauttaa tiedon, onko tehtävälle tekijä
+     * @param t tehtävä, jolle etsitään tekijää
+     * @return true jos on edes yksi sovittu käyttäjä, false jos ei yhtään
+     */
+    public boolean tehtavalleTekija(Tehtava t) {
+        return this.sovitut.tehtavalleTekija(t);
     }
     
     /**
@@ -177,10 +354,51 @@ public class Kotitalous {
     }
 
     
+    
+    
     /**
      * Lukee kerhon tiedot tiedostosta
      * @param nimi hakemiston nimi
      * @throws SailoException jos lukemisessa ongelmia
+     * @example
+     * <pre name="test">
+     * #THROWS SailoException
+     * #import java.io.File;
+     *  Kotitalous kt = new Kotitalous();
+     *  Kayttaja aada1 = new Kayttaja(); aada1.rekisteroi(); aada1.taytaAadaTiedoilla();
+     *  Kayttaja aada2 = new Kayttaja(); aada2.rekisteroi(); aada2.taytaAadaTiedoilla();
+     *  Kayttaja aada3 = new Kayttaja(); aada3.rekisteroi(); aada3.taytaAadaTiedoilla();
+     *  Tehtava imu12 = new Tehtava(); imu12.rekisteroi(); imu12.taytaImurointiTiedoilla();
+     *  Tehtava imu23 = new Tehtava(); imu23.rekisteroi(); imu23.taytaImurointiTiedoilla();
+     *  Tehtava imu34 = new Tehtava(); imu34.rekisteroi(); imu34.taytaImurointiTiedoilla();
+     *  SovittuTehtava st = new SovittuTehtava(); st.setKayttaja(aada1); st.setTehtava(imu12);
+     *  
+     *  String tiedNimi = "testiKotitalous";
+     *  File ftied = new File(tiedNimi + "/kayttajat.dat");
+     *  File ftied2 = new File(tiedNimi + "/tehtavat.dat");
+     *  File ftied3 = new File(tiedNimi + "/sovitut.dat");
+     *  ftied.delete(); ftied2.delete(); ftied3.delete();
+     *  kt.lueTiedostosta(tiedNimi); #THROWS SailoException
+     *  kt.lisaa(aada1); kt.lisaa(aada2); kt.lisaa(aada3);
+     *  kt.lisaa(imu12); kt.lisaa(imu23); kt.lisaa(imu34);
+     *  kt.lisaa(st);
+     *  kt.tallenna(tiedNimi);
+     *  
+     *  kt = new Kotitalous();
+     *  kt.lueTiedostosta(tiedNimi);
+     *  kt.getKayttajia() === 3;
+     *  kt.annaKayttaja(0).toString() === aada1.toString();
+     *  kt.poista(aada1);
+     *  kt.annaKayttaja(0).toString() == aada1.toString() === false;
+     *  kt.annaKayttaja(0).toString() === aada2.toString();
+     *  kt.getKayttajia() === 2;
+     *  kt.etsiTehtava(imu12.getTid()).toString() === imu12.toString();
+     *  kt.tallenna(tiedNimi);
+     *  
+     *  ftied.delete() === true;
+     *  ftied2.delete() === true;
+     *  ftied3.delete() === true;
+     * </pre>
      */
     public void lueTiedostosta(String nimi) throws SailoException {
         File dir = new File(nimi);
@@ -222,7 +440,38 @@ public class Kotitalous {
         
         if (!"".equals(virhe)) throw new SailoException(virhe);
     }
+    
+    
+    /**
+     * Testejä varten tallenna()-metodia vastaava, jossa hakemiston nimen voi vaihtaa
+     * @param hakemistonNimi testihakemiston nimi
+     * @throws SailoException jos tallettamisessa ongelmia
+     */
+    public void tallenna(String hakemistonNimi) throws SailoException {
+        String virhe = "";
+        try {
+            kayttajat.tallenna(hakemistonNimi);
+        } catch ( SailoException ex) {
+            virhe = ex.getMessage();
+        }
+        
+        try {
+            tehtavat.tallenna(hakemistonNimi);
+        } catch (SailoException ex) {
+            virhe += ex.getMessage();
+        }
+        
+        try {
+            sovitut.tallenna(hakemistonNimi);
+        } catch (SailoException ex) {
+            virhe += ex.getMessage();
+        }
+        
+        if (!"".equals(virhe)) throw new SailoException(virhe);
+    }
 
+    
+    
     /**
      * @param args ei käytössä
      */
@@ -230,7 +479,7 @@ public class Kotitalous {
         Kotitalous kt = new Kotitalous();
 
         try {
-            kt.lueTiedostosta("kotitalous");
+            kt.lueTiedostosta("testiKotitalous");
         } catch (SailoException e1) {
             System.err.println(e1.getMessage());
         }
@@ -295,11 +544,10 @@ public class Kotitalous {
         }
         
         try {
-            kt.tallenna();
+            kt.tallenna("testiKotitalous");
         } catch (SailoException e) {
             System.err.println(e.getMessage());
         }
 
     }
-
 }

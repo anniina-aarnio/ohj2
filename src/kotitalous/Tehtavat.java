@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -16,12 +15,13 @@ import java.util.Scanner;
  * - pitää yllä varsinaista tehtävärekisteriä, eli osaa lisätä ja poistaa tehtävän
  * - lukee ja kirjoittaa tehtävät tiedostoon
  * - osaa etsiä ja lajitella
- * @author Anniina
- * @version 6.3.2022
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
+ * @version 21.4.2022
  */
 public class Tehtavat implements Iterable<Tehtava> {
     
-    private final Collection<Tehtava> alkiot = new ArrayList<Tehtava>();
+    private final List<Tehtava> alkiot = new ArrayList<Tehtava>();
+    private boolean muutettu = false;
     
     /**
      * Lisää tehtävän
@@ -29,6 +29,63 @@ public class Tehtavat implements Iterable<Tehtava> {
      */
     public void lisaa(Tehtava tehtava) {
         this.alkiot.add(tehtava);
+        this.muutettu = true;
+    }
+    
+    
+    /**
+     * Korvaa käyttäjän tietorakenteessa. Ottaa käyttäjän omistukseensa.
+     * Etsitään samalla tunnusnumerolla oleva käyttäjä.
+     * Jos ei löydy, niin lisätään uutena käyttäjänä.
+     * @param tehtava korvattava tai lisättävä käyttäjä
+     * @example
+     * #THROWS CloneNotSupportedException
+     * <pre name="test">
+     * Tehtavat tehtavat = new Tehtavat();
+     * Tehtava t = new Tehtava(), t2 = new Tehtava();
+     * t.rekisteroi(); t2.rekisteroi();
+     * tehtavat.getLkm() === 0;
+     * tehtavat.korvaaTaiLisaa(t); tehtavat.getLkm() === 1;
+     * tehtavat.korvaaTaiLisaa(t2); tehtavat.getLkm() === 2;
+     * Tehtava t3 = new Tehtava();
+     * try {
+     *  t3 = t.clone();
+     * } catch (CloneNotSupportedException e) {
+     *  System.out.println(e.getMessage());
+     * }
+     * t3.aseta(1, "Imurointi");
+     * Iterator<Tehtava> it = tehtavat.iterator();
+     * it.next() == t === true;
+     * tehtavat.korvaaTaiLisaa(t3); tehtavat.getLkm() === 2;
+     * it = tehtavat.iterator();
+     * Tehtava t0 = it.next();
+     * t0 === t3;
+     * t0 == t === false;
+     * </pre>
+     */
+    public void korvaaTaiLisaa(Tehtava tehtava) {
+        int id = tehtava.getTid();
+
+        for (int i = 0; i < getLkm(); i++) {
+            if (this.alkiot.get(i).getTid() == id) {
+                this.alkiot.set(i, tehtava);
+                muutettu = true;
+                return;
+            }
+        }
+        lisaa(tehtava);
+    }
+    
+    
+    /**
+     * Poistaa tehtävän tehtävistä
+     * @param tehtava tehtävä joka poistetaan
+     * @return true jos poistettiin, false jos ei
+     */
+    public boolean poista(Tehtava tehtava) {
+        boolean poistettu = this.alkiot.remove(tehtava);
+        if (poistettu) this.muutettu = true;
+        return poistettu;
     }
     
        
@@ -81,6 +138,36 @@ public class Tehtavat implements Iterable<Tehtava> {
             kaikki.add(t);
         }
         return kaikki;
+    }
+    
+    /**
+     * Palauttaa listan tehtävistä, joihin sopii hakuehto
+     * @param hakuehto merkkijono, joka tulee löytyä nimestä
+     * @return lista sopivista tehtävistä
+     * @example
+     * <pre name="test">
+     * #import java.util.List;
+     * Tehtavat teet = new Tehtavat();
+     *  Tehtava imu = new Tehtava(); imu.rekisteroi(); imu.parse("2  | Imurointi | 20 |15");
+     *  Tehtava wc = new Tehtava(); wc.rekisteroi(); wc.parse("3  | WC:n pesu | 10 |18");
+     *  Tehtava astiat = new Tehtava(); astiat.rekisteroi(); astiat.parse("2  | Astioiden vienti | 20 |1");
+     *  teet.lisaa(imu); teet.lisaa(wc); teet.lisaa(astiat);
+     *  List<Tehtava> iilliset = teet.annaHakuehdolla("i");
+     *  iilliset.size() === 2;
+     *  iilliset.get(0) === imu;
+     *  iilliset.get(1) === astiat;
+     *  iilliset = teet.annaHakuehdolla("wc");
+     *  iilliset.size() === 1;
+     *  iilliset.get(0) === wc;
+     * </pre>
+     */
+    public List<Tehtava> annaHakuehdolla(String hakuehto) {
+        if (hakuehto == null || hakuehto.isEmpty()) return annaKaikki();
+        List<Tehtava> haetut = new ArrayList<Tehtava>();
+        for (Tehtava t : this.alkiot) {
+            if (t.ehto(hakuehto)) haetut.add(t);
+        }
+        return haetut;
     }
     
     
@@ -147,6 +234,7 @@ public class Tehtavat implements Iterable<Tehtava> {
      * @throws SailoException jos talletus epäonnistuu
      */
     public void tallenna(String hakemisto) throws SailoException {
+        if (this.muutettu == false) return;
         File ftied = new File(hakemisto + "/tehtavat.dat");
         try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) {
             for (var teht : this.alkiot) {
@@ -171,7 +259,7 @@ public class Tehtavat implements Iterable<Tehtava> {
         Tehtavat teet = new Tehtavat();
         
         try {
-            teet.lueTiedostosta("kotitalous");
+            teet.lueTiedostosta("testiKotitalous");
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
         }
@@ -193,14 +281,11 @@ public class Tehtavat implements Iterable<Tehtava> {
         }
         
         try {
-            teet.tallenna("kotitalous");
+            teet.tallenna("testiKotitalous");
         } catch (SailoException e) {
             e.printStackTrace();
         }
         
         
     }
-
-
-
 }

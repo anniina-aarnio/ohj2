@@ -11,13 +11,16 @@ import fi.jyu.mit.ohj2.Mjonot;
  * - osaa muuttaa 1|1-merkkijonon sovituksi tehtäväksi
  * - osaa antaa merkkijonona i:n kentän tiedot
  * - osaa laittaa merkkijonon i:nneksi kentäksi
- * @author Anniina
- * @version 6.3.2022
+ * Uudessa sovitussa tehtävässä id-arvot ovat -1, mikä tarkoittaa,
+ * ettei tehtävää tai käyttäjää ole sovittu
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
+ * @version 21.4.2022
  */
 public class SovittuTehtava {
     
-    private int kid;
-    private int tid;
+    private int kid;        // käyttäjä-id
+    private int tid;        // tehtävä-id
+    
     
     /**
      * Asettaa käyttäjän sovittuun tehtävään
@@ -37,6 +40,7 @@ public class SovittuTehtava {
         this.kid = kayttaja.getKid();
     }
     
+    
     /**
      * Asettaa tehtävän sovittuun tehtävään
      * @param tehtava asetettava tehtävä
@@ -53,6 +57,7 @@ public class SovittuTehtava {
     public void setTehtava(Tehtava tehtava) {
         this.tid = tehtava.getTid();
     }
+    
     
     /**
      * Palauttaa sovittuun tehtävään tallennetun käyttäjä-id:n
@@ -71,6 +76,7 @@ public class SovittuTehtava {
         return this.kid;
     }
     
+    
     /**
      * Palauttaa sovittuun tehtävään tallennetun tehtävä-id:n
      * @return tehtävän id
@@ -88,6 +94,7 @@ public class SovittuTehtava {
     public int getTid() {
         return this.tid;
     }
+    
     
     /**
      * Tulostetaan sovitun tehtävän tiedot
@@ -130,6 +137,46 @@ public class SovittuTehtava {
         this.tid = Mjonot.erota(sb, '|', this.tid);
     }
     
+    
+    /**
+     * Vertaa tätä ja annettua sovittua tehtävää toisiinsa
+     * @param st verrattava sovittu tehtävä
+     * @return true, jos samat, false jos eri
+     * @example
+     * <pre name="test">
+     * SovittuTehtava st1 = new SovittuTehtava();
+     * SovittuTehtava st2 = new SovittuTehtava();
+     * SovittuTehtava st3 = new SovittuTehtava();
+     * st1.parse("1 | 1");
+     * st2.parse("   2 | 1");
+     * st3.parse("   1|1   ");
+     * 
+     * st1.equals(st2) === false;
+     * st2.equals(st1) === false;
+     * st2.equals(st3) === false;
+     * st1.equals(st3) === true;
+     * st3.equals(st1) === true;
+     * </pre>
+     */
+    public boolean equals(SovittuTehtava st) {
+        if (st == null) return false;
+        return st.toString().equals(this.toString());
+    }
+    
+    
+    @Override
+    public boolean equals(Object st) {
+        if (st instanceof SovittuTehtava ) return equals((SovittuTehtava)st);
+        return false;
+    }
+    
+    
+    @Override
+    public int hashCode() {
+        return 1000 * this.kid + 1000 / this.tid;
+    }
+
+
     /**
      * @param args ei käytössä
      */

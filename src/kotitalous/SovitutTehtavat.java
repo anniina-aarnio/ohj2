@@ -17,12 +17,13 @@ import java.util.Scanner;
  *   tehtävän ja käyttäjän välillä
  * - lukee ja kirjoittaa sovitut tehtävät -tiedostoon
  * - osaa etsiä ja lajitella
- * @author Anniina
- * @version 6.3.2022
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
+ * @version 21.4.2022
  */
 public class SovitutTehtavat implements Iterable<SovittuTehtava> {
     
-    private final Collection<SovittuTehtava> alkiot = new ArrayList<SovittuTehtava>();  // pitäisikö olla hashmap??
+    private final Collection<SovittuTehtava> alkiot = new ArrayList<SovittuTehtava>();  // pitäisikö olla hashmap tms??
+    private boolean muutettu = false;
     
     
     /**
@@ -57,6 +58,63 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
      */
     public void lisaa(SovittuTehtava sovittutehtava) {
         this.alkiot.add(sovittutehtava);
+        this.muutettu = true;
+    }
+    
+    
+    /**
+     * Poistaa sovituntehtävän, jossa on molemmat:
+     * annettu käyttäjä ja annettu tehtävä
+     * @param kayttaja annettu käyttäjä
+     * @param tehtava annettu tehtävä
+     * @example
+     * <pre name="test">
+     * SovitutTehtavat steet = new SovitutTehtavat();
+     * SovittuTehtava st1 = new SovittuTehtava();
+     * SovittuTehtava st2 = new SovittuTehtava();
+     * Kayttaja k1 = new Kayttaja(); k1.rekisteroi();
+     * Kayttaja k2 = new Kayttaja(); k2.rekisteroi();
+     * Tehtava t1 = new Tehtava(); t1.rekisteroi();
+     * st1.setKayttaja(k1); st2.setKayttaja(k2);
+     * st1.setTehtava(t1); st2.setTehtava(t1);
+     * steet.lisaa(st1); steet.lisaa(st2);
+     * 
+     * List<SovittuTehtava> sovitutT1 = steet.annaSovitutKayttajat(t1);
+     * sovitutT1.size() === 2;
+     * sovitutT1.get(0).toString() === st1.toString();
+     * 
+     * steet.poista(k1, t1);
+     * sovitutT1 = steet.annaSovitutKayttajat(t1);
+     * sovitutT1.get(0).toString() === st2.toString();
+     * 
+     * steet.poista(st2);
+     * sovitutT1 = steet.annaSovitutKayttajat(t1);
+     * sovitutT1.size() === 0;
+     * </pre>
+     */
+    public void poista(Kayttaja kayttaja, Tehtava tehtava) {
+        if (kayttaja == null || tehtava == null) return;
+        
+        for (SovittuTehtava st : this.alkiot) {
+            if (st.getKid() == kayttaja.getKid() && st.getTid() == tehtava.getTid()) {
+                this.alkiot.remove(st);
+                this.muutettu = true;
+                return;
+            }
+        }
+    }
+    
+    
+    /**
+     * Poistaa sovituntehtävän
+     * Testi "poista(Kayttaja kayttaja, Tehtava tehtava)" kanssa samassa
+     * @param st poistettava sovittutehtävä
+     */
+    public void poista(SovittuTehtava st) {
+        if (st == null) return;
+        
+        this.alkiot.remove(st);
+        this.muutettu = true;
     }
     
     
@@ -160,6 +218,19 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
     
     
     /**
+     * Tutkii, onko annetulle tehtävälle edes yksi tekijä
+     * @param t tehtävä, jolle etsitään tekijää
+     * @return true, jos edes yksi sovittu käyttäjä, false jos ei yhtään
+     */
+    public boolean tehtavalleTekija(Tehtava t) {    //TODO testit
+        for (SovittuTehtava st : this.alkiot) {
+            if (st.getTid() == t.getTid()) return true;
+        }
+        return false;
+    }
+    
+    
+    /**
      * Lukee sovitut tehtävät tiedostosta
      * @param hakemisto tiedoston nimen alkuosa
      * @throws SailoException jos lukeminen epäonnistuu
@@ -242,6 +313,7 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
      * @throws SailoException jos talletus epäonnistuu
      */
     public void tallenna(String hakemisto) throws SailoException {
+        if (this.muutettu == false) return;
         File ftied = new File(hakemisto + "/sovitut.dat");
         try (PrintStream fo = new PrintStream(new FileOutputStream(ftied, false))) {
             for (var st : this.alkiot) {
@@ -269,7 +341,7 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
         SovitutTehtavat steet = new SovitutTehtavat();
         
         try {
-            steet.lueTiedostosta("kotitalous");
+            steet.lueTiedostosta("testiKotitalous");
         } catch (SailoException ex) {
             System.err.println(ex.getMessage());
         }
@@ -334,7 +406,7 @@ public class SovitutTehtavat implements Iterable<SovittuTehtava> {
         }
         
         try {
-            steet.tallenna("kotitalous");
+            steet.tallenna("testiKotitalous");
         } catch (SailoException e) {
             e.printStackTrace();
         }

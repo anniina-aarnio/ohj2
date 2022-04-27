@@ -9,7 +9,7 @@ import javafx.fxml.FXMLLoader;
 import kotitalous.Kotitalous;
 
 /**
- * @author Anniina
+ * @author Anniina Aarnio anniina.p.e.aarnio@student.jyu.fi
  * @version 19.1.2022
  *
  */

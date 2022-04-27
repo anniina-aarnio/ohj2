@@ -26,9 +26,17 @@
          <bottom>
             <HBox BorderPane.alignment="BOTTOM_LEFT">
                <children>
-                  <Button mnemonicParsing="false" onAction="#handleMuokkaaKayttajia" text="Muokkaa käyttäjiä">
+                  <Button mnemonicParsing="false" onAction="#handleUusiKayttaja" text="Uusi käyttäjä">
                      <tooltip>
-                        <Tooltip text="Muokkaa käyttäjää tai lisää uusi käyttäjä" />
+                        <Tooltip text="Lisää uusi käyttäjä" />
+                     </tooltip>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button layoutX="20.0" layoutY="20.0" mnemonicParsing="false" onAction="#handleMuokkaaKayttajaa" text="Muokkaa">
+                     <tooltip>
+                        <Tooltip text="Muokkaa valittua käyttäjää" />
                      </tooltip>
                   </Button>
                </children>
@@ -65,7 +73,7 @@
             </ButtonBar>
          </bottom>
          <center>
-            <StringGrid rivit="Nimi|Aika&#10;Imurointi|40&#10;Likakaivon tyhjennys|30" BorderPane.alignment="CENTER">
+            <StringGrid fx:id="tableTehtavat" rivit="Nimi|Aika&#10;Imurointi|40&#10;Likakaivon tyhjennys|30" BorderPane.alignment="CENTER">
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy></StringGrid>
@@ -77,19 +85,19 @@
         <menus>
           <Menu mnemonicParsing="false" text="Tiedosto">
             <items>
-                  <Menu mnemonicParsing="false" text="Uusi...">
-                    <items>
-                      <MenuItem mnemonicParsing="false" onAction="#handleUusiKayttaja" text="Käyttäjä" />
-                    <MenuItem mnemonicParsing="false" onAction="#handleUusiTehtava" text="Tehtävä" />
-                    </items>
-                  </Menu>
                   <MenuItem mnemonicParsing="false" onAction="#handleLopeta" text="Lopeta" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Muokkaa">
+          <Menu mnemonicParsing="false" text="Tehtävien hallinta">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaKayttajia" text="Muokkaa käyttäjiä" />
                   <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaTehtavia" text="Muokkaa tehtäviä" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Käyttäjien hallinta">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleUusiKayttaja" text="Uusi" />
+            <MenuItem mnemonicParsing="false" onAction="#handleMuokkaaKayttajaa" text="Muokkaa valittua" />
+                <MenuItem mnemonicParsing="false" onAction="#handlePoistaKayttaja" text="Poista valittu..." />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Apua">
